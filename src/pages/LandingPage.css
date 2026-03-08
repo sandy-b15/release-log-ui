@@ -1,0 +1,412 @@
+/* Reset & Base */
+.landing-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+    /* White background */
+    color: #0f172a;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(248, 250, 252, 0.8);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 24px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #0f172a;
+}
+
+.logo-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: #0f172a;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: none;
+    color: #0f172a;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+}
+
+/* Hero Section */
+.hero {
+    padding: 80px 24px 60px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 900px;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: 4rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: #0f172a;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    /* Blue gradient */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 60px;
+}
+
+/* Hero Visual */
+.hero-visual {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.source-icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: white;
+    padding: 24px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+    /* Soft shadow */
+    border: 1px solid #f1f5f9;
+}
+
+.connection-line {
+    width: 60px;
+    height: 2px;
+    background: #e2e8f0;
+    border-radius: 2px;
+}
+
+.destination-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.icon-github {
+    color: #000;
+}
+
+.icon-ai {
+    color: var(--primary-color);
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto 100px;
+    padding: 0 24px;
+}
+
+.feature-card {
+    background: white;
+    border: 1px solid #f1f5f9;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+    min-height: 380px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card.wide {
+    grid-column: span 1;
+    /* For 3-column layout, keep uniform or span? */
+}
+
+/* User's layout implies different spans likely. 
+   If they want exactly like the image, often it's:
+   Row 1: 3 cols layout or 2 cols?
+   The "Relayer" image usually has irregular bento.
+   Let's assume simple 3-col for now based on correct JSX structure from user which has 3 cards.
+*/
+
+.card-text {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.card-text h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #0f172a;
+}
+
+.card-text p {
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Mockup UIs */
+.mockup-ui {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Integration Hub Mock */
+.integration-hub .mock-card {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    font-size: 0.9rem;
+    justify-content: space-between;
+}
+
+.integration-hub .mock-card.active {
+    border-left: 3px solid #10b981;
+}
+
+.integration-hub .status {
+    color: #10b981;
+    font-size: 0.8rem;
+    background: #ecfdf5;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.integration-hub .btn-xs {
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    background: #eff6ff;
+    color: var(--primary-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Editor Preview Mock */
+.editor-preview .audience-tabs {
+    display: flex;
+    gap: 4px;
+    background: #e2e8f0;
+    padding: 4px;
+    border-radius: 6px;
+    width: fit-content;
+    margin-bottom: 12px;
+}
+
+.editor-preview .tab {
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 4px;
+    color: #64748b;
+}
+
+.editor-preview .tab.active {
+    background: white;
+    color: #0f172a;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.editor-preview .text-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.editor-preview .line {
+    height: 8px;
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.editor-preview .line.long {
+    width: 90%;
+}
+
+.editor-preview .line.med {
+    width: 70%;
+}
+
+.editor-preview .line.short {
+    width: 40%;
+}
+
+/* Automate UI Mock */
+.automate-ui {
+    justify-content: center;
+}
+
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.toggle {
+    width: 36px;
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    position: relative;
+}
+
+.toggle.active {
+    background: var(--primary-color);
+}
+
+.toggle.active::after {
+    content: '';
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+}
+
+.action-button {
+    background: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Media Queries */
+@media (max-width: 900px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+}

@@ -1,0 +1,359 @@
+/* Generate & Edit Page */
+.generate-edit-page {
+    min-height: 100vh;
+    background-color: #f8fafc;
+}
+
+.generate-edit-content {
+    margin: 0 auto;
+    padding: 24px;
+    width: 90%;
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.page-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back-link:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.page-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Editor Card */
+.editor-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Toolbar */
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+    flex-wrap: wrap;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background: #e2e8f0;
+    margin: 0 6px;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.toolbar-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.toolbar-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Editor Body */
+.editor-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* TipTap Editor Content Styles */
+.tiptap-editor-content {
+    padding: 32px;
+    outline: none;
+    min-height: 500px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #1e293b;
+}
+
+.tiptap-editor-content:focus {
+    outline: none;
+}
+
+/* Headings */
+.tiptap-editor-content h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 28px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.tiptap-editor-content h1:first-child {
+    margin-top: 0;
+}
+
+.tiptap-editor-content h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 24px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.tiptap-editor-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 20px 0 8px;
+}
+
+.tiptap-editor-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 16px 0 8px;
+}
+
+/* Paragraphs */
+.tiptap-editor-content p {
+    margin: 0 0 12px;
+    color: #334155;
+}
+
+/* Lists */
+.tiptap-editor-content ul,
+.tiptap-editor-content ol {
+    margin: 0 0 12px;
+    padding-left: 24px;
+}
+
+.tiptap-editor-content li {
+    margin-bottom: 4px;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.tiptap-editor-content li::marker {
+    color: var(--primary-color);
+}
+
+.tiptap-editor-content ul ul,
+.tiptap-editor-content ol ol,
+.tiptap-editor-content ul ol,
+.tiptap-editor-content ol ul {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* Blockquote */
+.tiptap-editor-content blockquote {
+    margin: 12px 0;
+    padding: 12px 20px;
+    border-left: 4px solid var(--primary-color);
+    background: #eff6ff;
+    border-radius: 0 8px 8px 0;
+    color: var(--secondary-color);
+}
+
+.tiptap-editor-content blockquote p {
+    margin: 0;
+    color: inherit;
+}
+
+/* Code */
+.tiptap-editor-content code {
+    background: #e2e8f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: #d946ef;
+    font-family: 'Fira Code', 'Consolas', monospace;
+}
+
+.tiptap-editor-content pre {
+    background: #1e293b;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+.tiptap-editor-content pre code {
+    background: none;
+    padding: 0;
+    color: #e2e8f0;
+    font-size: 0.85rem;
+}
+
+/* HR */
+.tiptap-editor-content hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 20px 0;
+}
+
+/* Strong / Emphasis */
+.tiptap-editor-content strong {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.tiptap-editor-content em {
+    font-style: italic;
+    color: #475569;
+}
+
+/* Underline */
+.tiptap-editor-content u {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* Links */
+.tiptap-editor-content a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.tiptap-editor-content a:hover {
+    color: var(--primary-hover);
+}
+
+/* Tables */
+.tiptap-editor-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.85rem;
+}
+
+.tiptap-editor-content th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: #0f172a;
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+}
+
+.tiptap-editor-content td {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: top;
+}
+
+.tiptap-editor-content tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .generate-edit-content {
+        padding: 16px;
+        width: 95%;
+    }
+
+    .tiptap-editor-content {
+        padding: 16px;
+        font-size: 0.9rem;
+    }
+
+    .page-title {
+        font-size: 1.25rem;
+    }
+
+    .page-header-actions .action-btn span {
+        display: none;
+    }
+
+    .page-header-actions .action-btn {
+        padding: 8px;
+    }
+
+    .toolbar-divider {
+        display: none;
+    }
+
+    .editor-toolbar {
+        gap: 2px;
+        padding: 6px 8px;
+    }
+}
+
+/* Download Dropdown */
+.download-wrapper {
+    position: relative;
+}
+
+.download-wrapper .dropdown-trigger {
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.download-wrapper .dropdown-options {
+    min-width: 220px;
+    right: 0;
+    left: auto;
+}
