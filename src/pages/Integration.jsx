@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import {
-    Github, CheckCircle2, Loader2, AlertCircle, Edit,
+    Github, CheckCircle2, Loader2, AlertCircle, Edit, X, Trash2,
     Search, Sparkles, Code2, Kanban, MessageSquare, BarChart3
 } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
@@ -12,6 +13,7 @@ import gitlabLogo from '../assets/gitlab-logo.png';
 import bitbucketLogo from '../assets/bitbucket_icon.webp';
 import jiraLogo from '../assets/jira_logo.webp';
 import './Integration.css';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -115,10 +117,82 @@ const CATEGORIES = [
     { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={15} /> },
 ];
 
+/* ── Edit Key Modal ── */
+const EditKeyModal = ({ config, loading, error, onSubmit, onClose }) => {
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
+        document.addEventListener('keydown', handleEsc);
+        return () => document.removeEventListener('keydown', handleEsc);
+    }, [onClose]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await onSubmit(token);
+    };
+
+    return ReactDOM.createPortal(
+        <div className="edit-key-overlay" onClick={onClose}>
+            <div className="edit-key-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <div className="modal-title-row">
+                        <div className={`card-icon ${config.iconClass}`}>
+                            {config.icon}
+                        </div>
+                        <div>
+                            <h3>Update {config.title} Key</h3>
+                            <p className="modal-subtitle">Enter a new access token below</p>
+                        </div>
+                    </div>
+                    <button className="modal-close-btn" onClick={onClose}>
+                        <X size={18} />
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit}>
+                    <div className="modal-body">
+                        <div className="input-group">
+                            <label>{config.tokenLabel}</label>
+                            <input
+                                type="password"
+                                value={token}
+                                onChange={(e) => setToken(e.target.value)}
+                                placeholder={config.placeholder}
+                                required
+                                autoFocus
+                            />
+                            {config.hint && <small>{config.hint}</small>}
+                        </div>
+
+                        {error && (
+                            <div className="error-msg">
+                                <AlertCircle size={14} />
+                                {error}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="modal-footer">
+                        <button type="submit" disabled={loading} className="btn-submit">
+                            {loading ? (
+                                <><Loader2 size={16} className="spin" /> Updating...</>
+                            ) : 'Update Key'}
+                        </button>
+                        <button type="button" className="btn-cancel" onClick={onClose}>
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>,
+        document.body
+    );
+};
+
 /* ── Single integration card ── */
-const IntegrationCard = ({ config, connected, onConnect, loading, error }) => {
+const IntegrationCard = ({ config, connected, onConnect, onEditKey, onDelete, loading, error }) => {
     const [showForm, setShowForm] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
     const [token, setToken] = useState('');
     const navigate = useNavigate();
     const isPlaceholder = !config.apiConnect;
@@ -128,7 +202,6 @@ const IntegrationCard = ({ config, connected, onConnect, loading, error }) => {
         await onConnect(token);
         if (!error) {
             setShowForm(false);
-            setIsEditing(false);
             setToken('');
         }
     };
@@ -174,7 +247,7 @@ const IntegrationCard = ({ config, connected, onConnect, loading, error }) => {
                     </>
                 )}
 
-                {(connected && !isEditing && !showForm) && (
+                {(connected && !showForm) && (
                     <>
                         <hr className="card-divider" />
                         <button className="connect-btn connected-btn">
@@ -186,21 +259,24 @@ const IntegrationCard = ({ config, connected, onConnect, loading, error }) => {
             </div>
 
             {/* Connected actions */}
-            {(connected && !isEditing && !showForm) && (
+            {(connected && !showForm) && (
                 <div className="card-actions">
-                    <button className="btn-edit" onClick={() => { setIsEditing(true); setShowForm(true); }}>
+                    <button className="btn-delete" onClick={onDelete}>
+                        <Trash2 size={14} />
+                    </button>
+                    <button className="btn-edit" onClick={onEditKey}>
                         <Edit size={14} /> Edit Key
                     </button>
                     {config.dashboardUrl && (
                         <button className="btn-dashboard" onClick={() => navigate(config.dashboardUrl)}>
-                            Dashboard →
+                            Dashboard
                         </button>
                     )}
                 </div>
             )}
 
-            {/* Token form */}
-            {(showForm && !isPlaceholder) && (
+            {/* Token form – only for initial connect, not for editing */}
+            {(showForm && !connected && !isPlaceholder) && (
                 <form className="token-form" onSubmit={handleSubmit}>
                     <div className="input-group">
                         <label>{config.tokenLabel}</label>
@@ -225,12 +301,12 @@ const IntegrationCard = ({ config, connected, onConnect, loading, error }) => {
                         <button type="submit" disabled={loading} className="btn-submit">
                             {loading ? (
                                 <><Loader2 size={16} className="spin" /> Connecting...</>
-                            ) : (connected ? 'Update Key' : 'Connect')}
+                            ) : 'Connect'}
                         </button>
                         <button
                             type="button"
                             className="btn-cancel"
-                            onClick={() => { setShowForm(false); setIsEditing(false); setToken(''); }}
+                            onClick={() => { setShowForm(false); setToken(''); }}
                         >
                             Cancel
                         </button>
@@ -248,6 +324,8 @@ const Integration = () => {
     const [errorState, setErrorState] = useState({});
     const [initialLoading, setInitialLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [editingIntegration, setEditingIntegration] = useState(null);
+    const [deletingIntegration, setDeletingIntegration] = useState(null);
     const [activeCategory, setActiveCategory] = useState('all');
 
     useEffect(() => {
@@ -285,6 +363,43 @@ const Integration = () => {
             setErrorState(prev => ({ ...prev, [integrationId]: msg }));
         } finally {
             setLoadingState(prev => ({ ...prev, [integrationId]: false }));
+        }
+    };
+
+    const handleEditKey = (integrationId) => {
+        setErrorState(prev => ({ ...prev, [integrationId]: '' }));
+        setEditingIntegration(integrationId);
+    };
+
+    const handleEditSubmit = async (token) => {
+        if (!editingIntegration) return;
+        const config = INTEGRATIONS.find(i => i.id === editingIntegration);
+        if (!config || !config.apiConnect) return;
+
+        setLoadingState(prev => ({ ...prev, [editingIntegration]: true }));
+        setErrorState(prev => ({ ...prev, [editingIntegration]: '' }));
+
+        try {
+            await api.post(config.apiConnect, { token });
+            setConnections(prev => ({ ...prev, [editingIntegration]: true }));
+            setEditingIntegration(null);
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to update. Please try again.';
+            setErrorState(prev => ({ ...prev, [editingIntegration]: msg }));
+        } finally {
+            setLoadingState(prev => ({ ...prev, [editingIntegration]: false }));
+        }
+    };
+
+    const handleDelete = async (integrationId) => {
+        try {
+            await api.delete(`/api/tokens/${integrationId}`);
+            setConnections(prev => ({ ...prev, [integrationId]: false }));
+            setDeletingIntegration(null);
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to disconnect. Please try again.';
+            setErrorState(prev => ({ ...prev, [integrationId]: msg }));
+            setDeletingIntegration(null);
         }
     };
 
@@ -361,18 +476,44 @@ const Integration = () => {
                                 <span>Checking connections...</span>
                             </div>
                         ) : (
-                            <div className="integration-grid">
-                                {filteredIntegrations.map(config => (
-                                    <IntegrationCard
-                                        key={config.id}
-                                        config={config}
-                                        connected={!!connections[config.id]}
-                                        onConnect={(token) => handleConnect(config.id, token)}
-                                        loading={!!loadingState[config.id]}
-                                        error={errorState[config.id] || ''}
+                            <>
+                                <div className="integration-grid">
+                                    {filteredIntegrations.map(config => (
+                                        <IntegrationCard
+                                            key={config.id}
+                                            config={config}
+                                            connected={!!connections[config.id]}
+                                            onConnect={(token) => handleConnect(config.id, token)}
+                                            onEditKey={() => handleEditKey(config.id)}
+                                            onDelete={() => setDeletingIntegration(config.id)}
+                                            loading={!!loadingState[config.id]}
+                                            error={errorState[config.id] || ''}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Edit Key Modal */}
+                                {editingIntegration && (
+                                    <EditKeyModal
+                                        config={INTEGRATIONS.find(i => i.id === editingIntegration)}
+                                        loading={!!loadingState[editingIntegration]}
+                                        error={errorState[editingIntegration] || ''}
+                                        onSubmit={handleEditSubmit}
+                                        onClose={() => setEditingIntegration(null)}
                                     />
-                                ))}
-                            </div>
+                                )}
+
+                                {/* Delete Confirm Dialog */}
+                                <ConfirmDialog
+                                    open={!!deletingIntegration}
+                                    title="Disconnect Service"
+                                    message={`Are you sure you want to disconnect ${INTEGRATIONS.find(i => i.id === deletingIntegration)?.title || 'this service'}? You will need to re-enter your token to reconnect.`}
+                                    confirmLabel="Disconnect"
+                                    variant="danger"
+                                    onConfirm={() => handleDelete(deletingIntegration)}
+                                    onCancel={() => setDeletingIntegration(null)}
+                                />
+                            </>
                         )}
                     </div>
                 </div>
