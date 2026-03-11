@@ -1,0 +1,219 @@
+/* ─── Docs Page ─── */
+
+.docs-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Sidebar */
+.docs-sidebar {
+  position: sticky;
+  top: 88px;
+}
+
+.docs-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.docs-sidebar-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--land-font);
+  color: var(--land-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.docs-sidebar-btn:hover {
+  color: var(--land-text);
+  background: var(--land-surface);
+}
+
+.docs-sidebar-btn.active {
+  color: var(--land-text);
+  background: var(--land-surface);
+  border-left-color: var(--land-accent);
+  font-weight: 600;
+}
+
+/* Content */
+.docs-content {
+  min-width: 0;
+  background: var(--land-card);
+  border: 1px solid var(--land-border);
+  border-radius: 16px;
+  padding: 40px 48px;
+}
+
+.docs-content-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--land-text);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--land-border);
+}
+
+.docs-content-body h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--land-text);
+  margin: 28px 0 10px;
+}
+
+.docs-content-body h3:first-child {
+  margin-top: 0;
+}
+
+.docs-content-body p {
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: var(--land-muted);
+  margin: 0 0 14px;
+}
+
+.docs-content-body ul,
+.docs-content-body ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+.docs-content-body li {
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: var(--land-muted);
+  margin-bottom: 6px;
+}
+
+.docs-content-body li::marker {
+  color: var(--land-accent);
+}
+
+.docs-content-body strong {
+  font-weight: 600;
+  color: var(--land-text);
+}
+
+.docs-content-body em {
+  font-style: italic;
+}
+
+.docs-content-body a {
+  color: var(--land-accent);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(99, 102, 241, 0.3);
+  transition: border-color 0.2s;
+}
+
+.docs-content-body a:hover {
+  border-bottom-color: var(--land-accent);
+}
+
+/* Table */
+.docs-content-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--land-border);
+}
+
+.docs-content-body th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--land-text);
+  background: var(--land-surface);
+  border: 1px solid var(--land-border);
+}
+
+.docs-content-body td {
+  padding: 10px 14px;
+  border: 1px solid var(--land-border);
+  color: var(--land-muted);
+}
+
+/* Callout box */
+.docs-callout {
+  margin: 20px 0;
+  padding: 14px 20px;
+  border-left: 3px solid var(--land-accent);
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 0 10px 10px 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--land-muted);
+}
+
+.docs-callout strong {
+  color: var(--land-text);
+}
+
+/* FAQ items */
+.docs-faq-item {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--land-border);
+}
+
+.docs-faq-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.docs-faq-item h3 {
+  margin-top: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .docs-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .docs-sidebar {
+    position: static;
+    border-bottom: 1px solid var(--land-border);
+    padding-bottom: 16px;
+  }
+
+  .docs-sidebar nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .docs-sidebar-btn {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .docs-sidebar-btn.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--land-accent);
+  }
+
+  .docs-content {
+    padding: 24px 20px;
+  }
+}

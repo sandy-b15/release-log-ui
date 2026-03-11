@@ -1,16 +1,134 @@
-# React + Vite
+# Release Log
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI-powered Release Notes Generator that connects to version control and project management tools to automatically generate tailored release notes for different audiences.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 19, Vite 7, React Router 7 |
+| Editor | Tiptap (rich text with tables, links, markdown) |
+| Backend | Express.js 4, Passport.js (Google OAuth 2.0) |
+| Database | PostgreSQL (sessions, users, tokens, notes) |
+| AI | Groq SDK (openai/gpt-oss-120b) |
+| Integrations | GitHub (Octokit), DevRev API |
+| Hosting | Firebase (UI), Railway (Server) |
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Authentication
+- [x] Google OAuth 2.0 login
+- [x] Session-based auth with PostgreSQL store
+- [x] Protected routes with auth guard
+- [x] Secure cookies (httpOnly, sameSite, secure)
 
-## Expanding the ESLint configuration
+### Integrations
+- [x] GitHub — connect via Personal Access Token, scope validation
+- [x] DevRev — connect via access token
+- [ ] GitLab — coming soon
+- [ ] Bitbucket — coming soon
+- [ ] Jira — coming soon
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Data Selection
+- [x] GitHub: browse repos, branches, and merged PRs
+- [x] GitHub: filter PRs by date range
+- [x] GitHub: multi-select PRs for generation
+- [x] DevRev: browse sprint boards and sprints
+- [x] DevRev: filter sprints by name and status
+- [x] DevRev: multi-select sprints for generation
+
+### AI Generation
+- [x] Audience-specific prompts (QA, Product, Stakeholder)
+- [x] Generate from GitHub PRs
+- [x] Generate from DevRev sprints
+- [x] Auto-save generated notes to database
+
+### Editor & Export
+- [x] Rich text editor (Tiptap) with full toolbar
+- [x] Bold, italic, underline, strikethrough, headings, lists
+- [x] Blockquote, code blocks, horizontal rules, links
+- [x] Undo/redo
+- [x] Export as Markdown (.md)
+- [x] Export as Word (.doc)
+- [x] Export as PDF
+- [x] Copy to clipboard
+
+### Dashboard
+- [x] Overview with stats and generated notes history
+- [x] View past notes from history table
+- [x] Generate view with source selection (GitHub/DevRev)
+
+### Security
+- [x] AES-256-GCM encryption for stored tokens
+- [x] Helmet CSP headers
+- [x] CORS origin whitelist
+- [x] GitHub token scope validation
+
+## Upcoming Features
+
+- [ ] GitLab, Bitbucket, Jira integrations
+- [ ] Team management and collaboration
+- [ ] Notification preferences
+- [ ] API key management (Settings page)
+- [ ] One-click publish to Confluence
+- [ ] Scheduled/automated generation
+- [ ] Custom prompt templates
+- [ ] Note editing history and versioning
+
+## Project Structure
+
+```
+release-log-ui/                    release-log-server/
+├── src/                           ├── index.js          (Express entry)
+│   ├── main.jsx                   ├── db.js             (PostgreSQL)
+│   ├── App.jsx                    ├── routes/
+│   ├── pages/                     │   ├── auth.js       (Google OAuth)
+│   │   ├── LandingPage.jsx        │   ├── tokens.js     (Token CRUD)
+│   │   ├── Login.jsx              │   ├── github.js     (GitHub API)
+│   │   ├── Dashboard.jsx          │   ├── generate.js   (AI generation)
+│   │   ├── GenerateEdit.jsx       │   ├── devrev.js     (DevRev API)
+│   │   ├── Integration.jsx        │   └── notes.js      (Notes CRUD)
+│   │   └── Settings.jsx           ├── middleware/
+│   └── components/                │   └── auth.js       (Auth guard)
+│       ├── Header.jsx             ├── utils/
+│       ├── Sidebar.jsx            │   ├── crypto.js     (AES encryption)
+│       ├── ProtectedRoute.jsx     │   └── prompts.js    (Template loader)
+│       ├── DataSelector.jsx       └── prompts/          (6 templates)
+│       └── ConfirmDialog.jsx
+└── firebase.json
+```
+
+## Environment Variables
+
+### UI (.env)
+```
+VITE_API_URL=http://localhost:3000
+```
+
+### Server (.env)
+```
+PORT=3000
+NODE_ENV=local
+DATABASE_URL=postgresql://...
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+SESSION_SECRET=...
+GROQ_API_KEY=...
+ENCRYPTION_KEY=...          # 64-char hex
+SERVER_URL=http://localhost:3000
+CORS_ORIGINS=http://localhost:5173
+```
+
+## Getting Started
+
+```bash
+# Server
+cd release-log-server
+npm install
+npm run dev
+
+# UI
+cd release-log-ui
+npm install
+npm run dev
+```

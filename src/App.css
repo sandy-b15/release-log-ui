@@ -1,44 +1,121 @@
+/* ═══════════════════════════════════════════════
+   Releasly v2 – Design System
+   ═══════════════════════════════════════════════ */
+
+:root {
+  /* ── Typography ── */
+  --font: 'Satoshi', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --f: var(--font);
+
+  /* ── Core Colors ── */
+  --bg: #fafaf9;
+  --white: #ffffff;
+  --s1: #f5f5f4;
+  --s2: #e7e5e4;
+  --border: #e5e4e2;
+  --border-l: #eeeeed;
+
+  /* ── Text ── */
+  --text: #1c1917;
+  --t2: #44403c;
+  --muted: #78716c;
+  --m2: #a8a29e;
+
+  /* ── Primary ── */
+  --primary: #1c1917;
+  --ph: #292524;
+  --pt: #fafaf9;
+
+  /* ── Accent Colors ── */
+  --indigo: #6366f1;
+  --il: #eef2ff;
+  --it: #4338ca;
+  --emerald: #10b981;
+  --el: #ecfdf5;
+  --et: #047857;
+  --sky: #0ea5e9;
+  --sl: #f0f9ff;
+  --st: #0369a1;
+  --amber: #f59e0b;
+  --al: #fffbeb;
+  --at: #92400e;
+  --rose: #f43f5e;
+  --rl: #fff1f2;
+  --rt: #be123c;
+  --violet: #8b5cf6;
+  --vl: #f5f3ff;
+  --vt: #6d28d9;
+  --orange: #fb923c;
+  --ol: #fff7ed;
+  --ot: #c2410c;
+
+  /* ── Spacing & Radius ── */
+  --r: 14px;
+  --rs: 8px;
+  --rl2: 20px;
+
+  /* ── Shadows ── */
+  --sh: 0 1px 2px rgba(28, 25, 23, .04);
+  --shm: 0 4px 12px rgba(28, 25, 23, .06);
+  --shl: 0 12px 40px rgba(28, 25, 23, .08);
+
+  /* ── Legacy aliases (backward compat for landing, login, settings, pricing) ── */
+  --body-bg: #fafaf9;
+  --surface: var(--s1);
+  --surface-hover: var(--s2);
+  --card: var(--s1);
+  --border-light: var(--border-l);
+  --text-secondary: var(--t2);
+  --muted-light: var(--m2);
+  --primary-hover: var(--ph);
+  --primary-text: var(--pt);
+  --accent: var(--indigo);
+  --accent-hover: #4f46e5;
+  --accent-light: rgba(99, 102, 241, 0.08);
+  --teal: var(--emerald);
+  --warm: var(--amber);
+  --purple: var(--violet);
+  --pink: #ec4899;
+  --success: #16a34a;
+  --success-bg: #ecfdf5;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --info: #2563eb;
+  --info-bg: #eff6ff;
+  --shadow-sm: var(--sh);
+  --shadow: var(--shm);
+  --shadow-lg: var(--shl);
+  --primary-color: var(--accent);
+  --secondary-color: var(--primary);
+  --accent-color: var(--accent);
+  --bg-color: var(--white);
+  --text-primary: var(--text);
+  --card-bg: var(--white);
+  --card-border: var(--border);
+  --card-shadow: var(--shm);
+  --gradient-text: linear-gradient(135deg, var(--primary), var(--indigo));
+}
+
 #root {
   max-width: 1600px;
   margin: 0 auto;
   text-align: left;
+  padding: 0;
+  width: 100%;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* ── App Layout v2 ── */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.app-main {
+  margin-left: 220px;
+  flex: 1;
+  min-height: 100vh;
 }

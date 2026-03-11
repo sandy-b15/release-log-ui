@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════
+   DataSelector v2
+   Styles are mostly in Dashboard.css
+   under the .selector-* v2 classes.
+   This file adds DataSelector-specific overrides.
+   ═══════════════════════════════════════ */
+
+.selector-date-input-v2 {
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--white);
+    margin: 0;
+    transition: border-color .15s;
+    width: 130px;
+}
+
+.selector-date-input-v2:focus {
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+.selector-date-input-v2:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--s1);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .selector-card-v2 > div:first-child {
+        grid-template-columns: 1fr !important;
+    }
+
+    .selector-sidebar-v2 {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-l);
+        max-height: 200px;
+        overflow-y: auto;
+    }
+}

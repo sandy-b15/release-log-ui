@@ -1,30 +1,67 @@
 
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import Header from './components/Header';
+import { Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
+import Sidebar from './components/Sidebar/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
-import Login from './pages/Login';
-import Integration from './pages/Integration';
-import Dashboard from './pages/Dashboard';
-import GenerateEdit from './pages/GenerateEdit';
-import Settings from './pages/Settings';
-import LandingPage from './pages/LandingPage';
+import Login from './pages/Login/Login';
+import Integration from './pages/Integration/Integration';
+import Dashboard from './pages/Dashboard/Dashboard';
+import GenerateEdit from './pages/GenerateEdit/GenerateEdit';
+import Settings from './pages/Settings/Settings';
+import LandingPage from './pages/Landing/LandingPage';
+import PricingPage from './pages/Pricing/PricingPage';
+import DocsPage from './pages/Docs/DocsPage';
+import { Toaster } from 'react-hot-toast';
 import './App.css';
 
-function App() {
-  const location = useLocation();
-  const hideHeaderRoutes = ['/login', '/signup'];
-  const showHeader = !hideHeaderRoutes.includes(location.pathname);
+/* Layout wrapper for authenticated pages — sidebar + main area */
+function AppShell() {
+  return (
+    <div className="app-shell">
+      <Sidebar />
+      <div className="app-main">
+        <Outlet />
+      </div>
+    </div>
+  );
+}
 
+function App() {
   return (
     <>
-      {showHeader && <Header />}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            fontFamily: 'var(--font)',
+            fontSize: '13px',
+            borderRadius: '10px',
+            padding: '10px 16px',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: { primary: 'var(--emerald)', secondary: '#fff' },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: { primary: 'var(--rose)', secondary: '#fff' },
+          },
+        }}
+      />
       <Routes>
+        {/* Public routes — no sidebar */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/integration" element={<ProtectedRoute><Integration /></ProtectedRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/generate" element={<ProtectedRoute><GenerateEdit /></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/docs" element={<DocsPage />} />
+
+        {/* Authenticated routes — sidebar layout */}
+        <Route element={<AppShell />}>
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/integration" element={<ProtectedRoute><Integration /></ProtectedRoute>} />
+          <Route path="/generate" element={<ProtectedRoute><GenerateEdit /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        </Route>
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

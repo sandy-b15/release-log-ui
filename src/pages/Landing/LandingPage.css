@@ -1,0 +1,166 @@
+/* ─── Landing Page Scoped Styles ─── */
+/* All classes prefixed with "land-" to avoid conflicts with app styles */
+
+/* CSS Variables scoped to landing page */
+.landing-root {
+  --land-bg: #ffffff;
+  --land-surface: #f4f4f5;
+  --land-surface-h: #e8e8ea;
+  --land-border: #e2e2e6;
+  --land-card: #f9f9fa;
+  --land-text: #18181b;
+  --land-muted: #71717a;
+  --land-primary: #18181b;
+  --land-primary-h: #27272a;
+  --land-primary-text: #ffffff;
+  --land-accent: #6366f1;
+  --land-accent2: #8b5cf6;
+  --land-teal: #10b981;
+  --land-sky: #0ea5e9;
+  --land-warm: #f59e0b;
+  --land-rose: #f43f5e;
+  --land-purple: #8b5cf6;
+  --land-orange: #f97316;
+  --land-pink: #ec4899;
+  --land-font: 'DM Sans', system-ui, sans-serif;
+  --land-mono: 'JetBrains Mono', monospace;
+  --land-serif: 'Instrument Serif', Georgia, serif;
+
+  background: var(--land-bg);
+  color: var(--land-text);
+  font-family: var(--land-font);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.landing-root *,
+.landing-root *::before,
+.landing-root *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.landing-root ::selection {
+  background: rgba(99, 102, 241, .15);
+  color: var(--land-text);
+}
+
+.landing-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Noise overlay */
+.land-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: .015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px;
+}
+
+/* Orb backgrounds */
+.land-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+/* Buttons */
+.land-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  font-family: var(--land-font);
+  border: none;
+  cursor: pointer;
+  transition: all .25s cubic-bezier(.16, 1, .3, 1);
+}
+
+.land-btn-p {
+  background: var(--land-primary);
+  color: var(--land-primary-text);
+}
+
+.land-btn-p:hover {
+  background: var(--land-primary-h);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px rgba(24, 24, 27, .2);
+}
+
+.land-btn-s {
+  background: var(--land-surface);
+  color: var(--land-text);
+  border: 1px solid var(--land-border);
+}
+
+.land-btn-s:hover {
+  background: var(--land-surface-h);
+  border-color: #d0d0d6;
+}
+
+/* Section & container */
+.land-sec {
+  padding: 100px 24px;
+  position: relative;
+}
+
+.land-con {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* Platform pills */
+.land-platform-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 6px;
+  border-radius: 8px;
+  background: var(--land-surface);
+  border: 1px solid var(--land-border);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--land-muted);
+  transition: all .3s ease;
+  white-space: nowrap;
+}
+
+.land-platform-pill:hover {
+  border-color: rgba(24, 24, 27, .2);
+  color: var(--land-text);
+  transform: translateY(-1px);
+}
+
+.land-platform-pill .land-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Animations */
+@keyframes land-pulse {
+  0%, 100% { opacity: .06; }
+  50% { opacity: .12; }
+}
+
+@keyframes land-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

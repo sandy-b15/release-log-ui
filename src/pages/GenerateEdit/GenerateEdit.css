@@ -1,0 +1,378 @@
+/* ═══════════════════════════════════════
+   GenerateEdit v2 – Editor Page
+   ═══════════════════════════════════════ */
+
+/* TopBar action buttons (shared with Dashboard) */
+.topbar-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    font-family: var(--font);
+    transition: all .15s;
+}
+
+.topbar-action-btn:hover {
+    background: var(--s1);
+    color: var(--text);
+}
+
+/* Publish button */
+.editor-publish-btn {
+    display: none;
+    /* to be removed after publish functionality is added */
+    /* display: flex; */
+    align-items: center;
+    gap: 5px;
+    padding: 7px 18px;
+    border-radius: 8px;
+    background: var(--primary);
+    color: var(--pt);
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font);
+    transition: all .15s;
+}
+
+.editor-publish-btn:hover {
+    background: var(--ph);
+}
+
+/* Download dropdown */
+.download-wrapper {
+    position: relative;
+}
+
+.download-options-v2 {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    min-width: 180px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shl);
+    z-index: 50;
+    padding: 4px;
+    animation: fadeUp .15s ease-out;
+}
+
+.download-option-v2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    font-size: 13px;
+    color: var(--t2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .1s;
+    font-family: var(--font);
+}
+
+.download-option-v2:hover {
+    background: var(--s1);
+}
+
+/* Mode Row (toggle + copy) */
+.editor-mode-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+/* Mode Toggle */
+.editor-mode-toggle {
+    display: flex;
+    gap: 2px;
+    background: var(--s1);
+    padding: 3px;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.editor-mode-btn {
+    padding: 6px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font);
+    text-transform: capitalize;
+    background: transparent;
+    color: var(--muted);
+    box-shadow: none;
+    transition: all .15s;
+}
+
+.editor-mode-btn.active {
+    background: var(--white);
+    color: var(--text);
+    box-shadow: var(--sh);
+}
+
+/* Editor Card */
+.editor-card {
+    border-radius: var(--r);
+    background: var(--white);
+    border: 1px solid var(--border-l);
+    box-shadow: var(--sh);
+    overflow: hidden;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Toolbar */
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px;
+    border-bottom: 1px solid var(--border-l);
+    background: var(--bg);
+    flex-wrap: wrap;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 6px;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    color: var(--m2);
+    cursor: pointer;
+    transition: all .1s;
+}
+
+.toolbar-btn:hover {
+    background: var(--s1);
+    color: var(--text);
+}
+
+.toolbar-btn.active {
+    background: var(--primary);
+    color: var(--pt);
+}
+
+/* Editor Body */
+.editor-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* TipTap Editor Content */
+.tiptap-editor-content {
+    padding: 32px 40px;
+    outline: none;
+    min-height: 500px;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--text);
+}
+
+.tiptap-editor-content:focus {
+    outline: none;
+}
+
+.tiptap-editor-content h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 28px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border-l);
+    letter-spacing: -.02em;
+}
+
+.tiptap-editor-content h1:first-child {
+    margin-top: 0;
+}
+
+.tiptap-editor-content h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 24px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-l);
+    letter-spacing: -.01em;
+}
+
+.tiptap-editor-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 20px 0 8px;
+}
+
+.tiptap-editor-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--t2);
+    margin: 16px 0 8px;
+}
+
+.tiptap-editor-content p {
+    margin: 0 0 12px;
+    color: var(--t2);
+}
+
+.tiptap-editor-content ul,
+.tiptap-editor-content ol {
+    margin: 0 0 12px;
+    padding-left: 24px;
+}
+
+.tiptap-editor-content li {
+    margin-bottom: 4px;
+    color: var(--t2);
+    line-height: 1.6;
+}
+
+.tiptap-editor-content li::marker {
+    color: var(--indigo);
+}
+
+.tiptap-editor-content blockquote {
+    margin: 12px 0;
+    padding: 12px 20px;
+    border-left: 4px solid var(--indigo);
+    background: var(--il);
+    border-radius: 0 8px 8px 0;
+    color: var(--text);
+}
+
+.tiptap-editor-content blockquote p {
+    margin: 0;
+    color: inherit;
+}
+
+.tiptap-editor-content code {
+    background: var(--s1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: var(--indigo);
+    font-family: var(--mono);
+}
+
+.tiptap-editor-content pre {
+    background: var(--primary);
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+.tiptap-editor-content pre code {
+    background: none;
+    padding: 0;
+    color: var(--s1);
+    font-size: 0.85rem;
+}
+
+.tiptap-editor-content hr {
+    border: none;
+    border-top: 1px solid var(--border-l);
+    margin: 20px 0;
+}
+
+.tiptap-editor-content strong {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.tiptap-editor-content em {
+    font-style: italic;
+    color: var(--muted);
+}
+
+.tiptap-editor-content u {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.tiptap-editor-content a {
+    color: var(--indigo);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.tiptap-editor-content a:hover {
+    color: var(--it);
+}
+
+.tiptap-editor-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-l);
+}
+
+.tiptap-editor-content th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-l);
+}
+
+.tiptap-editor-content td {
+    padding: 10px 14px;
+    border: 1px solid var(--border-l);
+    color: var(--t2);
+    vertical-align: top;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .tiptap-editor-content {
+        padding: 20px;
+        font-size: 0.9rem;
+    }
+
+    .toolbar-divider {
+        display: none;
+    }
+
+    .editor-toolbar {
+        gap: 2px;
+        padding: 6px 8px;
+    }
+}
