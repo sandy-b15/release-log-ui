@@ -52,6 +52,10 @@ const Dashboard = () => {
     const [generatedNotes, setGeneratedNotes] = useState([]);
     const [totalNotesGenerated, setTotalNotesGenerated] = useState(0);
 
+    // -- Publish Activity State --
+    const [publishEvents, setPublishEvents] = useState([]);
+    const [publishedCount, setPublishedCount] = useState(0);
+
     // -- GitHub State --
     const [repos, setRepos] = useState([]);
     const [branches, setBranches] = useState([]);
@@ -153,6 +157,14 @@ const Dashboard = () => {
                     setTotalNotesGenerated(countRes.data.count || 0);
                 } catch (e) {
                     console.error("Failed to fetch notes", e);
+                }
+
+                try {
+                    const activityRes = await api.get('/publish/activity');
+                    setPublishEvents(activityRes.data.events || []);
+                    setPublishedCount(activityRes.data.publishedCount || 0);
+                } catch (e) {
+                    console.error("Failed to fetch publish activity", e);
                 }
 
                 if (!ghRes.data.hasToken) setSource('devrev');
@@ -502,7 +514,7 @@ const Dashboard = () => {
     const handleViewNote = async (noteId) => {
         try {
             const res = await api.get(`/notes/${noteId}`);
-            navigate('/generate', { state: { notes: res.data.note.content, noteId: noteId, noteTitle: res.data.note.title } });
+            navigate('/generate', { state: { notes: res.data.note.content, noteId: noteId, noteTitle: res.data.note.title, published: res.data.note.published } });
         } catch (err) {
             console.error('Failed to fetch note content:', err);
             toast.error('Failed to load the release note.');
@@ -527,8 +539,23 @@ const Dashboard = () => {
 
     const stats = [
         { n: 'Notes Generated', v: totalNotesGenerated, icon: ic.doc, bg: 'var(--il)', c: 'var(--indigo)', change: `${connectedIntegrations.length} source${connectedIntegrations.length !== 1 ? 's' : ''}` },
-        { n: 'Integrations', v: connectedIntegrations.length, icon: ic.plug, bg: 'var(--el)', c: 'var(--emerald)', change: connectedIntegrations.join(', ') || 'None' },
+        { n: 'Published', v: publishedCount, icon: ic.send, bg: 'var(--el)', c: 'var(--emerald)', change: publishedCount > 0 ? `${publishEvents.length} total deploys` : 'No publishes yet' },
+        { n: 'Integrations', v: connectedIntegrations.length, icon: ic.plug, bg: 'var(--sl)', c: 'var(--sky)', change: connectedIntegrations.join(', ') || 'None' },
     ];
+
+    const CHANNEL_LABELS = { github: 'GitHub', jira: 'Jira', devrev: 'DevRev' };
+
+    const timeAgo = (dateStr) => {
+        const diff = Date.now() - new Date(dateStr).getTime();
+        const mins = Math.floor(diff / 60000);
+        if (mins < 1) return 'just now';
+        if (mins < 60) return `${mins}m ago`;
+        const hrs = Math.floor(mins / 60);
+        if (hrs < 24) return `${hrs}h ago`;
+        const days = Math.floor(hrs / 24);
+        if (days < 7) return `${days}d ago`;
+        return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    };
 
     const wizardSteps = [
         { n: 1, label: 'Select Source' },
@@ -577,10 +604,10 @@ const Dashboard = () => {
                                         <span style={{ color: 'var(--indigo)', display: 'flex' }}>{ic.doc}</span>
                                         Recent Notes
                                     </h2>
-                                    {/* All notes are shown inline */}
                                 </div>
                                 {generatedNotes.length > 0 ? (
-                                    generatedNotes.map((note, i) => (
+                                    <div className="dash-notes-content">
+                                    {generatedNotes.map((note, i) => (
                                         <div
                                             key={note.id}
                                             className="dash-note-row-v2"
@@ -592,6 +619,7 @@ const Dashboard = () => {
                                                 <div className="dash-note-title-v2">{note.title}</div>
                                                 <div className="dash-note-meta-v2">
                                                     <Pill color={note.source === 'GitHub' ? 'sky' : note.source === 'Jira' ? 'indigo' : 'emerald'}>{note.source}</Pill>
+                                                    {note.published && <span className="dash-published-badge"><Check size={10} /> Published</span>}
                                                     <span>{note.audience || 'Product'}</span>
                                                 </div>
                                             </div>
@@ -607,7 +635,8 @@ const Dashboard = () => {
                                             </button>
                                             <div style={{ color: 'var(--m2)', display: 'flex', flexShrink: 0 }}>{ic.arr}</div>
                                         </div>
-                                    ))
+                                    ))}
+                                    </div>
                                 ) : (
                                     <div className="dash-empty-v2">
                                         <div className="dash-empty-icon-v2">{ic.doc}</div>
@@ -618,6 +647,77 @@ const Dashboard = () => {
                                         <button className="dash-cta-v2 small" onClick={() => { setView('generate'); setStep(1); }}>
                                             {ic.spark} Get Started
                                         </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Activity Feed */}
+                            <div className="fu d4 dash-card-v2">
+                                <div className="dash-card-header">
+                                    <h2 className="dash-card-title">Activity</h2>
+                                </div>
+                                {publishEvents.length > 0 ? (
+                                    <div className="activity-feed">
+                                        {publishEvents.map((event, idx) => {
+                                            const channels = event.channels || [];
+                                            const allSuccess = channels.every(c => c.status === 'success');
+                                            const anyFailed = channels.some(c => c.status === 'failed');
+                                            const channelNames = channels.map(c => CHANNEL_LABELS[c.type] || c.type);
+                                            const successChannels = channels.filter(c => c.status === 'success').map(c => CHANNEL_LABELS[c.type] || c.type);
+                                            const dotColor = allSuccess ? 'var(--emerald)' : anyFailed ? 'var(--rose)' : 'var(--amber)';
+                                            const title = allSuccess
+                                                ? `Published to ${successChannels.join(', ')}`
+                                                : anyFailed && successChannels.length > 0
+                                                    ? `Partial publish to ${channelNames.join(', ')}`
+                                                    : `Failed to publish to ${channelNames.join(', ')}`;
+
+                                            // Build config detail string
+                                            const configDetails = channels.map(c => {
+                                                const cfg = c.config || {};
+                                                if (c.type === 'github' && cfg.repo) return `${cfg.repo}${cfg.tag ? ` · ${cfg.tag}` : ''}`;
+                                                if (c.type === 'jira' && cfg.project) return `${cfg.project}${cfg.version ? ` · ${cfg.version}` : ''}`;
+                                                if (c.type === 'devrev' && cfg.part) return cfg.part;
+                                                return null;
+                                            }).filter(Boolean).join(' / ');
+
+                                            // Collect success/error messages per channel
+                                            const messages = channels.map(c => {
+                                                const label = CHANNEL_LABELS[c.type] || c.type;
+                                                if (c.status === 'success' && c.result?.message) return { type: 'success', text: c.result.message };
+                                                if (c.status === 'failed' && c.error) return { type: 'error', text: `${label}: ${c.error}` };
+                                                return null;
+                                            }).filter(Boolean);
+
+                                            return (
+                                                <div
+                                                    key={event.id}
+                                                    className="activity-item"
+                                                    onClick={() => event.release_note_id && handleViewNote(event.release_note_id)}
+                                                >
+                                                    <div className="activity-timeline">
+                                                        <div className="activity-dot" style={{ background: dotColor }} />
+                                                        {idx < publishEvents.length - 1 && <div className="activity-line" />}
+                                                    </div>
+                                                    <div className="activity-content">
+                                                        <div className="activity-title">{title}</div>
+                                                        <div className="activity-desc">{event.note_title || 'Untitled Note'}</div>
+                                                        {configDetails && <div className="activity-config">{configDetails}</div>}
+                                                        {messages.map((msg, mi) => (
+                                                            <div key={mi} className={`activity-msg ${msg.type}`}>{msg.text}</div>
+                                                        ))}
+                                                        <div className="activity-time">{timeAgo(event.published_at)}</div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="dash-empty-v2" style={{ padding: '40px 24px' }}>
+                                        <div className="dash-empty-icon-v2">{ic.send}</div>
+                                        <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>No activity yet</p>
+                                        <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, maxWidth: 260, lineHeight: 1.5 }}>
+                                            Publish a release note to see activity here.
+                                        </p>
                                     </div>
                                 )}
                             </div>

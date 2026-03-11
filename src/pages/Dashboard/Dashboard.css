@@ -113,9 +113,10 @@
 
 /* ── Two Column Layout ── */
 .dash-two-col {
-
-    grid-template-columns: 1fr 320px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
     gap: 16px;
+    align-items: start;
 }
 
 /* ── Cards ── */
@@ -149,6 +150,12 @@
     color: var(--indigo);
     font-weight: 600;
     cursor: pointer;
+}
+
+/* ── Notes Content (scrollable) ── */
+.dash-notes-content {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 /* ── Note Rows ── */
@@ -226,6 +233,19 @@
     color: var(--rose);
 }
 
+/* ── Published Badge ── */
+.dash-published-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--emerald);
+    background: var(--el);
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
 /* ── Empty State ── */
 .dash-empty-v2 {
     display: flex;
@@ -280,6 +300,100 @@
     flex: 1;
     background: var(--border-l);
     min-height: 24px;
+}
+
+/* ── Activity Feed (timeline) ── */
+.activity-feed {
+    padding: 16px 18px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    gap: 14px;
+    cursor: pointer;
+}
+
+.activity-item:hover .activity-title {
+    color: var(--indigo);
+}
+
+.activity-timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4px;
+}
+
+.activity-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.activity-line {
+    width: 1.5px;
+    flex: 1;
+    background: var(--border-l);
+    min-height: 20px;
+}
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+    padding-bottom: 20px;
+}
+
+.activity-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+    transition: color .15s;
+}
+
+.activity-desc {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.activity-config {
+    font-size: 11px;
+    color: var(--sky);
+    font-weight: 500;
+    font-family: var(--mono);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.activity-msg {
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activity-msg.success {
+    color: var(--emerald);
+}
+
+.activity-msg.error {
+    color: var(--rose);
+}
+
+.activity-time {
+    font-size: 11px;
+    color: var(--m2);
 }
 
 /* ═══════════════════════════

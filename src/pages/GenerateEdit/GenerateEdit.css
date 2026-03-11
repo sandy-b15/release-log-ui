@@ -26,9 +26,7 @@
 
 /* Publish button */
 .editor-publish-btn {
-    display: none;
-    /* to be removed after publish functionality is added */
-    /* display: flex; */
+    display: flex;
     align-items: center;
     gap: 5px;
     padding: 7px 18px;
@@ -45,6 +43,14 @@
 
 .editor-publish-btn:hover {
     background: var(--ph);
+}
+
+.editor-publish-btn.published {
+    background: var(--emerald);
+}
+
+.editor-publish-btn.published:hover {
+    background: var(--et);
 }
 
 /* Download dropdown */

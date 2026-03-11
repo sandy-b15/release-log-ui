@@ -17,6 +17,7 @@ import {
     Code, Minus, Undo2, Redo2, Link as LinkIcon, ChevronDown, FileText, Check, Save
 } from 'lucide-react';
 import TopBar from '../../components/Header/Header';
+import PublishModal from '../../components/PublishModal/PublishModal';
 import './GenerateEdit.css';
 
 const api = axios.create({
@@ -114,6 +115,8 @@ const GenerateEdit = () => {
     const [saved, setSaved] = useState(false);
     const [hasChanges, setHasChanges] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [showPublishModal, setShowPublishModal] = useState(false);
+    const [isPublished, setIsPublished] = useState(false);
 
     // Convert incoming markdown to HTML
     useEffect(() => {
@@ -122,6 +125,7 @@ const GenerateEdit = () => {
             setInitialHtml(html);
             if (location.state.noteId) setNoteId(location.state.noteId);
             if (location.state.noteTitle) setNoteTitle(location.state.noteTitle);
+            if (location.state.published) setIsPublished(true);
         } else {
             navigate('/dashboard');
         }
@@ -222,9 +226,18 @@ const GenerateEdit = () => {
         if (noteId && hasChanges) {
             await handleSave();
         }
-        // For now publish just saves and goes back
-        navigate('/dashboard');
+        setShowPublishModal(true);
     };
+
+    const getHtmlContent = useCallback(() => {
+        if (!editor) return '';
+        return editor.getHTML();
+    }, [editor]);
+
+    const getJsonContent = useCallback(() => {
+        if (!editor) return null;
+        return editor.getJSON();
+    }, [editor]);
 
     const handleDownloadMd = () => {
         const md = getMarkdown();
@@ -313,8 +326,8 @@ const GenerateEdit = () => {
                             </div>
                         )}
                     </div>
-                    <button className="editor-publish-btn" onClick={handlePublish} disabled={saving}>
-                        {ic.send} Publish
+                    <button className={`editor-publish-btn ${isPublished ? 'published' : ''}`} onClick={handlePublish} disabled={saving}>
+                        {isPublished ? <><Check size={13} /> Published</> : <>{ic.send} Publish</>}
                     </button>
                 </div>
             </TopBar>
@@ -351,6 +364,18 @@ const GenerateEdit = () => {
                     </div>
                 </div>
             </div>
+            <PublishModal
+                open={showPublishModal}
+                onClose={(didPublish) => {
+                    setShowPublishModal(false);
+                    if (didPublish) setIsPublished(true);
+                }}
+                noteId={noteId}
+                noteTitle={noteTitle}
+                getHtmlContent={getHtmlContent}
+                getJsonContent={getJsonContent}
+                isPublished={isPublished}
+            />
         </>
     );
 };
