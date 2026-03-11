@@ -50,7 +50,7 @@ const SECTIONS = {
           </thead>
           <tbody>
             <tr><td>GitHub</td><td>Commits, PRs, tags</td><td>OAuth app authorization</td></tr>
-            <tr><td>Jira</td><td>Issues, sprints, versions</td><td>API token + domain</td></tr>
+            <tr><td>Jira</td><td>Issues, sprints (multi-select), release versions (multi-select)</td><td>API token + domain</td></tr>
             <tr><td>DevRev</td><td>Work items, sprints</td><td>PAT (Personal Access Token)</td></tr>
             <tr><td>Zoho Sprints</td><td>Sprint items, user stories</td><td>OAuth connection</td></tr>
           </tbody>
@@ -68,7 +68,7 @@ const SECTIONS = {
         <p>The generation wizard walks you through three simple steps to create release notes tailored to your audience.</p>
 
         <h3>Step 1 — Select Source Data</h3>
-        <p>Choose the connected source you want to pull from. For GitHub, select the repository and pick the commits to include. For Jira, DevRev, or Zoho, select the relevant sprints.</p>
+        <p>Choose the connected source you want to pull from. For GitHub, select the repository and pick the commits to include. For Jira, select a project and then choose between Board/Sprint mode (multi-select sprints across boards) or Release Version mode (multi-select versions). Use the searchable dropdowns to quickly find what you need, and filter issues by type, status, priority, assignee, or labels. For DevRev or Zoho, select the relevant sprints.</p>
 
         <h3>Step 2 — Configure</h3>
         <ul>
@@ -142,7 +142,7 @@ const SECTIONS = {
         <h3>Current Integrations</h3>
         <ul>
           <li><strong>GitHub</strong> — Connect via OAuth to pull commits, PRs, and tags from your repositories.</li>
-          <li><strong>Jira</strong> — Link your Atlassian account to pull sprint data and issue details.</li>
+          <li><strong>Jira</strong> — Link your Atlassian account to pull issues from sprints or release versions. Supports multi-select for sprints and versions, searchable dropdowns, and issue filtering by type, status, priority, assignee, and labels.</li>
           <li><strong>DevRev</strong> — Connect with a Personal Access Token to sync work items and sprints.</li>
           <li><strong>Zoho Sprints</strong> — OAuth-based connection for sprint items and user stories.</li>
         </ul>

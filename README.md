@@ -11,7 +11,7 @@ AI-powered Release Notes Generator that connects to version control and project 
 | Backend | Express.js 4, Passport.js (Google OAuth 2.0) |
 | Database | PostgreSQL (sessions, users, tokens, notes) |
 | AI | Groq SDK (openai/gpt-oss-120b) |
-| Integrations | GitHub (Octokit), DevRev API |
+| Integrations | GitHub (Octokit), Jira (REST API), DevRev API |
 | Hosting | Firebase (UI), Railway (Server) |
 
 ## Features
@@ -24,15 +24,20 @@ AI-powered Release Notes Generator that connects to version control and project 
 
 ### Integrations
 - [x] GitHub — connect via Personal Access Token, scope validation
+- [x] Jira — connect via API token + domain, OAuth-based project access
 - [x] DevRev — connect via access token
 - [ ] GitLab — coming soon
 - [ ] Bitbucket — coming soon
-- [ ] Jira — coming soon
 
 ### Data Selection
 - [x] GitHub: browse repos, branches, and merged PRs
 - [x] GitHub: filter PRs by date range
 - [x] GitHub: multi-select PRs for generation
+- [x] Jira: browse projects, boards, sprints, and release versions
+- [x] Jira: Board/Sprint mode — multi-select sprints across boards
+- [x] Jira: Release Version mode — multi-select versions
+- [x] Jira: searchable dropdowns for all selectors
+- [x] Jira: filter issues by type, status, priority, assignee, and labels
 - [x] DevRev: browse sprint boards and sprints
 - [x] DevRev: filter sprints by name and status
 - [x] DevRev: multi-select sprints for generation
@@ -40,6 +45,7 @@ AI-powered Release Notes Generator that connects to version control and project 
 ### AI Generation
 - [x] Audience-specific prompts (QA, Product, Stakeholder)
 - [x] Generate from GitHub PRs
+- [x] Generate from Jira issues (sprint or version based)
 - [x] Generate from DevRev sprints
 - [x] Auto-save generated notes to database
 
@@ -56,7 +62,7 @@ AI-powered Release Notes Generator that connects to version control and project 
 ### Dashboard
 - [x] Overview with stats and generated notes history
 - [x] View past notes from history table
-- [x] Generate view with source selection (GitHub/DevRev)
+- [x] Generate view with source selection (GitHub/Jira/DevRev)
 
 ### Security
 - [x] AES-256-GCM encryption for stored tokens
@@ -66,7 +72,7 @@ AI-powered Release Notes Generator that connects to version control and project 
 
 ## Upcoming Features
 
-- [ ] GitLab, Bitbucket, Jira integrations
+- [ ] GitLab, Bitbucket integrations
 - [ ] Team management and collaboration
 - [ ] Notification preferences
 - [ ] API key management (Settings page)
@@ -86,8 +92,9 @@ release-log-ui/                    release-log-server/
 │   │   ├── LandingPage.jsx        │   ├── tokens.js     (Token CRUD)
 │   │   ├── Login.jsx              │   ├── github.js     (GitHub API)
 │   │   ├── Dashboard.jsx          │   ├── generate.js   (AI generation)
-│   │   ├── GenerateEdit.jsx       │   ├── devrev.js     (DevRev API)
-│   │   ├── Integration.jsx        │   └── notes.js      (Notes CRUD)
+│   │   ├── GenerateEdit.jsx       │   ├── jira.js       (Jira API)
+│   │   ├── Integration.jsx        │   ├── devrev.js     (DevRev API)
+│   │   ├── Docs.jsx               │   └── notes.js      (Notes CRUD)
 │   │   └── Settings.jsx           ├── middleware/
 │   └── components/                │   └── auth.js       (Auth guard)
 │       ├── Header.jsx             ├── utils/

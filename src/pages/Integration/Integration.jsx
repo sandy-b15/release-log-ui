@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { Loader2, AlertCircle, X, Trash2 } from 'lucide-react';
 import TopBar from '../../components/Header/Header';
@@ -58,12 +58,12 @@ const INTEGRATIONS = [
         category: 'project-management',
         logo: jiraLogo,
         accentVar: '--sky',
-        tokenLabel: 'API Token',
-        placeholder: 'Enter API token...',
-        hint: 'Generate from Atlassian Account → Security → API tokens',
-        dashboardUrl: null,
-        apiConnect: null,
-        apiCheck: null,
+        tokenLabel: 'OAuth',
+        placeholder: '',
+        hint: 'Connect via Atlassian OAuth',
+        dashboardUrl: '/dashboard',
+        apiConnect: 'oauth', // special: uses OAuth redirect flow
+        apiCheck: '/api/tokens/jira',
     },
     {
         id: 'gitlab',
@@ -174,9 +174,10 @@ const EditKeyModal = ({ config, loading, error, onSubmit, onClose, mode = 'edit'
 };
 
 /* ── Single integration card ── */
-const IntegrationCard = ({ config, connected, onOpenModal, onDelete, index }) => {
+const IntegrationCard = ({ config, connected, onOpenModal, onConnect, onDelete, index }) => {
     const navigate = useNavigate();
     const isPlaceholder = !config.apiConnect;
+    const isOAuth = config.apiConnect === 'oauth';
 
     return (
         <div className={`pp d${Math.min(index + 1, 5)} int-card-v2`} style={{ position: 'relative' }}>
@@ -203,7 +204,11 @@ const IntegrationCard = ({ config, connected, onOpenModal, onDelete, index }) =>
             <div className="int-card-footer-v2">
                 {connected ? (
                     <div style={{ display: 'flex', gap: 6, width: '100%' }}>
-                        <button className="int-btn-outline-v2" style={{ flex: 1 }} onClick={onOpenModal}>Edit Key</button>
+                        {isOAuth ? (
+                            <button className="int-btn-outline-v2" style={{ flex: 1 }} onClick={onConnect}>Reconnect</button>
+                        ) : (
+                            <button className="int-btn-outline-v2" style={{ flex: 1 }} onClick={onOpenModal}>Edit Key</button>
+                        )}
                         {config.dashboardUrl && (
                             <button className="int-btn-primary-v2" style={{ flex: 1 }} onClick={() => navigate(config.dashboardUrl)}>Dashboard</button>
                         )}
@@ -213,7 +218,7 @@ const IntegrationCard = ({ config, connected, onOpenModal, onDelete, index }) =>
                 ) : (
                     <button
                         className="int-btn-connect-v2"
-                        onClick={() => isPlaceholder ? null : onOpenModal()}
+                        onClick={() => isOAuth ? onConnect() : (isPlaceholder ? null : onOpenModal())}
                         disabled={isPlaceholder}
                     >
                         {isPlaceholder ? 'Coming Soon' : 'Connect'}
@@ -221,6 +226,51 @@ const IntegrationCard = ({ config, connected, onOpenModal, onDelete, index }) =>
                 )}
             </div>
         </div>
+    );
+};
+
+/* ── Jira Site Selection Modal ── */
+const SiteSelectModal = ({ sites, loading, onSelect, onClose }) => {
+    useEffect(() => {
+        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
+        document.addEventListener('keydown', handleEsc);
+        return () => document.removeEventListener('keydown', handleEsc);
+    }, [onClose]);
+
+    return ReactDOM.createPortal(
+        <div className="edit-key-overlay" onClick={onClose}>
+            <div className="edit-key-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <div className="modal-title-row">
+                        <div className="int-card-icon-v2" style={{ background: 'var(--sky)0c', color: 'var(--sky)' }}>
+                            <img src={jiraLogo} alt="Jira" style={{ width: 20, height: 20, objectFit: 'contain' }} />
+                        </div>
+                        <div>
+                            <h3>Select Jira Site</h3>
+                            <p className="modal-subtitle">You have access to multiple Jira sites. Choose one to connect.</p>
+                        </div>
+                    </div>
+                    <button className="modal-close-btn" onClick={onClose}>
+                        <X size={18} />
+                    </button>
+                </div>
+                <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {sites.map(site => (
+                        <button
+                            key={site.id}
+                            className="int-btn-outline-v2"
+                            style={{ width: '100%', padding: '12px 16px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 2 }}
+                            onClick={() => onSelect(site.id)}
+                            disabled={loading}
+                        >
+                            <span style={{ fontWeight: 600, fontSize: 14 }}>{site.name}</span>
+                            <span style={{ fontSize: 11, color: 'var(--muted)' }}>{site.url}</span>
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>,
+        document.body
     );
 };
 
@@ -234,17 +284,22 @@ const Integration = () => {
     const [modalMode, setModalMode] = useState('edit'); // 'connect' | 'edit'
     const [deletingIntegration, setDeletingIntegration] = useState(null);
     const [activeTab, setActiveTab] = useState('all');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [jiraSites, setJiraSites] = useState(null); // for multi-site selection
+    const [siteSelectLoading, setSiteSelectLoading] = useState(false);
 
     useEffect(() => {
         const checkTokens = async () => {
             try {
-                const [ghRes, drRes] = await Promise.all([
+                const [ghRes, drRes, jiraRes] = await Promise.all([
                     api.get('/api/tokens/github'),
                     api.get('/api/tokens/devrev'),
+                    api.get('/api/tokens/jira'),
                 ]);
                 setConnections({
                     github: ghRes.data.hasToken,
                     devrev: drRes.data.hasToken,
+                    jira: jiraRes.data.hasToken,
                 });
             } catch (err) {
                 console.error('Token check failed', err);
@@ -254,6 +309,50 @@ const Integration = () => {
         };
         checkTokens();
     }, []);
+
+    // Handle Jira OAuth callback redirect
+    useEffect(() => {
+        const jiraStatus = searchParams.get('jira');
+        if (jiraStatus === 'success') {
+            setConnections(prev => ({ ...prev, jira: true }));
+            setSearchParams({}, { replace: true });
+        } else if (jiraStatus === 'select_site') {
+            try {
+                const sites = JSON.parse(searchParams.get('sites') || '[]');
+                if (sites.length) setJiraSites(sites);
+            } catch { /* ignore parse errors */ }
+            setSearchParams({}, { replace: true });
+        } else if (jiraStatus === 'error') {
+            setErrorState(prev => ({ ...prev, jira: searchParams.get('message') || 'Jira connection failed' }));
+            setSearchParams({}, { replace: true });
+        }
+    }, [searchParams, setSearchParams]);
+
+    const handleJiraOAuth = async () => {
+        try {
+            setLoadingState(prev => ({ ...prev, jira: true }));
+            const res = await api.get('/api/jira/auth');
+            window.location.href = res.data.authUrl;
+        } catch (err) {
+            console.error('Jira OAuth init failed:', err);
+            setErrorState(prev => ({ ...prev, jira: 'Failed to start Jira OAuth' }));
+            setLoadingState(prev => ({ ...prev, jira: false }));
+        }
+    };
+
+    const handleSelectJiraSite = async (siteId) => {
+        setSiteSelectLoading(true);
+        try {
+            await api.post('/api/jira/select-site', { siteId });
+            setConnections(prev => ({ ...prev, jira: true }));
+            setJiraSites(null);
+        } catch (err) {
+            setErrorState(prev => ({ ...prev, jira: err.response?.data?.error || 'Failed to select site' }));
+            setJiraSites(null);
+        } finally {
+            setSiteSelectLoading(false);
+        }
+    };
 
     const handleOpenModal = (integrationId, mode) => {
         setErrorState(prev => ({ ...prev, [integrationId]: '' }));
@@ -348,6 +447,7 @@ const Integration = () => {
                                     config={config}
                                     connected={!!connections[config.id]}
                                     onOpenModal={() => handleOpenModal(config.id, connections[config.id] ? 'edit' : 'connect')}
+                                    onConnect={config.apiConnect === 'oauth' ? handleJiraOAuth : undefined}
                                     onDelete={() => setDeletingIntegration(config.id)}
                                     index={i}
                                 />
@@ -362,6 +462,15 @@ const Integration = () => {
                                 onSubmit={handleEditSubmit}
                                 onClose={() => setEditingIntegration(null)}
                                 mode={modalMode}
+                            />
+                        )}
+
+                        {jiraSites && (
+                            <SiteSelectModal
+                                sites={jiraSites}
+                                loading={siteSelectLoading}
+                                onSelect={handleSelectJiraSite}
+                                onClose={() => setJiraSites(null)}
                             />
                         )}
 

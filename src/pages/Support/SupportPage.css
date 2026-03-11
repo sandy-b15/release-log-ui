@@ -1,0 +1,87 @@
+/* ─── Support Page ─── */
+
+.support-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.support-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--land-text);
+  margin-bottom: 6px;
+}
+
+.support-field input,
+.support-field select,
+.support-field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-family: var(--land-font);
+  color: var(--land-text);
+  background: var(--land-surface);
+  border: 1px solid var(--land-border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.support-field input:focus,
+.support-field select:focus,
+.support-field textarea:focus {
+  border-color: var(--land-accent);
+}
+
+.support-field textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.support-btn {
+  align-self: flex-start;
+  padding: 10px 24px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--land-font);
+  color: #fff;
+  background: var(--land-accent);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.support-btn:hover {
+  opacity: 0.9;
+}
+
+.support-success {
+  text-align: center;
+  padding: 32px 0;
+}
+
+.support-success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  margin-bottom: 12px;
+}
+
+.support-success p {
+  text-align: center;
+}
+
+.support-success .support-btn {
+  align-self: center;
+  margin: 8px auto 0;
+}

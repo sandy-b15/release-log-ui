@@ -10,6 +10,9 @@ import Settings from './pages/Settings/Settings';
 import LandingPage from './pages/Landing/LandingPage';
 import PricingPage from './pages/Pricing/PricingPage';
 import DocsPage from './pages/Docs/DocsPage';
+import PrivacyPage from './pages/Privacy/PrivacyPage';
+import TermsPage from './pages/Terms/TermsPage';
+import SupportPage from './pages/Support/SupportPage';
 import { Toaster } from 'react-hot-toast';
 import './App.css';
 
@@ -53,6 +56,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/docs" element={<DocsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/support" element={<SupportPage />} />
 
         {/* Authenticated routes — sidebar layout */}
         <Route element={<AppShell />}>
