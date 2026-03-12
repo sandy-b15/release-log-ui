@@ -70,12 +70,12 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
 
         api.get('/tokens').then((res) => {
             setConnectedServices(res.data.services || []);
-        }).catch(() => {});
+        }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load connected services'); });
 
         if (noteId) {
             api.get(`/publish/history/${noteId}`).then((res) => {
                 setPublishedChannels(res.data.publishedChannels || []);
-            }).catch(() => {});
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load publish history'); });
         }
     }, [open, noteTitle, noteId]);
 
@@ -84,7 +84,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         if (githubEnabled && ghRepos.length === 0 && connectedServices.includes('github')) {
             api.get('/publish/github/repos').then((res) => {
                 setGhRepos(res.data.repos || []);
-            }).catch(() => {});
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load GitHub repos'); });
         }
     }, [githubEnabled, connectedServices]);
 
@@ -93,7 +93,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         if (ghRepo) {
             api.get(`/publish/github/tags?repo=${encodeURIComponent(ghRepo)}`).then((res) => {
                 setGhTags(res.data.tags || []);
-            }).catch(() => {});
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load GitHub tags'); });
         }
     }, [ghRepo]);
 
@@ -102,7 +102,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         if (jiraEnabled && jiraProjects.length === 0 && connectedServices.includes('jira')) {
             api.get('/publish/jira/projects').then((res) => {
                 setJiraProjects(res.data.projects || []);
-            }).catch(() => {});
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load Jira projects'); });
         }
     }, [jiraEnabled, connectedServices]);
 
@@ -111,7 +111,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         if (devrevEnabled && devrevParts.length === 0 && connectedServices.includes('devrev')) {
             api.get('/publish/devrev/parts').then((res) => {
                 setDevrevParts(res.data.parts || []);
-            }).catch(() => {});
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load DevRev parts'); });
         }
     }, [devrevEnabled, connectedServices]);
 

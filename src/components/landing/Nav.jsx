@@ -21,8 +21,8 @@ export default function Nav() {
       transition: "all .35s ease",
     }}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <img src={logo} alt="Releasly" style={{ height: 36 }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => navigate('/')}>
+          <img src={logo} alt="Releasly" style={{ height: 50 }} />
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           {["Features", "Pricing", "Docs"].map((t) => {

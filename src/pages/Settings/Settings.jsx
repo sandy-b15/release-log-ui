@@ -1,45 +1,62 @@
-import { Settings as SettingsIcon, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { User, CreditCard, BarChart3, Key, Link2 } from 'lucide-react';
 import TopBar from '../../components/Header/Header';
+import BasicInfo from './BasicInfo';
+import PlansBilling from './PlansBilling';
+import UsageMetrics from './UsageMetrics';
+import LLMKeys from './LLMKeys';
+import SettingsIntegrations from './SettingsIntegrations';
 import './Settings.css';
 
+const tabs = [
+    { id: 'basic', label: 'Basic Info', icon: <User size={15} /> },
+    { id: 'plans', label: 'Plans & Billing', icon: <CreditCard size={15} /> },
+    { id: 'usage', label: 'Usage Metrics', icon: <BarChart3 size={15} /> },
+    { id: 'keys', label: 'LLM Keys', icon: <Key size={15} /> },
+    { id: 'integrations', label: 'Integrations', icon: <Link2 size={15} /> },
+];
+
+const tabContent = {
+    basic: BasicInfo,
+    plans: PlansBilling,
+    usage: UsageMetrics,
+    keys: LLMKeys,
+    integrations: SettingsIntegrations,
+};
+
 const Settings = () => {
+    const [activeTab, setActiveTab] = useState('basic');
+    const [animKey, setAnimKey] = useState(0);
+    const ActiveComponent = tabContent[activeTab];
+
+    const switchTab = (id) => {
+        setActiveTab(id);
+        setAnimKey(k => k + 1);
+    };
+
     return (
         <>
             <TopBar sub="Settings" title="Preferences" />
-            <main className="settings-main">
-                <div className="coming-soon-container">
-                    <div className="coming-soon-icon">
-                        <SettingsIcon size={48} strokeWidth={1.5} />
-                    </div>
-                    <h1 className="coming-soon-title">Settings</h1>
-                    <div className="coming-soon-badge">
-                        <Clock size={14} />
-                        <span>Coming Soon</span>
-                    </div>
-                    <p className="coming-soon-desc">
-                        We're working on bringing you a powerful settings experience.
-                        Stay tuned for account preferences, team management, and more.
-                    </p>
-                    <div className="coming-soon-features">
-                        <div className="feature-preview-card">
-                            <span className="feature-dot"></span>
-                            Account & Profile
-                        </div>
-                        <div className="feature-preview-card">
-                            <span className="feature-dot"></span>
-                            Team Management
-                        </div>
-                        <div className="feature-preview-card">
-                            <span className="feature-dot"></span>
-                            Notifications
-                        </div>
-                        <div className="feature-preview-card">
-                            <span className="feature-dot"></span>
-                            API Keys
-                        </div>
-                    </div>
+            <div className="settings-root">
+                <div className="settings-hdr">
+                    <h1>Settings</h1>
+                    <p>Manage your account, billing, and preferences</p>
                 </div>
-            </main>
+
+                <nav className="tabs-nav">
+                    {tabs.map(t => (
+                        <button
+                            key={t.id}
+                            className={`tab-btn${activeTab === t.id ? ' active' : ''}`}
+                            onClick={() => switchTab(t.id)}
+                        >
+                            {t.icon}{t.label}
+                        </button>
+                    ))}
+                </nav>
+
+                <ActiveComponent key={animKey} />
+            </div>
         </>
     );
 };

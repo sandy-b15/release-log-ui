@@ -10,6 +10,8 @@ import SearchDropdown from '../../components/ui/SearchDropdown';
 import devrevLogo from '../../assets/devrev-logo.webp';
 import jiraLogo from '../../assets/jira_logo.webp';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
+import LLMSelector from '../../components/generate/LLMSelector';
+import { useLLMKeys } from '../../hooks/useLLMKeys';
 import toast from 'react-hot-toast';
 import './Dashboard.css';
 
@@ -41,6 +43,7 @@ const api = axios.create({
 
 const Dashboard = () => {
     const navigate = useNavigate();
+    const { savedKeys, catalogue } = useLLMKeys();
 
     // -- Global Dashboard State --
     const [view, setView] = useState('overview'); // 'overview' | 'generate'
@@ -106,6 +109,7 @@ const Dashboard = () => {
     const [audience, setAudience] = useState(() => sessionStorage.getItem('shared_audience') || 'qa');
     const [releaseTitle, setReleaseTitle] = useState('');
     const [tone, setTone] = useState('professional');
+    const [llmConfig, setLlmConfig] = useState({ provider: 'releasly', model: null, apiKeyOverride: null });
     const [loading, setLoading] = useState(false);
     const [loadingData, setLoadingData] = useState(false);
 
@@ -134,6 +138,7 @@ const Dashboard = () => {
                     api.get('/tokens/github').catch(() => ({ data: { hasToken: false } })),
                     api.get('/tokens/devrev').catch(() => ({ data: { hasToken: false } })),
                     api.get('/tokens/jira').catch(() => ({ data: { hasToken: false } }))
+                    // Note: these catches return fallback data intentionally — token check failures are non-blocking
                 ]);
 
                 try {
@@ -148,6 +153,7 @@ const Dashboard = () => {
                     setConnectedIntegrations(formatted);
                 } catch (e) {
                     console.error("Failed to fetch all tokens", e);
+                    toast.error('Failed to load connected integrations');
                 }
 
                 try {
@@ -157,6 +163,7 @@ const Dashboard = () => {
                     setTotalNotesGenerated(countRes.data.count || 0);
                 } catch (e) {
                     console.error("Failed to fetch notes", e);
+                    toast.error('Failed to load release notes');
                 }
 
                 try {
@@ -165,6 +172,7 @@ const Dashboard = () => {
                     setPublishedCount(activityRes.data.publishedCount || 0);
                 } catch (e) {
                     console.error("Failed to fetch publish activity", e);
+                    toast.error('Failed to load publish activity');
                 }
 
                 if (!ghRes.data.hasToken) setSource('devrev');
@@ -175,6 +183,7 @@ const Dashboard = () => {
 
             } catch (err) {
                 console.error("Dashboard Init Error", err);
+                toast.error('Failed to initialize dashboard');
             }
         };
         init();
@@ -192,7 +201,7 @@ const Dashboard = () => {
                 setBranches(branchRes.data);
                 if (initialBranch) fetchCommits(initialRepo, initialBranch, dateRange, false);
             }
-        } catch (err) { console.error("GH fetchRepos", err); }
+        } catch (err) { console.error("GH fetchRepos", err); toast.error('Failed to load repositories'); }
     };
 
     const handleSelectRepo = async (repoFullName) => {
@@ -206,7 +215,7 @@ const Dashboard = () => {
             setBranches(res.data);
             const defaultBranch = res.data.find(b => b.name === 'main' || b.name === 'master');
             if (defaultBranch) handleSelectBranch(defaultBranch.name, repoFullName);
-        } catch (err) { console.error(err); }
+        } catch (err) { console.error(err); toast.error('Failed to load branches'); }
     };
 
     const handleSelectBranch = async (branch, repoOverride = null) => {
@@ -240,7 +249,7 @@ const Dashboard = () => {
             }
             setCommits(fetched);
             if (autoSelectAll) setSelectedCommits(fetched.map(c => c.id));
-        } catch (err) { console.error("GH fetchCommits", err); }
+        } catch (err) { console.error("GH fetchCommits", err); toast.error('Failed to load pull requests'); }
         finally { setLoadingData(false); }
     };
 
@@ -257,7 +266,7 @@ const Dashboard = () => {
             const res = await api.get('/devrev/sprint-boards');
             setBoards(res.data.data || []);
             if (initialBoard) fetchSprintsForBoard(initialBoard.id);
-        } catch (err) { console.error("DR fetchBoards", err); }
+        } catch (err) { console.error("DR fetchBoards", err); toast.error('Failed to load DevRev boards'); }
     };
 
     const handleSelectBoard = async (board) => {
@@ -271,7 +280,7 @@ const Dashboard = () => {
         try {
             const res = await api.post('/devrev/groups', { parent_id: boardId });
             setSprints(res.data.data || []);
-        } catch (err) { console.error("DR fetchSprints", err); }
+        } catch (err) { console.error("DR fetchSprints", err); toast.error('Failed to load sprints'); }
         finally { setLoadingData(false); }
     };
 
@@ -343,7 +352,7 @@ const Dashboard = () => {
             const projects = res.data.projects || [];
             setJiraProjects(projects);
             if (projects.length === 1) handleSelectJiraProject(projects[0]);
-        } catch (err) { console.error("Jira fetchProjects", err); }
+        } catch (err) { console.error("Jira fetchProjects", err); toast.error('Failed to load Jira projects'); }
     };
 
     const handleSelectJiraProject = async (project) => {
@@ -362,7 +371,7 @@ const Dashboard = () => {
                 setJiraBoards(boards);
                 if (boards.length === 1) handleSelectJiraBoard(boards[0]);
             }
-        } catch (err) { console.error("Jira fetchBoards/versions", err); }
+        } catch (err) { console.error("Jira fetchBoards/versions", err); toast.error('Failed to load Jira boards'); }
         finally { setLoadingData(false); }
     };
 
@@ -381,7 +390,7 @@ const Dashboard = () => {
                 setJiraSprints(sprints);
                 if (sprints.length === 1) handleSelectJiraSprints([sprints[0].id]);
             }
-        } catch (err) { console.error("Jira fetchSprints", err); }
+        } catch (err) { console.error("Jira fetchSprints", err); toast.error('Failed to load Jira sprints'); }
         finally { setLoadingData(false); }
     };
 
@@ -399,7 +408,7 @@ const Dashboard = () => {
             const seen = new Set();
             const unique = allIssues.filter(i => { if (seen.has(i.id)) return false; seen.add(i.id); return true; });
             setJiraIssues(unique);
-        } catch (err) { console.error("Jira fetchIssues", err); }
+        } catch (err) { console.error("Jira fetchIssues", err); toast.error('Failed to load Jira issues'); }
         finally { setLoadingData(false); }
     };
 
@@ -416,7 +425,7 @@ const Dashboard = () => {
             const seen = new Set();
             const unique = allIssues.filter(i => { if (seen.has(i.id)) return false; seen.add(i.id); return true; });
             setJiraIssues(unique);
-        } catch (err) { console.error("Jira fetchVersionIssues", err); }
+        } catch (err) { console.error("Jira fetchVersionIssues", err); toast.error('Failed to load version issues'); }
         finally { setLoadingData(false); }
     };
 
@@ -429,12 +438,12 @@ const Dashboard = () => {
             if (mode === 'version') {
                 api.get('/jira/versions', { params: { projectKeyOrId: jiraSelectedProject.key } })
                     .then(res => { setJiraVersions(res.data.versions || []); })
-                    .catch(err => console.error("Jira fetchVersions", err))
+                    .catch(err => { console.error("Jira fetchVersions", err); toast.error('Failed to load versions'); })
                     .finally(() => setLoadingData(false));
             } else {
                 api.get('/jira/boards', { params: { projectKeyOrId: jiraSelectedProject.key } })
                     .then(res => { setJiraBoards(res.data.boards || []); })
-                    .catch(err => console.error("Jira fetchBoards", err))
+                    .catch(err => { console.error("Jira fetchBoards", err); toast.error('Failed to load Jira boards'); })
                     .finally(() => setLoadingData(false));
             }
         }
@@ -475,6 +484,11 @@ const Dashboard = () => {
     // --- Generation Logic ---
     const handleGenerate = async () => {
         setLoading(true);
+        const llm = {
+            provider: llmConfig.provider || 'releasly',
+            model: llmConfig.model || undefined,
+            apiKeyOverride: llmConfig.apiKeyOverride || undefined,
+        };
         try {
             if (source === 'github') {
                 const selectedObjects = commits.filter(c => selectedCommits.includes(c.id));
@@ -482,17 +496,17 @@ const Dashboard = () => {
                     commit: { message: `PR #${pr.number}: ${pr.title}`, author: { name: pr.user.login } }
                 }));
                 const title = releaseTitle || `GitHub Release Notes - ${new Date().toLocaleDateString()}`;
-                const genRes = await api.post('/generate', { commits: commitList, audience, title, tone });
+                const genRes = await api.post('/generate', { commits: commitList, audience, title, tone, llm });
                 sessionStorage.setItem('last_integration', 'github');
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             } else if (source === 'devrev') {
                 const title = releaseTitle || `DevRev Release Notes - ${new Date().toLocaleDateString()}`;
-                const genRes = await api.post('/devrev/generate', { sprints: selectedSprints, audience, title, tone });
+                const genRes = await api.post('/devrev/generate', { sprints: selectedSprints, audience, title, tone, llm });
                 sessionStorage.setItem('last_integration', 'devrev');
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             } else if (source === 'jira') {
                 const title = releaseTitle || `Jira Release Notes - ${new Date().toLocaleDateString()}`;
-                const genRes = await api.post('/jira/generate', { issues: jiraSelectedIssues, audience, title, tone });
+                const genRes = await api.post('/jira/generate', { issues: jiraSelectedIssues, audience, title, tone, llm });
                 sessionStorage.setItem('last_integration', 'jira');
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             }
@@ -1061,11 +1075,17 @@ const Dashboard = () => {
                                             <div style={{ padding: 18, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                                                 <div className="selector-filter-row-v2">
                                                     <input type="text" placeholder="Search sprints..." className="selector-search-v2" style={{ maxWidth: 200, margin: 0 }} value={sprintSearch} onChange={e => setSprintSearch(e.target.value)} />
-                                                    <select className="selector-filter-select-v2" value={sprintFilter} onChange={e => setSprintFilter(e.target.value)}>
-                                                        <option value="all">All Status</option>
-                                                        <option value="active">Active</option>
-                                                        <option value="completed">Completed</option>
-                                                    </select>
+                                                    <SearchDropdown
+                                                        options={[
+                                                            { id: 'all', label: 'All Status' },
+                                                            { id: 'active', label: 'Active' },
+                                                            { id: 'completed', label: 'Completed' },
+                                                        ]}
+                                                        value={sprintFilter}
+                                                        onChange={(id) => setSprintFilter(id)}
+                                                        placeholder="Filter..."
+                                                        style={{ maxWidth: 150 }}
+                                                    />
                                                 </div>
                                                 <div className="selector-list-header-v2" onClick={handleToggleAllSprints}>
                                                     {filteredSprints.length > 0 && filteredSprints.every(s => selectedSprints.find(sel => sel.id === s.id))
@@ -1127,28 +1147,38 @@ const Dashboard = () => {
                                     </div>
                                     <div>
                                         <label className="gen-config-label">Audience</label>
-                                        <select
-                                            className="gen-config-input"
+                                        <SearchDropdown
+                                            options={[
+                                                { id: 'product', label: 'Product Team' },
+                                                { id: 'qa', label: 'QA / Testing' },
+                                                { id: 'stakeholder', label: 'Stakeholders' },
+                                            ]}
                                             value={audience}
-                                            onChange={e => setAudience(e.target.value)}
-                                        >
-                                            <option value="product">Product Team</option>
-                                            <option value="qa">QA / Testing</option>
-                                            <option value="stakeholder">Stakeholders</option>
-                                        </select>
+                                            onChange={(id) => setAudience(id)}
+                                            placeholder="Select audience..."
+                                        />
                                     </div>
                                     <div>
                                         <label className="gen-config-label">Tone</label>
-                                        <select
-                                            className="gen-config-input"
+                                        <SearchDropdown
+                                            options={[
+                                                { id: 'professional', label: 'Professional' },
+                                                { id: 'casual', label: 'Casual' },
+                                                { id: 'technical', label: 'Technical' },
+                                            ]}
                                             value={tone}
-                                            onChange={e => setTone(e.target.value)}
-                                        >
-                                            <option value="professional">Professional</option>
-                                            <option value="casual">Casual</option>
-                                            <option value="technical">Technical</option>
-                                        </select>
+                                            onChange={(id) => setTone(id)}
+                                            placeholder="Select tone..."
+                                        />
                                     </div>
+                                    {catalogue && (
+                                        <LLMSelector
+                                            catalogue={catalogue}
+                                            savedKeys={savedKeys}
+                                            llmConfig={llmConfig}
+                                            onChange={setLlmConfig}
+                                        />
+                                    )}
                                 </div>
                                 <div style={{ display: 'flex', gap: 8 }}>
                                     <button className="topbar-action-btn" onClick={() => setStep(2)}>{ic.back} Back</button>

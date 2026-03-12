@@ -1,0 +1,108 @@
+/* LLM Selector in Configure step */
+.llm-selector {
+    margin-top: 2px;
+}
+
+.llm-selector-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.llm-selector-row {
+    width: 100%;
+}
+
+.llm-selector-key-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 0.78rem;
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+
+.llm-selector-key-status.saved {
+    background: rgba(34, 197, 94, 0.08);
+    color: #16a34a;
+}
+
+.llm-selector-key-status.no-key {
+    background: rgba(234, 179, 8, 0.08);
+    color: #a16207;
+}
+
+.llm-selector-key-status.default-info {
+    background: var(--surface);
+    color: var(--muted);
+}
+
+.llm-selector-check {
+    font-weight: 700;
+}
+
+.llm-selector-warn {
+    font-weight: 600;
+}
+
+.llm-selector-or {
+    color: var(--muted);
+    font-size: 0.72rem;
+}
+
+.llm-selector-add-key-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.llm-selector-settings-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.llm-selector-settings-link:hover {
+    text-decoration: underline;
+}
+
+.llm-selector-override {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.llm-selector-override .llm-key-input-wrap {
+    position: relative;
+    flex: 1;
+}
+
+.llm-selector-override .llm-key-eye-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+}
+
+.llm-selector-hint {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-style: italic;
+}
