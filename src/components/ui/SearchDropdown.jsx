@@ -75,13 +75,14 @@ const SearchDropdown = ({ options = [], value, onChange, placeholder = 'Select..
                 style={{
                     width: '100%', padding: '7px 12px', borderRadius: 8,
                     border: `1px solid ${open ? 'var(--indigo)' : 'var(--border)'}`,
-                    fontSize: 12, fontFamily: 'var(--font)',
+                    fontSize: 14, fontFamily: 'var(--font)',
                     background: 'var(--white)', margin: 0, cursor: disabled ? 'not-allowed' : 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6,
                     color: isPlaceholder ? 'var(--muted)' : 'var(--text)',
                     textAlign: 'left', opacity: disabled ? 0.5 : 1,
                     boxShadow: open ? '0 0 0 3px rgba(99, 102, 241, 0.08)' : 'none',
                     transition: 'border-color .15s, box-shadow .15s',
+                    minHeight: '40px',
                 }}
             >
                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{displayLabel}</span>
@@ -126,7 +127,7 @@ const SearchDropdown = ({ options = [], value, onChange, placeholder = 'Select..
                                     onClick={() => handleSelect(o.id)}
                                     style={{
                                         width: '100%', padding: '7px 12px', display: 'flex', alignItems: 'center',
-                                        gap: 8, fontSize: 12, border: 'none', cursor: 'pointer',
+                                        gap: 8, fontSize: 14, border: 'none', cursor: 'pointer',
                                         background: sel ? 'var(--il)' : 'transparent',
                                         color: sel ? 'var(--it)' : 'var(--text)',
                                         fontFamily: 'var(--font)', textAlign: 'left',

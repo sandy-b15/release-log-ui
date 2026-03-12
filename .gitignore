@@ -116,8 +116,8 @@ dist
 # DynamoDB Local files
 .dynamodb/
 
-# Firebase cache directory
-.firebase/
+# Vercel
+.vercel/
 
 # TernJS port file
 .tern-port

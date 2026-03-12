@@ -11,10 +11,155 @@
 
 .topbar-left {
     min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ── Project Switcher ── */
+.project-switcher {
+    position: relative;
+}
+
+.project-switcher-btn {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    transition: background .15s;
+    white-space: nowrap;
+}
+
+.project-switcher-btn:hover {
+    background: var(--s1);
+}
+
+.project-switcher-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--emerald);
+    flex-shrink: 0;
+}
+
+.project-switcher-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-switcher-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 220px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shl);
+    z-index: 100;
+    animation: fadeIn 0.15s ease-out;
+    overflow: hidden;
+}
+
+.project-switcher-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 6px;
+}
+
+.project-switcher-option {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.9375rem;
+    color: var(--text);
+    transition: background .1s;
+    box-sizing: border-box;
+}
+
+.project-switcher-option:hover {
+    background: var(--s1);
+}
+
+.project-switcher-option.active {
+    background: var(--il);
+    color: var(--it);
+}
+
+.project-switcher-opt-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.project-switcher-new {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 14px;
+    font-family: var(--font);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--indigo);
+    border-top: 1px solid var(--border-l);
+    transition: background .1s;
+    box-sizing: border-box;
+}
+
+.project-switcher-new:hover {
+    background: var(--s1);
+}
+
+.project-switcher-create-form {
+    display: flex;
+    gap: 6px;
+    padding: 18px 8px;
+    border-top: 1px solid var(--border-l);
+    align-items: baseline;
+}
+
+.project-switcher-input {
+    flex: 1;
+    font-family: var(--font);
+    font-size: 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    color: var(--text);
+    min-width: 0;
+    min-height: 32px;
+}
+
+.project-switcher-input:focus {
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+/* project-switcher-create-btn — uses global .btn .btn-primary .btn-sm */
+.topbar-divider-left {
+    height: 24px;
 }
 
 .topbar-sub {
-    font-size: 11px;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--indigo);
     text-transform: uppercase;
@@ -23,7 +168,7 @@
 }
 
 .topbar-title {
-    font-size: 16px;
+    font-size: 1.125rem;
     font-weight: 700;
     letter-spacing: -.02em;
     margin: 0;
@@ -91,27 +236,27 @@
 }
 
 .topbar-avatar {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 10px;
     background: linear-gradient(135deg, var(--indigo), var(--violet));
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 12px;
+    font-size: 0.875rem;
     font-weight: 700;
 }
 
 .topbar-avatar-img {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 10px;
     object-fit: cover;
 }
 
 .topbar-username {
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-weight: 600;
 }
 
@@ -140,7 +285,7 @@
     border: none;
     border-radius: 8px;
     color: var(--rose);
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s;
@@ -160,5 +305,35 @@
 
     .topbar-username {
         display: none;
+    }
+
+    .topbar-title {
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    .topbar-sub {
+        font-size: 0.7rem;
+    }
+
+    .topbar-divider {
+        display: none;
+    }
+
+    .topbar-divider-left {
+        display: none;
+    }
+
+    .topbar-sub,
+    .topbar-title {
+        display: none;
+    }
+
+    .project-switcher-name {
+        max-width: 120px;
+        font-size: 0.875rem;
     }
 }

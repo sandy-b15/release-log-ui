@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { User, CreditCard, BarChart3, Key, Link2 } from 'lucide-react';
+import { User, CreditCard, BarChart3, Key, Link2, FolderOpen } from 'lucide-react';
 import TopBar from '../../components/Header/Header';
 import BasicInfo from './BasicInfo';
 import PlansBilling from './PlansBilling';
 import UsageMetrics from './UsageMetrics';
 import LLMKeys from './LLMKeys';
 import SettingsIntegrations from './SettingsIntegrations';
+import SettingsProjects from './SettingsProjects';
 import './Settings.css';
 
 const tabs = [
     { id: 'basic', label: 'Basic Info', icon: <User size={15} /> },
+    { id: 'projects', label: 'Projects', icon: <FolderOpen size={15} /> },
     { id: 'plans', label: 'Plans & Billing', icon: <CreditCard size={15} /> },
     { id: 'usage', label: 'Usage Metrics', icon: <BarChart3 size={15} /> },
     { id: 'keys', label: 'LLM Keys', icon: <Key size={15} /> },
@@ -18,6 +20,7 @@ const tabs = [
 
 const tabContent = {
     basic: BasicInfo,
+    projects: SettingsProjects,
     plans: PlansBilling,
     usage: UsageMetrics,
     keys: LLMKeys,

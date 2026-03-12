@@ -11,14 +11,14 @@
 }
 
 .dash-date-v2 {
-    font-size: 12px;
+    font-size: 0.875rem;
     color: var(--muted);
     font-weight: 500;
     margin: 0 0 4px;
 }
 
 .dash-hello-v2 {
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 800;
     letter-spacing: -.03em;
     line-height: 1.1;
@@ -32,40 +32,15 @@
     color: var(--indigo);
 }
 
-/* CTA Button */
+/* CTA Button — uses global .btn .btn-primary, with optional shadow */
 .dash-cta-v2 {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 20px;
-    border-radius: 12px;
-    background: var(--primary);
-    color: var(--pt);
-    border: none;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: var(--font);
     box-shadow: var(--shm);
-    transition: all .2s ease;
-    white-space: nowrap;
-}
-
-.dash-cta-v2:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shl);
-}
-
-.dash-cta-v2.small {
-    padding: 8px 16px;
-    font-size: 12px;
-    border-radius: 10px;
 }
 
 /* ── Stats Row ── */
 .dash-stats-v2 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 14px;
     margin-bottom: 24px;
 }
@@ -92,21 +67,21 @@
 }
 
 .dash-stat-number-v2 {
-    font-size: 24px;
+    font-size: 1.625rem;
     font-weight: 800;
     letter-spacing: -.02em;
     line-height: 1;
 }
 
 .dash-stat-label-v2 {
-    font-size: 12px;
+    font-size: 0.875rem;
     color: var(--muted);
     font-weight: 500;
     margin-top: 2px;
 }
 
 .dash-stat-change-v2 {
-    font-size: 10px;
+    font-size: 0.8rem;
     color: var(--m2);
     margin-top: 3px;
 }
@@ -137,7 +112,7 @@
 }
 
 .dash-card-title {
-    font-size: 14px;
+    font-size: 1.05rem;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -146,7 +121,7 @@
 }
 
 .dash-view-all {
-    font-size: 11px;
+    font-size: 0.8rem;
     color: var(--indigo);
     font-weight: 600;
     cursor: pointer;
@@ -185,7 +160,7 @@
 }
 
 .dash-note-title-v2 {
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -193,7 +168,7 @@
 }
 
 .dash-note-meta-v2 {
-    font-size: 11px;
+    font-size: 0.8rem;
     color: var(--muted);
     margin-top: 2px;
     display: flex;
@@ -202,7 +177,7 @@
 }
 
 .dash-note-date-v2 {
-    font-size: 11px;
+    font-size: 0.8rem;
     color: var(--m2);
     font-family: var(--mono);
     white-space: nowrap;
@@ -234,11 +209,23 @@
 }
 
 /* ── Published Badge ── */
+.dash-llm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--t2);
+    background: var(--s1);
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
 .dash-published-badge {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    font-size: 10px;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--emerald);
     background: var(--el);
@@ -347,7 +334,7 @@
 }
 
 .activity-title {
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 2px;
@@ -355,7 +342,7 @@
 }
 
 .activity-desc {
-    font-size: 12px;
+    font-size: 0.875rem;
     color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
@@ -364,7 +351,7 @@
 }
 
 .activity-config {
-    font-size: 11px;
+    font-size: 0.8rem;
     color: var(--sky);
     font-weight: 500;
     font-family: var(--mono);
@@ -375,7 +362,7 @@
 }
 
 .activity-msg {
-    font-size: 11px;
+    font-size: 0.8rem;
     font-weight: 500;
     margin-bottom: 2px;
     white-space: nowrap;
@@ -392,7 +379,7 @@
 }
 
 .activity-time {
-    font-size: 11px;
+    font-size: 0.8rem;
     color: var(--m2);
 }
 
@@ -400,27 +387,7 @@
    Generate View – v2
    ═══════════════════════════ */
 
-/* TopBar action buttons */
-.topbar-action-btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--white);
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--muted);
-    font-family: var(--font);
-    transition: all .15s;
-}
-
-.topbar-action-btn:hover {
-    background: var(--s1);
-    color: var(--text);
-}
+/* TopBar action buttons — use global .btn .btn-secondary */
 
 /* Source Cards */
 .gen-source-grid-v2 {
@@ -444,7 +411,6 @@
 }
 
 .gen-source-btn-v2.active {
-    border: 2px solid var(--indigo);
     background: var(--il);
 }
 
@@ -455,55 +421,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 800;
 }
 
-/* Continue / Generate buttons */
-.gen-continue-btn {
-    padding: 10px 24px;
-    border-radius: 10px;
-    background: var(--primary);
-    color: var(--pt);
-    border: none;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: var(--font);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.gen-continue-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
+/* Continue / Generate buttons — use global .btn .btn-primary */
 .gen-generate-btn {
-    padding: 10px 24px;
-    border-radius: 10px;
-    background: var(--primary);
-    color: var(--pt);
-    border: none;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: var(--font);
-    display: flex;
-    align-items: center;
-    gap: 6px;
     box-shadow: var(--shm);
-}
-
-.gen-generate-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
 }
 
 /* Config inputs */
 .gen-config-label {
-    font-size: 12px;
+    font-size: 0.875rem;
     font-weight: 600;
     color: var(--t2);
     display: block;
@@ -512,14 +441,15 @@
 
 .gen-config-input {
     width: 100%;
-    padding: 10px 14px;
+    padding: 9px 14px;
     border-radius: 10px;
     border: 1px solid var(--border);
-    font-size: 13px;
+    font-size: 0.9375rem;
     color: var(--text);
     background: var(--white);
     transition: border-color .15s;
     margin: 0;
+    min-height: 38px;
 }
 
 .gen-config-input:focus {
@@ -542,7 +472,7 @@
 }
 
 .selector-sidebar-header-v2 {
-    font-size: 10px;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--m2);
     text-transform: uppercase;
@@ -552,13 +482,14 @@
 
 .selector-search-v2 {
     width: 100%;
-    padding: 7px 10px;
+    padding: 8px 10px;
     border-radius: 8px;
     border: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 0.875rem;
     font-family: var(--font);
     margin: 0 0 6px;
     transition: border-color .15s;
+    min-height: 38px;
 }
 
 .selector-search-v2:focus {
@@ -571,12 +502,12 @@
     align-items: center;
     gap: 6px;
     width: 100%;
-    padding: 7px 10px;
+    padding: 8px 10px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
     text-align: left;
-    font-size: 12px;
+    font-size: 0.875rem;
     font-weight: 400;
     font-family: var(--font);
     background: transparent;
@@ -601,14 +532,15 @@
 }
 
 .selector-filter-select-v2 {
-    padding: 7px 12px;
+    padding: 8px 12px;
     border-radius: 8px;
     border: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 0.875rem;
     color: var(--muted);
     font-family: var(--font);
     background: var(--white);
     margin: 0;
+    min-height: 38px;
 }
 
 .selector-list-header-v2 {
@@ -617,7 +549,7 @@
     gap: 10px;
     padding: 8px 0 12px;
     color: var(--muted);
-    font-size: 12px;
+    font-size: 0.875rem;
     cursor: pointer;
     font-weight: 500;
 }
@@ -635,8 +567,8 @@
 }
 
 .selector-item-v2.selected {
-    background: var(--el);
-    border-color: var(--emerald);
+    /* background: var(--el); */
+    border-left-color: var(--emerald);
 }
 
 .selector-checkbox-v2 {
@@ -666,12 +598,14 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
-    .dash-stats-v2 {
+@media (max-width: 1023px) {
+    .dash-two-col {
         grid-template-columns: 1fr;
     }
+}
 
-    .dash-two-col {
+@media (max-width: 900px) {
+    .dash-stats-v2 {
         grid-template-columns: 1fr;
     }
 
@@ -688,6 +622,109 @@
     }
 
     .dash-hello-v2 {
-        font-size: 22px;
+        font-size: 1.5rem;
     }
+
+    .dash-stats-v2 {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .dash-stat-v2 {
+        padding: 16px 18px;
+    }
+
+    .dash-note-row-v2 {
+        padding: 12px 16px;
+    }
+
+    .dash-note-date-v2 {
+        display: none;
+    }
+
+    .gen-source-grid-v2 {
+        grid-template-columns: 1fr;
+    }
+
+    .selector-filter-row-v2 {
+        flex-direction: column;
+    }
+
+    .config-layout {
+        flex-direction: column;
+    }
+
+    .config-summary-col {
+        order: -1;
+    }
+}
+
+/* ── Step 3 Config Layout ── */
+.config-layout {
+    display: flex;
+    gap: 28px;
+}
+
+.config-form-col {
+    flex: 3;
+    min-width: 0;
+}
+
+.config-summary-col {
+    flex: 2;
+    min-width: 0;
+}
+
+.config-summary-card {
+    background: var(--bg);
+    border: 1px solid var(--border-l);
+    border-radius: var(--r);
+    padding: 20px;
+    position: sticky;
+    top: 100px;
+}
+
+.config-summary-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.config-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.config-summary-label {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.config-summary-value {
+    font-size: 0.875rem;
+    color: var(--text);
+    font-weight: 600;
+    text-align: right;
+}
+
+/* Advanced Options */
+.config-advanced {
+    border-top: 1px solid var(--border-l);
+    padding-top: 16px;
+}
+
+.config-advanced-toggle {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+    padding: 4px 0;
 }

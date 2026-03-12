@@ -190,7 +190,7 @@ export default function BasicInfo() {
             />
           </div>
         </div>
-        <button className="s-btn s-btn-primary" onClick={handleSaveProfile} disabled={saving}>
+        <button className="btn btn-primary" onClick={handleSaveProfile} disabled={saving}>
           {saving ? <Loader2 size={14} className="spin" /> : <Check size={14} />} Save Changes
         </button>
       </div>
@@ -218,7 +218,7 @@ export default function BasicInfo() {
             </div>
           </div>
         ))}
-        <button className="s-btn s-btn-primary" onClick={handlePasswordUpdate} disabled={pwSaving || !pwForm.newPw}>
+        <button className="btn btn-primary" onClick={handlePasswordUpdate} disabled={pwSaving || !pwForm.newPw}>
           {pwSaving ? <Loader2 size={14} className="spin" /> : <Lock size={14} />}
           {hasPassword ? ' Update Password' : ' Set Password'}
         </button>
@@ -234,15 +234,15 @@ export default function BasicInfo() {
           This action is irreversible. All your data, release notes, and integrations will be permanently deleted.
         </p>
         {!showDeleteConfirm ? (
-          <button className="s-btn s-btn-danger" onClick={() => setShowDeleteConfirm(true)}>
+          <button className="btn btn-danger" onClick={() => setShowDeleteConfirm(true)}>
             <Trash2 size={14} /> Delete Account
           </button>
         ) : (
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <button className="s-btn s-btn-danger" onClick={handleDeleteAccount} disabled={deleting}>
+            <button className="btn btn-danger" onClick={handleDeleteAccount} disabled={deleting}>
               {deleting ? <Loader2 size={14} className="spin" /> : <Trash2 size={14} />} Yes, Delete Everything
             </button>
-            <button className="s-btn s-btn-secondary" onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
+            <button className="btn btn-secondary" onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
           </div>
         )}
       </div>

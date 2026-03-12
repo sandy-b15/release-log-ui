@@ -304,11 +304,11 @@ const GenerateEdit = () => {
         <>
             <TopBar sub="Editor" title="Release Notes">
                 <div style={{ display: 'flex', gap: 6 }}>
-                    <button className="topbar-action-btn" onClick={() => navigate('/dashboard')}>
+                    <button className="btn btn-secondary" onClick={() => navigate('/dashboard')}>
                         {ic.back} Back
                     </button>
                     <div className="download-wrapper">
-                        <button className="topbar-action-btn" onClick={() => setShowDownloadMenu(!showDownloadMenu)}>
+                        <button className="btn btn-secondary" onClick={() => setShowDownloadMenu(!showDownloadMenu)}>
                             {ic.dl} Export
                             <ChevronDown size={12} style={{ transition: 'transform .2s', transform: showDownloadMenu ? 'rotate(180deg)' : 'none' }} />
                         </button>
@@ -326,7 +326,7 @@ const GenerateEdit = () => {
                             </div>
                         )}
                     </div>
-                    <button className={`editor-publish-btn ${isPublished ? 'published' : ''}`} onClick={handlePublish} disabled={saving}>
+                    <button className={`btn btn-primary editor-publish-btn ${isPublished ? 'published' : ''}`} onClick={handlePublish} disabled={saving}>
                         {isPublished ? <><Check size={13} /> Published</> : <>{ic.send} Publish</>}
                     </button>
                 </div>
@@ -346,11 +346,11 @@ const GenerateEdit = () => {
                         ))}
                     </div>
                     <div style={{ display: 'flex', gap: 6 }}>
-                        <button className="topbar-action-btn" onClick={handleCopy}>
+                        <button className="btn btn-secondary" onClick={handleCopy}>
                             {copied ? <><Check size={13} /> Copied</> : <>{ic.copy} Copy</>}
                         </button>
                         {noteId && (
-                            <button className="topbar-action-btn" onClick={handleSave} disabled={saving || !hasChanges}>
+                            <button className="btn btn-secondary" onClick={handleSave} disabled={saving || !hasChanges}>
                                 {saving ? 'Saving...' : saved ? <><Check size={13} /> Saved</> : <><Save size={13} /> Save</>}
                             </button>
                         )}

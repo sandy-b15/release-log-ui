@@ -8,13 +8,13 @@
 /* ── Header ── */
 .settings-hdr { margin-bottom: 32px; }
 .settings-hdr h1 {
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--text);
     letter-spacing: -0.5px;
 }
 .settings-hdr p {
-    font-size: 14px;
+    font-size: 1rem;
     color: var(--muted);
     margin-top: 4px;
 }
@@ -35,7 +35,7 @@
     cursor: pointer;
     padding: 10px 16px 12px;
     font-family: var(--font);
-    font-size: 13.5px;
+    font-size: 0.9375rem;
     font-weight: 500;
     color: var(--m2);
     white-space: nowrap;
@@ -50,7 +50,7 @@
     color: var(--text);
     border-bottom-color: var(--primary);
 }
-.tab-btn svg { width: 15px; height: 15px; }
+.tab-btn svg { width: 16px; height: 16px; }
 
 /* ── Content Animation ── */
 .tab-content {
@@ -71,13 +71,13 @@
 }
 
 .section-title {
-    font-size: 15px;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--text);
     margin-bottom: 4px;
 }
 .section-desc {
-    font-size: 13px;
+    font-size: 0.9375rem;
     color: var(--muted);
     margin-bottom: 20px;
 }
@@ -86,16 +86,16 @@
 .form-group { margin-bottom: 20px; }
 .form-label {
     display: block;
-    font-size: 13px;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--t2);
     margin-bottom: 6px;
 }
 .form-input {
     width: 100%;
-    padding: 10px 14px;
+    padding: 9px 14px;
     font-family: var(--font);
-    font-size: 14px;
+    font-size: 0.9375rem;
     color: var(--text);
     background: var(--white);
     border: 1px solid var(--border);
@@ -103,6 +103,7 @@
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
+    min-height: 38px;
 }
 .form-input:focus {
     border-color: var(--primary);
@@ -113,9 +114,9 @@
 .form-select {
     appearance: none;
     width: 100%;
-    padding: 10px 36px 10px 14px;
+    padding: 9px 36px 9px 14px;
     font-family: var(--font);
-    font-size: 14px;
+    font-size: 0.9375rem;
     color: var(--text);
     background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%2378716c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 12px center;
     border: 1px solid var(--border);
@@ -124,6 +125,7 @@
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
+    min-height: 38px;
 }
 .form-select:focus {
     border-color: var(--primary);
@@ -136,40 +138,7 @@
     gap: 16px;
 }
 
-/* ── Buttons ── */
-.s-btn {
-    all: unset;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 18px;
-    font-family: var(--font);
-    font-size: 13.5px;
-    font-weight: 500;
-    border-radius: 10px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-}
-.s-btn-primary {
-    background: var(--primary);
-    color: var(--pt);
-}
-.s-btn-primary:hover { background: var(--ph); }
-.s-btn-secondary {
-    background: transparent;
-    color: var(--t2);
-    border: 1px solid var(--border);
-}
-.s-btn-secondary:hover { background: var(--s1); }
-.s-btn-danger {
-    background: transparent;
-    color: #dc2626;
-    border: 1px solid #fca5a5;
-}
-.s-btn-danger:hover { background: #fef2f2; }
-.s-btn-sm { padding: 6px 12px; font-size: 12.5px; }
-.s-btn svg { width: 14px; height: 14px; }
+/* Buttons: use global .btn .btn-primary/.btn-secondary/.btn-danger/.btn-sm from index.css */
 
 /* ── Badge ── */
 .s-badge {
@@ -177,7 +146,7 @@
     align-items: center;
     gap: 4px;
     padding: 3px 10px;
-    font-size: 11.5px;
+    font-size: 0.8rem;
     font-weight: 500;
     border-radius: 100px;
 }
@@ -229,6 +198,8 @@
     padding: 24px;
     position: relative;
     transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
 }
 .plan-card:hover { border-color: var(--m2); }
 .plan-card.active {
@@ -244,15 +215,15 @@
     justify-content: center;
     margin-bottom: 16px;
 }
-.plan-card .plan-name { font-size: 16px; font-weight: 600; color: var(--text); }
+.plan-card .plan-name { font-size: 1.05rem; font-weight: 600; color: var(--text); }
 .plan-card .plan-price {
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--text);
     margin: 8px 0 4px;
     letter-spacing: -0.5px;
 }
-.plan-card .plan-price span { font-size: 14px; font-weight: 400; color: var(--muted); }
+.plan-card .plan-price span { font-size: 0.875rem; font-weight: 400; color: var(--muted); }
 .plan-card .plan-features {
     list-style: none;
     margin: 16px 0 20px;
@@ -260,22 +231,23 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    flex: 1;
 }
 .plan-card .plan-features li {
-    font-size: 13px;
+    font-size: 0.9375rem;
     color: var(--t2);
     display: flex;
     align-items: center;
     gap: 8px;
 }
-.plan-card .plan-features li svg { color: #10b981; width: 14px; height: 14px; flex-shrink: 0; }
+.plan-card .plan-features li svg { color: #10b981; width: 15px; height: 15px; flex-shrink: 0; }
 .current-badge {
     position: absolute;
     top: 16px;
     right: 16px;
     background: var(--primary);
     color: var(--pt);
-    font-size: 11px;
+    font-size: 0.8rem;
     font-weight: 600;
     padding: 3px 10px;
     border-radius: 100px;
@@ -295,7 +267,7 @@
     padding: 20px 22px;
 }
 .stat-card .stat-label {
-    font-size: 12.5px;
+    font-size: 0.875rem;
     color: var(--muted);
     font-weight: 500;
     margin-bottom: 6px;
@@ -303,15 +275,15 @@
     align-items: center;
     gap: 6px;
 }
-.stat-card .stat-label svg { width: 14px; height: 14px; }
+.stat-card .stat-label svg { width: 15px; height: 15px; }
 .stat-card .stat-value {
-    font-size: 26px;
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--text);
     letter-spacing: -0.5px;
 }
 .stat-card .stat-sub {
-    font-size: 12px;
+    font-size: 0.8rem;
     color: var(--m2);
     margin-top: 2px;
 }
@@ -341,7 +313,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 13px;
+    font-size: 0.9375rem;
     color: var(--t2);
 }
 .provider-dot {
@@ -360,7 +332,7 @@
 .s-table-wrap table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 0.9375rem;
 }
 .s-table-wrap th {
     text-align: left;
@@ -368,7 +340,7 @@
     font-weight: 500;
     color: var(--muted);
     background: var(--s1);
-    font-size: 12px;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     border-bottom: 1px solid var(--border);
@@ -406,16 +378,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-weight: 700;
     flex-shrink: 0;
     color: #fff;
 }
 .key-info { flex: 1; }
-.key-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.key-name { font-size: 1rem; font-weight: 600; color: var(--text); }
 .key-masked {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 0.875rem;
     color: var(--m2);
     margin-top: 3px;
 }
@@ -423,7 +395,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 12px;
+    font-size: 0.875rem;
     margin-top: 6px;
 }
 .status-dot {
@@ -436,20 +408,7 @@
     gap: 4px;
     margin-top: 4px;
 }
-.s-icon-btn {
-    all: unset;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    color: var(--muted);
-    transition: all 0.15s;
-}
-.s-icon-btn:hover { background: var(--s1); color: var(--text); }
-.s-icon-btn svg { width: 14px; height: 14px; }
+/* Icon buttons: use global .btn .btn-icon from index.css */
 
 /* ── Integration Cards ── */
 .integrations-grid {
@@ -486,7 +445,7 @@
 }
 .int-body { flex: 1; }
 .int-name {
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text);
     display: flex;
@@ -494,7 +453,7 @@
     gap: 8px;
 }
 .int-desc {
-    font-size: 12.5px;
+    font-size: 0.875rem;
     color: var(--muted);
     margin-top: 3px;
     line-height: 1.5;
@@ -506,13 +465,13 @@
     flex-wrap: wrap;
 }
 .int-meta-item {
-    font-size: 11.5px;
+    font-size: 0.8rem;
     color: var(--m2);
     display: flex;
     align-items: center;
     gap: 4px;
 }
-.int-meta-item svg { width: 12px; height: 12px; }
+.int-meta-item svg { width: 13px; height: 13px; }
 
 /* ── Divider ── */
 .s-divider {
@@ -546,12 +505,36 @@
     color: var(--pt);
     padding: 8px 14px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 0.875rem;
     font-family: var(--font);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
-.chart-tooltip .ct-label { color: var(--m2); font-size: 11px; }
-.chart-tooltip .ct-value { font-weight: 600; font-size: 14px; }
+.chart-tooltip .ct-label { color: var(--m2); font-size: 0.8rem; }
+.chart-tooltip .ct-value { font-weight: 600; font-size: 1rem; }
+
+/* ── Coming Soon Overlay ── */
+.coming-soon-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(2px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--r);
+}
+.coming-soon-label {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--white);
+    padding: 14px 36px;
+    border-radius: var(--rl2);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--sh);
+    letter-spacing: -0.3px;
+}
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
@@ -559,6 +542,17 @@
     .stats-grid { grid-template-columns: 1fr; }
     .keys-grid { grid-template-columns: 1fr; }
     .integrations-grid { grid-template-columns: 1fr; }
+    .tabs-nav {
+        gap: 0;
+        padding-bottom: 0;
+    }
+    .tab-btn {
+        padding: 8px 12px 10px;
+        font-size: 0.8rem;
+    }
+    .settings-hdr h1 {
+        font-size: 1.5rem;
+    }
 }
 @media (max-width: 640px) {
     .form-row { grid-template-columns: 1fr; }

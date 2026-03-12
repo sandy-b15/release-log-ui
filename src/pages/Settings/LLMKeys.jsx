@@ -42,6 +42,14 @@ export default function LLMKeys() {
     if (!apiKeyInput.trim()) return;
     setSaving(true);
     try {
+      const model = selectedModel || catalogue?.[selectedProvider]?.defaultModel;
+      const validation = await validateKey(selectedProvider, apiKeyInput.trim(), model);
+      if (!validation.valid) {
+        const providerName = providerLabelMap[selectedProvider] || selectedProvider;
+        toast.error(`Invalid ${providerName} API key. Please check and try again.`);
+        setSaving(false);
+        return;
+      }
       await saveKey(selectedProvider, apiKeyInput.trim(), selectedModel || undefined, undefined, false);
       setApiKeyInput('');
       setShowAdd(false);
@@ -117,7 +125,7 @@ export default function LLMKeys() {
           <div className="section-title">API Keys</div>
           <div className="section-desc" style={{ marginBottom: 0 }}>Manage your AI provider keys (encrypted with AES-256)</div>
         </div>
-        <button className="s-btn s-btn-primary s-btn-sm" onClick={() => { setShowAdd(!showAdd); if (showAdd) setApiKeyInput(''); }}>
+        <button className="btn btn-primary btn-sm" onClick={() => { setShowAdd(!showAdd); if (showAdd) setApiKeyInput(''); }}>
           {showAdd ? <><X size={13} /> Cancel</> : <><Plus size={13} /> Add Key</>}
         </button>
       </div>
@@ -166,7 +174,7 @@ export default function LLMKeys() {
             <span style={{ fontSize: 12, color: 'var(--m2)' }}>Encrypted with AES-256 before storage</span>
           </div>
           <div style={{ marginTop: 16 }}>
-            <button className="s-btn s-btn-primary" onClick={handleSaveKey} disabled={saving || !apiKeyInput.trim()}>
+            <button className="btn btn-primary" onClick={handleSaveKey} disabled={saving || !apiKeyInput.trim()}>
               {saving ? <Loader2 size={14} className="spin" /> : <Key size={14} />}
               Save Key
             </button>
@@ -201,7 +209,7 @@ export default function LLMKeys() {
             </div>
             {k.connected && !k.builtin && (
               <div className="key-actions">
-                <button className="s-icon-btn" style={{ color: 'var(--rose)' }} onClick={(e) => { e.stopPropagation(); handleRemoveKey(k.id); }}>
+                <button className="btn btn-icon" style={{ color: 'var(--rose)' }} onClick={(e) => { e.stopPropagation(); handleRemoveKey(k.id); }}>
                   <Trash2 />
                 </button>
               </div>
@@ -244,7 +252,7 @@ export default function LLMKeys() {
             );
           })}
         </div>
-        <button className="s-btn s-btn-primary" style={{ marginTop: 16 }} onClick={handleSaveDefault}>
+        <button className="btn btn-primary" style={{ marginTop: 16 }} onClick={handleSaveDefault}>
           <Check size={14} /> Save Preference
         </button>
       </div>

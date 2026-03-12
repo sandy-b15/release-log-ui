@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ChevronDown, Check, Plus } from 'lucide-react';
+import toast from 'react-hot-toast';
 import './Header.css';
+
+const api = axios.create({ baseURL: `${import.meta.env.VITE_API_URL}/api`, withCredentials: true });
 
 const BellIcon = () => (
     <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
@@ -9,6 +13,121 @@ const BellIcon = () => (
         <path d="M10.3 15.75a1.5 1.5 0 01-2.6 0" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
     </svg>
 );
+
+/* ── Project Switcher ── */
+const ProjectSwitcher = () => {
+    const [projects, setProjects] = useState([]);
+    const [activeProject, setActiveProject] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [creating, setCreating] = useState(false);
+    const [newName, setNewName] = useState('');
+    const ref = useRef(null);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        loadProjects();
+    }, []);
+
+    useEffect(() => {
+        const handler = (e) => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                setOpen(false);
+                setCreating(false);
+                setNewName('');
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, []);
+
+    useEffect(() => {
+        if (creating && inputRef.current) inputRef.current.focus();
+    }, [creating]);
+
+    const loadProjects = async () => {
+        try {
+            const [projRes, activeRes] = await Promise.all([
+                api.get('/projects'),
+                api.get('/projects/active'),
+            ]);
+            setProjects(projRes.data.projects || []);
+            setActiveProject(activeRes.data.project || null);
+        } catch (err) {
+            console.error('Failed to load projects', err);
+        }
+    };
+
+    const switchProject = async (project) => {
+        try {
+            await api.post('/projects/active', { projectId: project.id });
+            setActiveProject(project);
+            setOpen(false);
+            toast.success(`Switched to ${project.name}`);
+            // Reload the page to refresh data with new project context
+            window.location.reload();
+        } catch (err) {
+            toast.error('Failed to switch project');
+        }
+    };
+
+    const createProject = async () => {
+        if (!newName.trim()) return;
+        try {
+            const res = await api.post('/projects', { name: newName.trim() });
+            const created = res.data.project;
+            setProjects(prev => [...prev, created]);
+            setNewName('');
+            setCreating(false);
+            await switchProject(created);
+        } catch (err) {
+            toast.error(err.response?.data?.error || 'Failed to create project');
+        }
+    };
+
+    return (
+        <div className="project-switcher" ref={ref}>
+            <button className="project-switcher-btn" onClick={() => setOpen(o => !o)}>
+                <span className="project-switcher-dot" />
+                <span className="project-switcher-name">{activeProject?.name || 'No Project'}</span>
+                <ChevronDown size={14} style={{ color: 'var(--muted)', transition: 'transform .2s', transform: open ? 'rotate(180deg)' : 'none' }} />
+            </button>
+            {open && (
+                <div className="project-switcher-dropdown">
+                    <div className="project-switcher-list">
+                        {projects.map(p => (
+                            <button
+                                key={p.id}
+                                className={`project-switcher-option${activeProject?.id === p.id ? ' active' : ''}`}
+                                onClick={() => switchProject(p)}
+                            >
+                                <span className="project-switcher-opt-name">{p.name}</span>
+                                {activeProject?.id === p.id && <Check size={14} style={{ color: 'var(--indigo)', flexShrink: 0 }} />}
+                            </button>
+                        ))}
+                    </div>
+                    {creating ? (
+                        <div className="project-switcher-create-form">
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                placeholder="Project name"
+                                value={newName}
+                                onChange={e => setNewName(e.target.value)}
+                                onKeyDown={e => e.key === 'Enter' && createProject()}
+                                className="project-switcher-input"
+                            />
+                            <button className="btn btn-primary btn-sm" onClick={createProject}>Add</button>
+                        </div>
+                    ) : (
+                        <button className="project-switcher-new" onClick={() => setCreating(true)}>
+                            <Plus size={14} /> New Project
+                        </button>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const TopBar = ({ title, sub, children }) => {
     const navigate = useNavigate();
@@ -54,8 +173,9 @@ const TopBar = ({ title, sub, children }) => {
     return (
         <header className="topbar">
             <div className="topbar-left">
-                {sub && <p className="topbar-sub">{sub}</p>}
-                {title && <h1 className="topbar-title">{title}</h1>}
+                <ProjectSwitcher />
+                {(sub || title) && <div className="topbar-divider topbar-divider-left" />}
+
             </div>
             <div className="topbar-right">
                 {children}

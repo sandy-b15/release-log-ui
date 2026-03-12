@@ -318,48 +318,7 @@
     gap: 8px;
 }
 
-.publish-btn-primary {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 22px;
-    border-radius: 10px;
-    background: var(--primary);
-    color: var(--pt);
-    border: none;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    font-family: var(--font);
-    transition: all 0.15s;
-}
-
-.publish-btn-primary:hover:not(:disabled) {
-    background: var(--ph);
-}
-
-.publish-btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.publish-btn-cancel {
-    padding: 10px 18px;
-    border-radius: 10px;
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 500;
-    font-family: var(--font);
-    transition: all 0.15s;
-}
-
-.publish-btn-cancel:hover {
-    background: var(--s1);
-    color: var(--text);
-}
+/* Publish buttons — use global .btn .btn-primary / .btn-secondary */
 
 /* ── Status View ── */
 .publish-status-list {

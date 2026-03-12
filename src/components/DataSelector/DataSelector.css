@@ -6,16 +6,17 @@
    ═══════════════════════════════════════ */
 
 .selector-date-input-v2 {
-    padding: 7px 10px;
+    padding: 8px 10px;
     border-radius: 8px;
     border: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 0.875rem;
     font-family: var(--font);
     color: var(--text);
     background: var(--white);
     margin: 0;
     transition: border-color .15s;
     width: 130px;
+    min-height: 38px;
 }
 
 .selector-date-input-v2:focus {

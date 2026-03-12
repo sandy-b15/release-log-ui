@@ -36,7 +36,7 @@ function App() {
         toastOptions={{
           style: {
             fontFamily: 'var(--font)',
-            fontSize: '13px',
+            fontSize: '0.9375rem',
             borderRadius: '10px',
             padding: '10px 16px',
           },

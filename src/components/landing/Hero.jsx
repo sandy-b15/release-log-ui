@@ -8,9 +8,9 @@ function DashboardMockup() {
     <div style={{ padding: "20px 24px 0" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
         <div style={{ display: "flex", gap: 6 }}>
-          {["#ff5f57","#ffbd2e","#28c840"].map((c) => <div key={c} style={{ width: 10, height: 10, borderRadius: 10, background: c, opacity: .7 }} />)}
+          {["#ff5f57", "#ffbd2e", "#28c840"].map((c) => <div key={c} style={{ width: 10, height: 10, borderRadius: 10, background: c, opacity: .7 }} />)}
         </div>
-        <div style={{ flex: 1, textAlign: "center", fontSize: 12, color: "var(--land-muted)", fontFamily: "var(--land-mono)" }}>app.releasly.io/releases</div>
+        <div style={{ flex: 1, textAlign: "center", fontSize: 12, color: "var(--land-muted)", fontFamily: "var(--land-mono)" }}>releaslyy.com/releases</div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 16, paddingBottom: 20 }}>
         <div style={{ background: "rgba(0,0,0,.02)", borderRadius: 10, padding: 16 }}>
@@ -89,7 +89,7 @@ export default function Hero() {
             fontSize: 13, color: "var(--land-text)", fontWeight: 500, marginBottom: 32,
           }}>
             <span style={{ display: "flex", color: "var(--land-accent)" }}>{I.sparkle}</span>
-            Now with Jira, DevRev &amp; Zoho integrations
+            Now with Jira, DevRev &amp; Github integrations
           </div>
         </FadeIn>
 
@@ -107,7 +107,7 @@ export default function Hero() {
 
         <FadeIn delay={0.2}>
           <p style={{ fontSize: 18, color: "var(--land-muted)", maxWidth: 560, margin: "0 auto 40px", lineHeight: 1.65 }}>
-            Connect GitHub, Jira, DevRev, or Zoho Sprints. AI generates beautiful release notes — then publishes them right back to your platforms and customers.
+            Connect GitHub, Jira, or DevRev sprints. AI generates beautiful release notes — then publishes them right back to your platforms and customers.
           </p>
         </FadeIn>
 

@@ -109,11 +109,11 @@ export default function PlansBilling() {
                 {allFeatures.map(f => <li key={f}><Check /> {f}</li>)}
               </ul>
               {isActive
-                ? <button className="s-btn s-btn-secondary" style={{ width: '100%', justifyContent: 'center' }}>Current Plan</button>
+                ? <button className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', marginTop: 'auto' }}>Current Plan</button>
                 : (
                   <button
-                    className="s-btn s-btn-primary"
-                    style={{ width: '100%', justifyContent: 'center' }}
+                    className="btn btn-primary"
+                    style={{ width: '100%', justifyContent: 'center', marginTop: 'auto' }}
                     onClick={() => handleSubscribe(p.id)}
                     disabled={subscribing === p.id}
                   >
@@ -155,7 +155,7 @@ export default function PlansBilling() {
               <span>Next billing: <strong style={{ color: 'var(--text)' }}>{new Date(subscription.renews_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></span>
             </div>
           )}
-          <button className="s-btn s-btn-primary" onClick={handleSaveBilling} disabled={billingSaving}>
+          <button className="btn btn-primary" onClick={handleSaveBilling} disabled={billingSaving}>
             {billingSaving ? <Loader2 size={14} className="spin" /> : <Check size={14} />} Save Billing
           </button>
         </div>
@@ -172,7 +172,7 @@ export default function PlansBilling() {
                     <td>{new Date(inv.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
                     <td style={{ fontWeight: 500 }}>${Number(inv.amount).toFixed(2)}</td>
                     <td><span className={`s-badge ${inv.status === 'active' ? 's-badge-green' : 's-badge-red'}`}>{inv.status === 'active' ? 'Paid' : inv.status}</span></td>
-                    <td>{inv.invoice_link && <a href={inv.invoice_link} target="_blank" rel="noreferrer"><button className="s-icon-btn"><Download /></button></a>}</td>
+                    <td>{inv.invoice_link && <a href={inv.invoice_link} target="_blank" rel="noreferrer"><button className="btn btn-icon"><Download /></button></a>}</td>
                   </tr>
                 ))}</tbody>
               </table>

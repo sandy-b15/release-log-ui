@@ -35,37 +35,54 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     return (
-        <aside className="sidebar-v2">
-            {/* Logo row */}
-            <div className="sidebar-logo-row">
-                <div className="sidebar-logo" onClick={() => navigate('/dashboard')} title="Releasly">
-                    <img src={logo} alt="Releasly" className="sidebar-logo-img" />
+        <>
+            {/* Desktop Sidebar */}
+            <aside className="sidebar-v2">
+                {/* Logo row */}
+                <div className="sidebar-logo-row">
+                    <div className="sidebar-logo" onClick={() => navigate('/dashboard')} title="Releasly">
+                        <img src={logo} alt="Releasly" className="sidebar-logo-img" />
+                    </div>
                 </div>
-            </div>
 
-            {/* Main Nav */}
-            <nav className="sidebar-nav-v2">
-                {navItems.map(item => (
+                {/* Main Nav */}
+                <nav className="sidebar-nav-v2">
+                    {navItems.map(item => (
+                        <NavLink
+                            key={item.to}
+                            to={item.to}
+                            className={({ isActive }) => `sidebar-btn ${isActive ? 'active' : ''}`}
+                        >
+                            <span className="sidebar-btn-icon">{item.icon}</span>
+                            <span className="sidebar-btn-label">{item.label}</span>
+                        </NavLink>
+                    ))}
+                </nav>
+
+                {/* Settings at bottom */}
+                <NavLink
+                    to="/settings"
+                    className={({ isActive }) => `sidebar-btn ${isActive ? 'active' : ''}`}
+                >
+                    <span className="sidebar-btn-icon">{icons.gear}</span>
+                    <span className="sidebar-btn-label">Settings</span>
+                </NavLink>
+            </aside>
+
+            {/* Mobile Bottom Nav */}
+            <nav className="bottom-nav">
+                {[...navItems, { to: '/settings', icon: icons.gear, label: 'Settings' }].map(item => (
                     <NavLink
                         key={item.to}
                         to={item.to}
-                        className={({ isActive }) => `sidebar-btn ${isActive ? 'active' : ''}`}
+                        className={({ isActive }) => `bottom-nav-btn ${isActive ? 'active' : ''}`}
                     >
-                        <span className="sidebar-btn-icon">{item.icon}</span>
-                        <span className="sidebar-btn-label">{item.label}</span>
+                        <span className="bottom-nav-icon">{item.icon}</span>
+                        <span className="bottom-nav-label">{item.label}</span>
                     </NavLink>
                 ))}
             </nav>
-
-            {/* Settings at bottom */}
-            <NavLink
-                to="/settings"
-                className={({ isActive }) => `sidebar-btn ${isActive ? 'active' : ''}`}
-            >
-                <span className="sidebar-btn-icon">{icons.gear}</span>
-                <span className="sidebar-btn-label">Settings</span>
-            </NavLink>
-        </aside>
+        </>
     );
 };
 

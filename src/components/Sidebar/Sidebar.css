@@ -40,7 +40,7 @@
 }
 
 .sidebar-brand {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text);
     white-space: nowrap;
@@ -87,12 +87,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 18px;
+    min-width: 22px;
+}
+
+.sidebar-btn-icon svg {
+    width: 22px;
+    height: 22px;
 }
 
 /* Label */
 .sidebar-btn-label {
-    font-size: 13px;
+    font-size: 0.9375rem;
     font-weight: 500;
 }
 
@@ -107,4 +112,68 @@
     height: 16px;
     border-radius: 2px;
     background: var(--indigo);
+}
+
+/* ── Bottom Nav (Mobile) ── */
+.bottom-nav {
+    display: none;
+}
+
+/* ── Mobile: Convert sidebar to bottom nav ── */
+@media (max-width: 768px) {
+    .sidebar-v2 {
+        display: none;
+    }
+
+    .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: var(--white);
+        border-top: 1px solid var(--border-l);
+        z-index: 50;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 8px;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .bottom-nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 6px 12px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: var(--m2);
+        transition: all .15s;
+        min-width: 60px;
+    }
+
+    .bottom-nav-btn:hover,
+    .bottom-nav-btn.active {
+        color: var(--text);
+        background: var(--s1);
+    }
+
+    .bottom-nav-btn .bottom-nav-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bottom-nav-btn .bottom-nav-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .bottom-nav-btn .bottom-nav-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
 }

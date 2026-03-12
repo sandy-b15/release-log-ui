@@ -205,19 +205,19 @@ const IntegrationCard = ({ config, connected, onOpenModal, onConnect, onDelete, 
                 {connected ? (
                     <div style={{ display: 'flex', gap: 6, width: '100%' }}>
                         {isOAuth ? (
-                            <button className="int-btn-outline-v2" style={{ flex: 1 }} onClick={onConnect}>Reconnect</button>
+                            <button className="btn btn-secondary btn-sm" style={{ flex: 1 }} onClick={onConnect}>Reconnect</button>
                         ) : (
-                            <button className="int-btn-outline-v2" style={{ flex: 1 }} onClick={onOpenModal}>Edit Key</button>
+                            <button className="btn btn-secondary btn-sm" style={{ flex: 1 }} onClick={onOpenModal}>Edit Key</button>
                         )}
                         {config.dashboardUrl && (
-                            <button className="int-btn-primary-v2" style={{ flex: 1 }} onClick={() => navigate(config.dashboardUrl)}>Dashboard</button>
+                            <button className="btn btn-primary btn-sm" style={{ flex: 1 }} onClick={() => navigate(config.dashboardUrl)}>Dashboard</button>
                         )}
                     </div>
                 ) : config.soon ? (
                     <div className="int-coming-soon-v2">Coming Soon</div>
                 ) : (
                     <button
-                        className="int-btn-connect-v2"
+                        className="btn btn-secondary int-btn-connect-v2"
                         onClick={() => isOAuth ? onConnect() : (isPlaceholder ? null : onOpenModal())}
                         disabled={isPlaceholder}
                     >
@@ -258,7 +258,7 @@ const SiteSelectModal = ({ sites, loading, onSelect, onClose }) => {
                     {sites.map(site => (
                         <button
                             key={site.id}
-                            className="int-btn-outline-v2"
+                            className="btn btn-secondary btn-sm"
                             style={{ width: '100%', padding: '12px 16px', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 2 }}
                             onClick={() => onSelect(site.id)}
                             disabled={loading}

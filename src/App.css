@@ -119,3 +119,11 @@
   flex: 1;
   min-height: 100vh;
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .app-main {
+    margin-left: 0;
+    padding-bottom: 68px;
+  }
+}

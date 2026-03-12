@@ -27,7 +27,10 @@ export default function UsageMetrics() {
   const avgTokens = Math.round(totalTokens / generationLog.length);
 
   return (
-    <div className="tab-content">
+    <div className="tab-content" style={{ position: 'relative' }}>
+      <div className="coming-soon-overlay">
+        <div className="coming-soon-label">Coming Soon</div>
+      </div>
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-label"><Sparkles size={14} /> Total Tokens Used</div>

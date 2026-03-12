@@ -78,11 +78,11 @@ export default function SettingsIntegrations() {
                 <div style={{ marginTop: 12 }}>
                   {connected ? (
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="s-btn s-btn-secondary s-btn-sm"><RefreshCw size={12} /> Sync</button>
-                      <button className="s-btn s-btn-danger s-btn-sm">Disconnect</button>
+                      <button className="btn btn-secondary btn-sm"><RefreshCw size={12} /> Sync</button>
+                      <button className="btn btn-danger btn-sm">Disconnect</button>
                     </div>
                   ) : (
-                    <button className="s-btn s-btn-primary s-btn-sm"><Link2 size={12} /> Connect</button>
+                    <button className="btn btn-primary btn-sm"><Link2 size={12} /> Connect</button>
                   )}
                 </div>
               </div>

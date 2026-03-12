@@ -18,7 +18,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 6px;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     padding: 8px 10px;
     border-radius: 8px;
 }
@@ -48,14 +48,14 @@
 
 .llm-selector-or {
     color: var(--muted);
-    font-size: 0.72rem;
+    font-size: 0.8rem;
 }
 
 .llm-selector-add-key-btn {
     background: none;
     border: none;
     color: var(--primary);
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     padding: 0;
@@ -67,7 +67,7 @@
     align-items: center;
     gap: 3px;
     color: var(--primary);
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     font-weight: 500;
     text-decoration: none;
 }
@@ -102,7 +102,7 @@
 }
 
 .llm-selector-hint {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     color: var(--muted);
     font-style: italic;
 }

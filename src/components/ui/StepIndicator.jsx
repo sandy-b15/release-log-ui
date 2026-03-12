@@ -16,27 +16,28 @@ const StepIndicator = ({ steps, currentStep, onStepClick }) => {
       {steps.map((s, i) => (
         <div key={s.n} style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
           <div
-            onClick={() => onStepClick?.(s.n)}
+            onClick={() => !s.disabled && onStepClick?.(s.n)}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 8,
-              padding: '8px 18px',
+              padding: '9px 20px',
               borderRadius: 10,
-              cursor: 'pointer',
+              cursor: s.disabled ? 'not-allowed' : 'pointer',
               transition: 'all .15s',
-              background: currentStep === s.n ? 'var(--primary)' : currentStep > s.n ? 'var(--el)' : 'var(--white)',
+              opacity: s.disabled ? 0.45 : 1,
+              background: currentStep === s.n ? 'var(--primary)' : currentStep > s.n ? 'var(--white)' : 'var(--white)',
               border: currentStep === s.n ? 'none' : '1px solid var(--border-l)',
             }}
           >
             <div style={{
-              width: 22,
-              height: 22,
-              borderRadius: 22,
+              width: 24,
+              height: 24,
+              borderRadius: 24,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 700,
               background: currentStep > s.n ? 'var(--emerald)' : 'transparent',
               color: currentStep === s.n ? 'var(--pt)' : currentStep > s.n ? '#fff' : 'var(--muted)',
@@ -44,9 +45,9 @@ const StepIndicator = ({ steps, currentStep, onStepClick }) => {
               {currentStep > s.n ? <CheckIcon /> : s.n}
             </div>
             <span style={{
-              fontSize: 13,
+              fontSize: '0.9rem',
               fontWeight: 600,
-              color: currentStep === s.n ? 'var(--pt)' : currentStep > s.n ? 'var(--et)' : 'var(--muted)',
+              color: currentStep === s.n ? 'var(--pt)' : currentStep > s.n ? 'var(--muted)' : 'var(--muted)',
             }}>
               {s.label}
             </span>

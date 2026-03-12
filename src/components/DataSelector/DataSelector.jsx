@@ -148,7 +148,7 @@ const DataSelector = ({
             {/* Footer */}
             <div className="selector-footer-v2">
                 {showBackButton && (
-                    <button className="topbar-action-btn" onClick={onBack}>
+                    <button className="btn btn-secondary" onClick={onBack}>
                         <BackIcon /> Back
                     </button>
                 )}
@@ -156,7 +156,7 @@ const DataSelector = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <span style={{ fontSize: 12, color: 'var(--muted)' }}>{selectedCommits.length} selected</span>
                     <button
-                        className="gen-continue-btn"
+                        className="btn btn-primary"
                         onClick={onGenerate}
                         disabled={selectedCommits.length === 0 || loading}
                     >

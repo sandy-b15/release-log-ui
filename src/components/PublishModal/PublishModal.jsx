@@ -443,7 +443,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 {/* Footer */}
                 <div className="publish-footer">
                     {statuses ? (
-                        <button className="publish-btn-primary" onClick={() => {
+                        <button className="btn btn-primary" onClick={() => {
                             const hasSuccess = statuses.some((s) => s.status === 'success');
                             onClose(hasSuccess);
                         }}>
@@ -451,9 +451,9 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                         </button>
                     ) : (
                         <>
-                            <button className="publish-btn-cancel" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
                             <button
-                                className="publish-btn-primary"
+                                className="btn btn-primary"
                                 disabled={enabledCount === 0 || !hasValidConfig || publishing}
                                 onClick={handlePublish}
                             >
