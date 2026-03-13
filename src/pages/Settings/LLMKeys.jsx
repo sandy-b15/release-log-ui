@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Plus, X, Eye, EyeOff, Key, Shield, Check, Trash2, Loader2 } from 'lucide-react';
+import { Plus, X, Eye, EyeOff, Key, Shield, Check, Trash2, Loader2, Lock } from 'lucide-react';
 import { useLLMKeys } from '../../hooks/useLLMKeys';
+import { useEntitlements } from '../../hooks/useEntitlements';
 import { providerColors } from './settingsData.jsx';
 import SearchDropdown from '../../components/ui/SearchDropdown';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import groqLogo from '../../assets/groq-logo.svg';
 import openaiLogo from '../../assets/openai-logo.svg';
 import anthropicLogo from '../../assets/anthropic-logo.svg';
@@ -14,6 +16,9 @@ const providerLogos = { releasly: releaslyLogo, groq: groqLogo, openai: openaiLo
 
 export default function LLMKeys() {
   const { savedKeys, catalogue, saveKey, removeKey, validateKey, isLoading } = useLLMKeys();
+  const { canUse } = useEntitlements();
+  const navigate = useNavigate();
+  const byokCheck = canUse('byok_enabled');
   const [showAdd, setShowAdd] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState('groq');
   const [selectedModel, setSelectedModel] = useState('');
@@ -55,8 +60,7 @@ export default function LLMKeys() {
       setShowAdd(false);
       toast.success(`${providerLabelMap[selectedProvider]} key saved`);
     } catch (err) {
-      const msg = err.response?.data?.error || err.message || 'Failed to save key';
-      toast.error(msg);
+      toast.error(err.response?.data?.error || err.message || 'Failed to save key');
     } finally {
       setSaving(false);
     }
@@ -112,6 +116,29 @@ export default function LLMKeys() {
     return (
       <div className="tab-content" style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
         <Loader2 size={24} className="spin" style={{ color: 'var(--muted)' }} />
+      </div>
+    );
+  }
+
+  if (!byokCheck.allowed) {
+    return (
+      <div className="tab-content">
+        <div style={{
+          textAlign: 'center', padding: '60px 24px',
+          border: '1.5px dashed var(--border)', borderRadius: 'var(--r)',
+          background: 'var(--s1)',
+        }}>
+          <Lock size={32} style={{ color: 'var(--muted)', marginBottom: 12 }} />
+          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)', marginBottom: 6 }}>
+            Bring Your Own Key is a Pro feature
+          </div>
+          <p style={{ fontSize: 14, color: 'var(--muted)', marginBottom: 20, maxWidth: 400, margin: '0 auto 20px' }}>
+            Upgrade to Pro to use your own API keys from OpenAI, Anthropic, Groq, and Gemini for release note generation.
+          </p>
+          <button className="btn btn-primary" onClick={() => navigate('/pricing')}>
+            Upgrade to Pro
+          </button>
+        </div>
       </div>
     );
   }

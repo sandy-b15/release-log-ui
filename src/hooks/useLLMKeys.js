@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
-
-const API = `${import.meta.env.VITE_API_URL}/api`;
+import api from '../lib/api';
 
 export function useLLMKeys() {
   const [savedKeys, setSavedKeys] = useState([]);
@@ -12,7 +10,7 @@ export function useLLMKeys() {
 
   const fetchKeys = useCallback(async () => {
     try {
-      const res = await axios.get(`${API}/user/llm-keys`, { withCredentials: true });
+      const res = await api.get('/user/llm-keys');
       setSavedKeys(res.data);
     } catch (err) {
       console.error('Failed to fetch LLM keys:', err);
@@ -23,7 +21,7 @@ export function useLLMKeys() {
 
   const fetchCatalogue = useCallback(async () => {
     try {
-      const res = await axios.get(`${API}/llm/catalogue`);
+      const res = await api.get('/llm/catalogue');
       setCatalogue(res.data);
     } catch (err) {
       console.error('Failed to fetch LLM catalogue:', err);
@@ -39,22 +37,22 @@ export function useLLMKeys() {
   const defaultProvider = savedKeys.find(k => k.isDefault)?.provider || null;
 
   const saveKey = useCallback(async (provider, apiKey, preferredModel, label, isDefault) => {
-    const res = await axios.post(`${API}/user/llm-keys`, {
+    const res = await api.post('/user/llm-keys', {
       provider, apiKey, preferredModel, label, isDefault,
-    }, { withCredentials: true });
+    });
     await fetchKeys();
     return res.data;
   }, [fetchKeys]);
 
   const removeKey = useCallback(async (provider) => {
-    await axios.delete(`${API}/user/llm-keys/${provider}`, { withCredentials: true });
+    await api.delete(`/user/llm-keys/${provider}`);
     await fetchKeys();
   }, [fetchKeys]);
 
   const validateKey = useCallback(async (provider, apiKey, model) => {
-    const res = await axios.post(`${API}/user/llm-keys/validate`, {
+    const res = await api.post('/user/llm-keys/validate', {
       provider, apiKey, model,
-    }, { withCredentials: true });
+    });
     return res.data;
   }, []);
 

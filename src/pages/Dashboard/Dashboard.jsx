@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { RefreshCw, Square, CheckSquare, Trash2, Search, X, Check, Plus } from 'lucide-react';
+import api, { authApi } from '../../lib/api';
 import TopBar from '../../components/Header/Header';
 import DataSelector from '../../components/DataSelector/DataSelector';
 import Pill from '../../components/ui/Pill';
@@ -20,6 +20,7 @@ const llmProviderLabels = { releasly: 'Releaslyy AI', groq: 'Groq', openai: 'Ope
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import LLMSelector from '../../components/generate/LLMSelector';
 import { useLLMKeys } from '../../hooks/useLLMKeys';
+import { useEntitlements } from '../../hooks/useEntitlements';
 import toast from 'react-hot-toast';
 import './Dashboard.css';
 
@@ -45,14 +46,10 @@ const JIRA_FILTER_DEFS = [
     { key: 'labels', label: 'Labels', extract: i => i.labels || [], multi: true },
 ];
 
-const api = axios.create({
-    baseURL: `${import.meta.env.VITE_API_URL}/api`,
-    withCredentials: true
-});
-
 const Dashboard = () => {
     const navigate = useNavigate();
     const { savedKeys, catalogue } = useLLMKeys();
+    const { canUse, usage, entitlements, refetch: refetchEntitlements } = useEntitlements();
 
     // -- Global Dashboard State --
     const [view, setView] = useState('overview'); // 'overview' | 'generate'
@@ -153,7 +150,7 @@ const Dashboard = () => {
     useEffect(() => {
         const init = async () => {
             try {
-                const userRes = await axios.get(`${import.meta.env.VITE_API_URL}/auth/me`, { withCredentials: true });
+                const userRes = await authApi.get('/auth/me');
                 if (userRes.data && userRes.data.id) setUser(userRes.data);
 
                 const [ghRes, drRes, jiraRes] = await Promise.all([
@@ -553,6 +550,11 @@ const Dashboard = () => {
 
     // --- Generation Logic ---
     const handleGenerate = async () => {
+        const genCheck = canUse('max_generations_per_month');
+        if (!genCheck.allowed) {
+            toast.error(`You've reached your plan limit (${genCheck.used}/${genCheck.limit} generations). Upgrade your subscription to continue.`);
+            return;
+        }
         setLoading(true);
         const llm = {
             provider: llmConfig.provider || 'releasly',
@@ -569,21 +571,24 @@ const Dashboard = () => {
                 const commitList = selectedObjects.map(pr => ({
                     commit: { message: `PR #${pr.number}: ${pr.title}`, author: { name: pr.user.login } }
                 }));
-                const genRes = await api.post('/generate', { commits: commitList, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined });
+                const genRes = await api.post('/generate', { commits: commitList, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'github');
+                refetchEntitlements();
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             } else if (sources.includes('devrev') && devrevSelectedItems.length > 0) {
-                const genRes = await api.post('/devrev/generate', { items: devrevSelectedItems, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined });
+                const genRes = await api.post('/devrev/generate', { items: devrevSelectedItems, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'devrev');
+                refetchEntitlements();
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             } else if (sources.includes('jira') && jiraSelectedIssues.length > 0) {
-                const genRes = await api.post('/jira/generate', { issues: jiraSelectedIssues, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined });
+                const genRes = await api.post('/jira/generate', { issues: jiraSelectedIssues, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'jira');
+                refetchEntitlements();
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             }
         } catch (err) {
             console.error(err);
-            toast.error('Failed to generate notes.');
+            toast.error(err.response?.data?.error || 'Failed to generate notes.');
         } finally {
             setLoading(false);
         }
@@ -686,6 +691,13 @@ const Dashboard = () => {
                                         <div className="dash-stat-number-v2">{s.v}</div>
                                         <div className="dash-stat-label-v2">{s.n}</div>
                                         <div className="dash-stat-change-v2">{s.change}</div>
+                                        {s.n === 'Notes Generated' && entitlements && (
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: 4 }}>
+                                                {entitlements.max_generations_per_month === -1
+                                                    ? 'Unlimited generations'
+                                                    : `${usage?.generations_this_month || 0} / ${entitlements.max_generations_per_month} used this month`}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -873,10 +885,15 @@ const Dashboard = () => {
                                                 const isSelected = sources.includes(s.id);
                                                 return (
                                                     <button key={s.id} onClick={() => {
-                                                        setSources(prev => prev.includes(s.id)
-                                                            ? prev.filter(x => x !== s.id)
-                                                            : [...prev, s.id]
-                                                        );
+                                                        setSources(prev => {
+                                                            if (prev.includes(s.id)) return prev.filter(x => x !== s.id);
+                                                            const limit = canUse('max_sources_per_release');
+                                                            if (limit.allowed === false || (limit.limit > 0 && prev.length >= limit.limit)) {
+                                                                toast.error('Upgrade your subscription to use multiple sources in one release.');
+                                                                return prev;
+                                                            }
+                                                            return [...prev, s.id];
+                                                        });
                                                     }} className={`gen-source-btn-v2 ${isSelected ? 'active' : ''}`}>
                                                         <div style={{
                                                             width: 20, height: 20, borderRadius: 6, flexShrink: 0,
@@ -1359,6 +1376,7 @@ const Dashboard = () => {
                                                     savedKeys={savedKeys}
                                                     llmConfig={llmConfig}
                                                     onChange={setLlmConfig}
+                                                    byokEnabled={canUse('byok_enabled').allowed}
                                                 />
                                             )}
                                         </div>

@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2, Loader2, FolderOpen } from 'lucide-react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
-
-const API = `${import.meta.env.VITE_API_URL}/api`;
-const api = axios.create({ baseURL: API, withCredentials: true });
+import api from '../../lib/api';
 
 export default function SettingsProjects() {
   const [projects, setProjects] = useState([]);

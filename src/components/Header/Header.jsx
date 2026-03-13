@@ -1,11 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Check, Plus } from 'lucide-react';
 import toast from 'react-hot-toast';
+import api, { authApi } from '../../lib/api';
 import './Header.css';
-
-const api = axios.create({ baseURL: `${import.meta.env.VITE_API_URL}/api`, withCredentials: true });
 
 const BellIcon = () => (
     <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
@@ -138,7 +136,7 @@ const TopBar = ({ title, sub, children }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/me`, { withCredentials: true });
+                const res = await authApi.get('/auth/me');
                 if (res.data && res.data.id) setUser(res.data);
             } catch (error) {
                 console.error("Failed to fetch user", error);
@@ -159,7 +157,7 @@ const TopBar = ({ title, sub, children }) => {
 
     const handleLogout = async () => {
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/auth/logout`, {}, { withCredentials: true });
+            await authApi.post('/auth/logout');
             navigate('/login');
         } catch (e) {
             console.error('Logout failed', e);

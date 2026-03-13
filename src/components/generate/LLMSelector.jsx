@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import SearchDropdown from '../ui/SearchDropdown';
 import './LLMSelector.css';
 
-export default function LLMSelector({ catalogue, savedKeys, llmConfig, onChange }) {
+export default function LLMSelector({ catalogue, savedKeys, llmConfig, onChange, byokEnabled = true }) {
   const providers = catalogue ? Object.entries(catalogue) : [];
   const selectedProvider = llmConfig.provider || 'releasly';
   const providerConfig = catalogue?.[selectedProvider] || null;
@@ -38,7 +38,11 @@ export default function LLMSelector({ catalogue, savedKeys, llmConfig, onChange 
       <div className="llm-selector-fields">
         <div className="llm-selector-row">
           <SearchDropdown
-            options={providers.map(([key, val]) => ({ id: key, label: val.label }))}
+            options={providers.map(([key, val]) => ({
+              id: key,
+              label: !val.builtin && !byokEnabled ? `${val.label} (Pro)` : val.label,
+              disabled: !val.builtin && !byokEnabled,
+            }))}
             value={selectedProvider}
             onChange={handleProviderChange}
             placeholder="Select provider..."

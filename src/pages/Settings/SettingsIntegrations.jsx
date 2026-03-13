@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link2, Clock, FileText, RefreshCw, Github } from 'lucide-react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import devrevLogo from '../../assets/devrev-logo.webp';
 import jiraLogo from '../../assets/jira_logo.webp';
-
-const API = `${import.meta.env.VITE_API_URL}/api`;
-const api = axios.create({ baseURL: API, withCredentials: true });
+import api from '../../lib/api';
 
 const integrationDefs = [
   {

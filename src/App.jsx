@@ -2,6 +2,8 @@
 import { Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import Sidebar from './components/Sidebar/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
+import { EntitlementsProvider } from './hooks/useEntitlements';
+import ExpiryBanner from './components/ExpiryBanner/ExpiryBanner';
 import Login from './pages/Login/Login';
 import Integration from './pages/Integration/Integration';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -19,12 +21,15 @@ import './App.css';
 /* Layout wrapper for authenticated pages — sidebar + main area */
 function AppShell() {
   return (
-    <div className="app-shell">
-      <Sidebar />
-      <div className="app-main">
-        <Outlet />
+    <EntitlementsProvider>
+      <div className="app-shell">
+        <Sidebar />
+        <div className="app-main">
+          <ExpiryBanner />
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </EntitlementsProvider>
   );
 }
 

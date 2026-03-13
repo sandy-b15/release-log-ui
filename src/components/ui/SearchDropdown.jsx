@@ -124,16 +124,18 @@ const SearchDropdown = ({ options = [], value, onChange, placeholder = 'Select..
                             return (
                                 <button
                                     key={o.id}
-                                    onClick={() => handleSelect(o.id)}
+                                    onClick={() => { if (!o.disabled) handleSelect(o.id); }}
                                     style={{
                                         width: '100%', padding: '7px 12px', display: 'flex', alignItems: 'center',
-                                        gap: 8, fontSize: 14, border: 'none', cursor: 'pointer',
+                                        gap: 8, fontSize: 14, border: 'none',
+                                        cursor: o.disabled ? 'not-allowed' : 'pointer',
                                         background: sel ? 'var(--il)' : 'transparent',
-                                        color: sel ? 'var(--it)' : 'var(--text)',
+                                        color: o.disabled ? 'var(--muted)' : sel ? 'var(--it)' : 'var(--text)',
+                                        opacity: o.disabled ? 0.55 : 1,
                                         fontFamily: 'var(--font)', textAlign: 'left',
                                         borderRadius: 0, transition: 'background .1s',
                                     }}
-                                    onMouseEnter={e => { if (!sel) e.currentTarget.style.background = 'var(--s1)'; }}
+                                    onMouseEnter={e => { if (!sel && !o.disabled) e.currentTarget.style.background = 'var(--s1)'; }}
                                     onMouseLeave={e => { if (!sel) e.currentTarget.style.background = 'transparent'; }}
                                 >
                                     {multi && (

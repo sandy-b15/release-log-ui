@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Camera, Check, Lock, Eye, EyeOff, AlertTriangle, Trash2, Loader2 } from 'lucide-react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import SearchDropdown from '../../components/ui/SearchDropdown';
-
-const API = `${import.meta.env.VITE_API_URL}/api`;
-const api = axios.create({ baseURL: API, withCredentials: true });
+import api from '../../lib/api';
 
 export default function BasicInfo() {
   const [profile, setProfile] = useState({ name: '', email: '', company: '', role: '', avatar: '' });

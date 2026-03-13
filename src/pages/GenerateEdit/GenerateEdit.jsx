@@ -8,8 +8,8 @@ import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table
 import { marked } from 'marked';
 import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
-import axios from 'axios';
 import toast from 'react-hot-toast';
+import api from '../../lib/api';
 import {
     Bold, Italic, Underline as UnderlineIcon, Strikethrough,
     Heading1, Heading2, Heading3,
@@ -19,11 +19,6 @@ import {
 import TopBar from '../../components/Header/Header';
 import PublishModal from '../../components/PublishModal/PublishModal';
 import './GenerateEdit.css';
-
-const api = axios.create({
-    baseURL: `${import.meta.env.VITE_API_URL}/api`,
-    withCredentials: true
-});
 
 /* ── Micro Icons ── */
 const ic = {

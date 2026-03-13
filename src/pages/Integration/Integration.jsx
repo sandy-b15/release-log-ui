@@ -1,9 +1,9 @@
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { Loader2, AlertCircle, X, Trash2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import TopBar from '../../components/Header/Header';
 import Pill from '../../components/ui/Pill';
 import devrevLogo from '../../assets/devrev-logo.webp';
@@ -12,11 +12,7 @@ import bitbucketLogo from '../../assets/bitbucket_icon.webp';
 import jiraLogo from '../../assets/jira_logo.webp';
 import './Integration.css';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials: true
-});
+import api from '../../lib/api';
 
 /* ── Micro Icons ── */
 const ghIcon = <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M9 1.5A7.5 7.5 0 006.63 16.11c.375.068.513-.163.513-.36v-1.357c-2.09.454-2.531-.99-2.531-.99a1.987 1.987 0 00-.836-1.099c-.682-.465.052-.457.052-.457a1.575 1.575 0 011.147.772 1.597 1.597 0 002.183.623 1.597 1.597 0 01.476-1.002c-1.669-.187-3.424-.833-3.424-3.708a2.903 2.903 0 01.773-2.014 2.7 2.7 0 01.075-1.987s.63-.203 2.063.769a7.125 7.125 0 013.75 0c1.432-.972 2.062-.769 2.062-.769a2.7 2.7 0 01.076 1.987 2.895 2.895 0 01.772 2.014c0 2.884-1.76 3.517-3.434 3.704a1.8 1.8 0 01.51 1.391v2.063c0 .199.135.437.518.357A7.5 7.5 0 009 1.5z" fill="currentColor"/></svg>;
@@ -34,8 +30,8 @@ const INTEGRATIONS = [
         placeholder: 'ghp_...',
         hint: <>Scopes required: <code>repo</code>, <code>read:user</code></>,
         dashboardUrl: '/dashboard',
-        apiConnect: '/api/tokens/github',
-        apiCheck: '/api/tokens/github',
+        apiConnect: '/tokens/github',
+        apiCheck: '/tokens/github',
     },
     {
         id: 'devrev',
@@ -48,8 +44,8 @@ const INTEGRATIONS = [
         placeholder: 'eyJ...',
         hint: 'Generate a token from DevRev Settings → Account → Access Tokens',
         dashboardUrl: '/dashboard',
-        apiConnect: '/api/devrev/connect',
-        apiCheck: '/api/tokens/devrev',
+        apiConnect: '/devrev/connect',
+        apiCheck: '/tokens/devrev',
     },
     {
         id: 'jira',
@@ -63,7 +59,7 @@ const INTEGRATIONS = [
         hint: 'Connect via Atlassian OAuth',
         dashboardUrl: '/dashboard',
         apiConnect: 'oauth', // special: uses OAuth redirect flow
-        apiCheck: '/api/tokens/jira',
+        apiCheck: '/tokens/jira',
     },
     {
         id: 'gitlab',
@@ -292,9 +288,9 @@ const Integration = () => {
         const checkTokens = async () => {
             try {
                 const [ghRes, drRes, jiraRes] = await Promise.all([
-                    api.get('/api/tokens/github'),
-                    api.get('/api/tokens/devrev'),
-                    api.get('/api/tokens/jira'),
+                    api.get('/tokens/github'),
+                    api.get('/tokens/devrev'),
+                    api.get('/tokens/jira'),
                 ]);
                 setConnections({
                     github: ghRes.data.hasToken,
@@ -331,11 +327,12 @@ const Integration = () => {
     const handleJiraOAuth = async () => {
         try {
             setLoadingState(prev => ({ ...prev, jira: true }));
-            const res = await api.get('/api/jira/auth');
+            const res = await api.get('/jira/auth');
             window.location.href = res.data.authUrl;
         } catch (err) {
-            console.error('Jira OAuth init failed:', err);
-            setErrorState(prev => ({ ...prev, jira: 'Failed to start Jira OAuth' }));
+            const msg = err.response?.data?.error || 'Failed to start Jira OAuth';
+            toast.error(msg);
+            setErrorState(prev => ({ ...prev, jira: msg }));
             setLoadingState(prev => ({ ...prev, jira: false }));
         }
     };
@@ -343,7 +340,7 @@ const Integration = () => {
     const handleSelectJiraSite = async (siteId) => {
         setSiteSelectLoading(true);
         try {
-            await api.post('/api/jira/select-site', { siteId });
+            await api.post('/jira/select-site', { siteId });
             setConnections(prev => ({ ...prev, jira: true }));
             setJiraSites(null);
         } catch (err) {
@@ -374,6 +371,7 @@ const Integration = () => {
             setEditingIntegration(null);
         } catch (err) {
             const msg = err.response?.data?.error || 'Failed to update. Please try again.';
+            toast.error(msg);
             setErrorState(prev => ({ ...prev, [editingIntegration]: msg }));
         } finally {
             setLoadingState(prev => ({ ...prev, [editingIntegration]: false }));
@@ -382,7 +380,7 @@ const Integration = () => {
 
     const handleDelete = async (integrationId) => {
         try {
-            await api.delete(`/api/tokens/${integrationId}`);
+            await api.delete(`/tokens/${integrationId}`);
             setConnections(prev => ({ ...prev, [integrationId]: false }));
             setDeletingIntegration(null);
         } catch (err) {
