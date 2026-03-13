@@ -13,10 +13,10 @@ import groqLogo from '../../assets/groq-logo.svg';
 import openaiLogo from '../../assets/openai-logo.svg';
 import anthropicLogo from '../../assets/anthropic-logo.svg';
 import geminiLogo from '../../assets/gemini-logo.svg';
-import releaslyLogo from '../../assets/mini-logo.png';
+import releaslyLogo from '../../assets/logos/releaslyy-logo-main.png';
 
 const llmProviderLogos = { releasly: releaslyLogo, groq: groqLogo, openai: openaiLogo, anthropic: anthropicLogo, gemini: geminiLogo };
-const llmProviderLabels = { releasly: 'Releasly AI', groq: 'Groq', openai: 'OpenAI', anthropic: 'Anthropic', gemini: 'Gemini' };
+const llmProviderLabels = { releasly: 'Releaslyy AI', groq: 'Groq', openai: 'OpenAI', anthropic: 'Anthropic', gemini: 'Gemini' };
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import LLMSelector from '../../components/generate/LLMSelector';
 import { useLLMKeys } from '../../hooks/useLLMKeys';
@@ -34,7 +34,7 @@ const ic = {
     spark: <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M9 1.5l1.35 4.95L15.3 5.1 11.25 9l4.05 3.9-4.95-1.35L9 16.5l-1.35-4.95L2.7 12.9 6.75 9 2.7 5.1l4.95 1.35L9 1.5z" fill="currentColor" /></svg>,
     gh: <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M9 1.5A7.5 7.5 0 006.63 16.11c.375.068.513-.163.513-.36v-1.357c-2.09.454-2.531-.99-2.531-.99a1.987 1.987 0 00-.836-1.099c-.682-.465.052-.457.052-.457a1.575 1.575 0 011.147.772 1.597 1.597 0 002.183.623 1.597 1.597 0 01.476-1.002c-1.669-.187-3.424-.833-3.424-3.708a2.903 2.903 0 01.773-2.014 2.7 2.7 0 01.075-1.987s.63-.203 2.063.769a7.125 7.125 0 013.75 0c1.432-.972 2.062-.769 2.062-.769a2.7 2.7 0 01.076 1.987 2.895 2.895 0 01.772 2.014c0 2.884-1.76 3.517-3.434 3.704a1.8 1.8 0 01.51 1.391v2.063c0 .199.135.437.518.357A7.5 7.5 0 009 1.5z" fill="currentColor" /></svg>,
     layers: <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M9 1.5L1.5 6 9 10.5 16.5 6 9 1.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /><path d="M1.5 12l7.5 4.5 7.5-4.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /><path d="M1.5 9l7.5 4.5L16.5 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-    key: <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M10.5 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" stroke="currentColor" strokeWidth="1.4"/><path d="M9.75 10.5l5.25 5.25M12.75 13.5l2.25-2.25" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    key: <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M10.5 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" stroke="currentColor" strokeWidth="1.4" /><path d="M9.75 10.5l5.25 5.25M12.75 13.5l2.25-2.25" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>,
 };
 
 const JIRA_FILTER_DEFS = [
@@ -702,41 +702,41 @@ const Dashboard = () => {
                                 </div>
                                 {generatedNotes.length > 0 ? (
                                     <div className="dash-notes-content">
-                                    {generatedNotes.map((note, i) => (
-                                        <div
-                                            key={note.id}
-                                            className="dash-note-row-v2"
-                                            style={{ borderBottom: i < generatedNotes.length - 1 ? '1px solid var(--border-l)' : 'none' }}
-                                            onClick={() => handleViewNote(note.id)}
-                                        >
-                                            <div className="dash-note-icon-v2">{ic.doc}</div>
-                                            <div style={{ flex: 1, minWidth: 0 }}>
-                                                <div className="dash-note-title-v2">{note.title}</div>
-                                                <div className="dash-note-meta-v2">
-                                                    <Pill color={note.source === 'GitHub' ? 'sky' : note.source === 'Jira' ? 'indigo' : 'emerald'}>{note.source}</Pill>
-                                                    {note.llm_provider && (
-                                                        <span className="dash-llm-badge">
-                                                            <img src={llmProviderLogos[note.llm_provider]} alt="" style={{ width: 14, height: 14, borderRadius: 3, objectFit: 'contain' }} />
-                                                            {llmProviderLabels[note.llm_provider] || note.llm_provider}
-                                                        </span>
-                                                    )}
-                                                    {note.published && <span className="dash-published-badge"><Check size={10} /> Published</span>}
-                                                    <span>{note.audience || 'Product'}</span>
-                                                </div>
-                                            </div>
-                                            <div className="dash-note-date-v2">
-                                                {new Date(note.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                            </div>
-                                            <button
-                                                className="dash-note-delete-btn"
-                                                title="Delete"
-                                                onClick={(e) => { e.stopPropagation(); setDeletingNoteId(note.id); }}
+                                        {generatedNotes.map((note, i) => (
+                                            <div
+                                                key={note.id}
+                                                className="dash-note-row-v2"
+                                                style={{ borderBottom: i < generatedNotes.length - 1 ? '1px solid var(--border-l)' : 'none' }}
+                                                onClick={() => handleViewNote(note.id)}
                                             >
-                                                <Trash2 size={14} />
-                                            </button>
-                                            <div style={{ color: 'var(--m2)', display: 'flex', flexShrink: 0 }}>{ic.arr}</div>
-                                        </div>
-                                    ))}
+                                                <div className="dash-note-icon-v2">{ic.doc}</div>
+                                                <div style={{ flex: 1, minWidth: 0 }}>
+                                                    <div className="dash-note-title-v2">{note.title}</div>
+                                                    <div className="dash-note-meta-v2">
+                                                        <Pill color={note.source === 'GitHub' ? 'sky' : note.source === 'Jira' ? 'indigo' : 'emerald'}>{note.source}</Pill>
+                                                        {note.llm_provider && (
+                                                            <span className="dash-llm-badge">
+                                                                <img src={llmProviderLogos[note.llm_provider]} alt="" style={{ width: 14, height: 14, borderRadius: 3, objectFit: 'contain' }} />
+                                                                {llmProviderLabels[note.llm_provider] || note.llm_provider}
+                                                            </span>
+                                                        )}
+                                                        {note.published && <span className="dash-published-badge"><Check size={10} /> Published</span>}
+                                                        <span>{note.audience || 'Product'}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="dash-note-date-v2">
+                                                    {new Date(note.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </div>
+                                                <button
+                                                    className="dash-note-delete-btn"
+                                                    title="Delete"
+                                                    onClick={(e) => { e.stopPropagation(); setDeletingNoteId(note.id); }}
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                                <div style={{ color: 'var(--m2)', display: 'flex', flexShrink: 0 }}>{ic.arr}</div>
+                                            </div>
+                                        ))}
                                     </div>
                                 ) : (
                                     <div className="dash-empty-v2">
@@ -888,7 +888,7 @@ const Dashboard = () => {
                                                             {isSelected && <Check size={12} color="#fff" />}
                                                         </div>
                                                         <div className="gen-source-icon-v2" style={{ background: `var(${s.c})0c`, color: `var(${s.c})` }}>
-                                                            {s.logo ? <img src={s.logo} alt={s.l} style={{ width: 20, height: 20, objectFit: 'contain' }} /> : s.icon}
+                                                            {s.logo ? <img src={s.logo} alt={s.l} style={{ width: 35, height: 35, objectFit: 'contain', borderRadius: 6, }} /> : s.icon}
                                                         </div>
                                                         <div style={{ textAlign: 'left' }}>
                                                             <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>{s.l}</div>
@@ -1148,7 +1148,7 @@ const Dashboard = () => {
                                                                     </div>
                                                                     <div style={{ flex: 1, minWidth: 0 }}>
                                                                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                                                            <span style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: 'var(--sky)', fontWeight: 600 }}>{issue.key}</span>
+                                                                            <span style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: 'var(--ph)', fontWeight: 600 }}>{issue.key}</span>
                                                                             <span style={{ fontSize: '0.9375rem', fontWeight: 500 }}>{issue.summary}</span>
                                                                         </div>
                                                                         <div style={{ fontSize: '0.8rem', color: 'var(--m2)', marginTop: 2, display: 'flex', gap: 8 }}>
@@ -1167,11 +1167,11 @@ const Dashboard = () => {
                                             ) : (
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: 'var(--muted)', fontSize: '0.9375rem' }}>
                                                     {loadingData ? <RefreshCw className="spin" style={{ color: 'var(--indigo)' }} /> :
-                                                     !jiraSelectedProject ? 'Select a project to get started' :
-                                                     jiraMode === 'version' ? (jiraVersions.length === 0 ? 'No release versions found' : jiraSelectedVersions.length === 0 ? 'Select release versions' : 'No issues in selected versions') :
-                                                     !jiraSelectedBoard ? (jiraBoards.length === 0 ? 'No boards found for this project' : 'Select a board') :
-                                                     jiraSprints.length > 0 && jiraSelectedSprints.length === 0 ? 'Select sprints to view issues' :
-                                                     'No issues found'}
+                                                        !jiraSelectedProject ? 'Select a project to get started' :
+                                                            jiraMode === 'version' ? (jiraVersions.length === 0 ? 'No release versions found' : jiraSelectedVersions.length === 0 ? 'Select release versions' : 'No issues in selected versions') :
+                                                                !jiraSelectedBoard ? (jiraBoards.length === 0 ? 'No boards found for this project' : 'Select a board') :
+                                                                    jiraSprints.length > 0 && jiraSelectedSprints.length === 0 ? 'Select sprints to view issues' :
+                                                                        'No issues found'}
                                                 </div>
                                             )}
                                         </div>
@@ -1289,8 +1289,8 @@ const Dashboard = () => {
                                                 ) : (
                                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: 'var(--muted)', fontSize: '0.9375rem' }}>
                                                         {loadingData ? <RefreshCw className="spin" style={{ color: 'var(--indigo)' }} /> :
-                                                         selectedSprints.length === 0 ? 'Select sprints to view work items' :
-                                                         'No work items found'}
+                                                            selectedSprints.length === 0 ? 'Select sprints to view work items' :
+                                                                'No work items found'}
                                                     </div>
                                                 )}
                                             </div>
@@ -1439,7 +1439,7 @@ const Dashboard = () => {
                                                 <div className="config-summary-row">
                                                     <span className="config-summary-label">LLM</span>
                                                     <span className="config-summary-value">
-                                                        {llmConfig.provider === 'releasly' ? 'Releasly AI' : (llmConfig.model || llmConfig.provider)}
+                                                        {llmConfig.provider === 'releasly' ? 'Releaslyy AI' : (llmConfig.model || llmConfig.provider)}
                                                     </span>
                                                 </div>
                                             </div>

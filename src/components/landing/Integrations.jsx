@@ -1,5 +1,6 @@
 import FadeIn from "./FadeIn";
 import { SOURCES, DESTINATIONS } from "./data";
+import logoR from "../../assets/logos/releaslyy-favicon.svg";
 
 export default function Integrations() {
   return (
@@ -14,7 +15,7 @@ export default function Integrations() {
               <span style={{ fontFamily: "var(--land-serif)", fontStyle: "italic", fontWeight: 400 }}>connected</span>
             </h2>
             <p style={{ fontSize: 16, color: "var(--land-muted)", maxWidth: 500, margin: "16px auto 0", lineHeight: 1.6 }}>
-              Pull from any source. Publish to any destination. Releasly sits at the center of your release workflow.
+              Pull from any source. Publish to any destination. Releaslyy sits at the center of your release workflow.
             </p>
           </div>
         </FadeIn>
@@ -51,11 +52,11 @@ export default function Integrations() {
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
                     <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,var(--land-primary),var(--land-accent))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontSize: 15, fontWeight: 800, color: "#fff" }}>R</span>
+                      <img src={logoR} alt="Releaslyy" style={{ width: 18, height: 18, objectFit: "contain" }} />
                     </div>
                   </div>
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-.01em", color: "var(--land-text)" }}>Releasly AI</div>
+                <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-.01em", color: "var(--land-text)" }}>Releaslyy AI</div>
                 <div style={{ fontSize: 12, color: "var(--land-muted)", textAlign: "center", maxWidth: 140 }}>Generates &amp; publishes</div>
               </div>
             </FadeIn>

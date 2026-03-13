@@ -104,7 +104,7 @@ export default function LLMSelector({ catalogue, savedKeys, llmConfig, onChange 
 
         {isBuiltin && (
           <div className="llm-selector-key-status default-info">
-            Using Releasly AI — free, no API key needed. <Link to="/settings" className="llm-selector-settings-link">Add your own key for more control <ExternalLink size={11} /></Link>
+            Using Releaslyy AI — free, no API key needed. <Link to="/settings" className="llm-selector-settings-link">Add your own key for more control <ExternalLink size={11} /></Link>
           </div>
         )}
       </div>

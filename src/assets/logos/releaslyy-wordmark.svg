@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" width="720" height="160">
+  <defs>
+    <linearGradient id="brandGrad" x1="0" y1="0" x2="720" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="30%" stop-color="#1e1e3a"/>
+      <stop offset="55%" stop-color="#3d3d99"/>
+      <stop offset="78%" stop-color="#5555cc"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="brandGradSubtle" x1="0" y1="0" x2="720" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="40%" stop-color="#23233d"/>
+      <stop offset="65%" stop-color="#4040a0"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <style>
+    @import url('https://api.fontshare.com/v2/css?f[]=satoshi@500&amp;display=swap');
+    .wordmark {
+      font-family: 'Satoshi', 'DM Sans', -apple-system, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      font-size: 108px;
+      letter-spacing: -1.5px;
+    }
+  </style>
+  <text class="wordmark" x="360" y="115" text-anchor="middle" fill="url(#brandGrad)">Releaslyy</text>
+</svg>

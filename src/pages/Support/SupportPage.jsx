@@ -31,7 +31,7 @@ export default function SupportPage() {
               <h1 className="docs-content-title">Support</h1>
               <div className="docs-content-body">
                 <p>
-                  Need help with Releasly? We're here to assist. Browse the resources below or send us a message.
+                  Need help with Releaslyy? We're here to assist. Browse the resources below or send us a message.
                 </p>
 
                 <h3>Quick Resources</h3>
@@ -59,7 +59,7 @@ export default function SupportPage() {
 
                 <p><strong>Can't log in?</strong></p>
                 <ul>
-                  <li>Releasly uses Google OAuth. Make sure you're signing in with the same Google account you registered with.</li>
+                  <li>Releaslyy uses Google OAuth. Make sure you're signing in with the same Google account you registered with.</li>
                   <li>Clear your browser cookies and try again if the session has expired.</li>
                 </ul>
 

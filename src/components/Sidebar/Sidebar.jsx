@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import logo from '../../assets/release-log-logo-2.png';
+import logo from '../../assets/logos/releaslyy-logo-main.png';
 import './Sidebar.css';
 
 /* ── Micro Icons ── */
@@ -40,8 +40,8 @@ const Sidebar = () => {
             <aside className="sidebar-v2">
                 {/* Logo row */}
                 <div className="sidebar-logo-row">
-                    <div className="sidebar-logo" onClick={() => navigate('/dashboard')} title="Releasly">
-                        <img src={logo} alt="Releasly" className="sidebar-logo-img" />
+                    <div className="sidebar-logo" onClick={() => navigate('/dashboard')} title="Releaslyy">
+                        <img src={logo} alt="Releaslyy" className="sidebar-logo-img" />
                     </div>
                 </div>
 

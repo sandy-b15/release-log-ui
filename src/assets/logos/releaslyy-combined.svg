@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 160" width="780" height="160">
+  <defs>
+    <linearGradient id="iconGrad" x1="0" y1="0" x2="140" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="50%" stop-color="#3d3d99"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="170" y1="0" x2="780" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="30%" stop-color="#1e1e3a"/>
+      <stop offset="55%" stop-color="#3d3d99"/>
+      <stop offset="78%" stop-color="#5555cc"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <style>
+    @import url('https://api.fontshare.com/v2/css?f[]=satoshi@500&amp;display=swap');
+    .wordmark {
+      font-family: 'Satoshi', 'DM Sans', -apple-system, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      font-size: 96px;
+      letter-spacing: -1.5px;
+    }
+  </style>
+  <!-- Favicon icon -->
+  <rect x="10" y="10" width="140" height="140" rx="28" fill="url(#iconGrad)"/>
+  <g transform="translate(33, 28)">
+    <path d="
+      M 14 0
+      L 14 105
+      L 28 105
+      L 28 60
+      L 52 60
+      L 78 105
+      L 95 105
+      L 67 57
+      C 80 52 90 41 90 28
+      C 90 10 76 0 55 0
+      Z
+      M 28 14
+      L 53 14
+      C 68 14 75 21 75 28
+      C 75 36 68 45 53 45
+      L 28 45
+      Z
+    " fill="white"/>
+  </g>
+  <!-- Wordmark -->
+  <text class="wordmark" x="180" y="110" text-anchor="start" fill="url(#textGrad)">Releaslyy</text>
+</svg>

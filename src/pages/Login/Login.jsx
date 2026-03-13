@@ -1,7 +1,7 @@
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import './Login.css';
-import logo from '../../assets/release-log-logo-2.png';
+import logo from '../../assets/logos/releaslyy-logo-main.png';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -20,10 +20,10 @@ const Login = () => {
 
             <div className="login-left">
                 <div className="brand-logo">
-                    <img src={logo} alt="ReleaseNoteGen.ai Logo" style={{ height: '60px' }} />
+                    <img src={logo} alt="Releaslyy.com Logo" style={{ height: '30px' }} />
                 </div>
 
-                <h1 className="login-title">Welcome back</h1>
+                <h1 className="login-title">Welcome!</h1>
                 <p className="login-subtitle">
                     Sign in to continue managing your release notes.
                 </p>
@@ -42,7 +42,7 @@ const Login = () => {
                     </div>
 
                     <p className="terms-text">
-                        By clicking continue, you verify that you are an authorized user and agree to our <a href="#">Terms of Service</a>.
+                        By clicking continue, you verify that you are an authorized user and agree to our <a href="/terms">Terms of Service</a>.
                     </p>
                 </div>
             </div>

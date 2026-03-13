@@ -22,7 +22,7 @@ export default function SocialProof() {
             borderRadius: 16, background: "var(--land-card)", border: "1px solid var(--land-border)",
           }}>
             <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--land-text)", fontStyle: "italic", fontFamily: "var(--land-serif)", marginBottom: 16 }}>
-              "We used to copy-paste from Jira tickets into a Google Doc. Now Releasly pulls everything — commits, sprints, the lot — and writes release notes better than we ever did."
+              "We used to copy-paste from Jira tickets into a Google Doc. Now Releaslyy pulls everything — commits, sprints, the lot — and writes release notes better than we ever did."
             </p>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
               <div style={{ width: 32, height: 32, borderRadius: 32, background: "linear-gradient(135deg,var(--land-primary),var(--land-accent))" }} />

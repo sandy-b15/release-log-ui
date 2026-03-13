@@ -2,7 +2,7 @@ import FadeIn from "./FadeIn";
 
 export default function HowItWorks() {
   const steps = [
-    { num: "01", title: "Connect Your Tools", desc: "Link GitHub, Jira, DevRev, Zoho — or any combination. Releasly watches for merges, sprint closures, and new tags.", color: "var(--land-sky)" },
+    { num: "01", title: "Connect Your Tools", desc: "Link GitHub, Jira, DevRev, Zoho — or any combination. Releaslyy watches for merges, sprint closures, and new tags.", color: "var(--land-sky)" },
     { num: "02", title: "AI Analyzes Everything", desc: "Our AI reads commits, PRs, sprint items, and linked issues across all sources to understand what shipped and why.", color: "var(--land-accent)" },
     { num: "03", title: "Generate & Publish", desc: "Review the draft, customize the tone, then publish — back to GitHub Releases, DevRev, Jira, email, or your changelog page.", color: "var(--land-warm)" },
   ];

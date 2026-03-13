@@ -8,7 +8,7 @@ import groqLogo from '../../assets/groq-logo.svg';
 import openaiLogo from '../../assets/openai-logo.svg';
 import anthropicLogo from '../../assets/anthropic-logo.svg';
 import geminiLogo from '../../assets/gemini-logo.svg';
-import releaslyLogo from '../../assets/mini-logo.png';
+import releaslyLogo from '../../assets/logos/releaslyy-favicon-192.png';
 
 const providerLogos = { releasly: releaslyLogo, groq: groqLogo, openai: openaiLogo, anthropic: anthropicLogo, gemini: geminiLogo };
 

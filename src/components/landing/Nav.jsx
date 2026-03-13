@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/release-log-logo-2.png";
+import logo from "../../assets/logos/releaslyy-logo-main.png";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -22,7 +22,7 @@ export default function Nav() {
     }}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => navigate('/')}>
-          <img src={logo} alt="Releasly" style={{ height: 50 }} />
+          <img src={logo} alt="Releaslyy" style={{ height: 30 }} />
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           {["Features", "Pricing", "Docs"].map((t) => {

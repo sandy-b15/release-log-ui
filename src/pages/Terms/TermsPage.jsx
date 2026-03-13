@@ -18,12 +18,12 @@ export default function TermsPage() {
               <div className="docs-content-body">
                 <p><strong>Effective Date:</strong> March 11, 2026</p>
                 <p>
-                  Welcome to Releasly. By accessing or using our platform, you agree to be bound by these Terms & Conditions. If you do not agree, please do not use the service.
+                  Welcome to Releaslyy. By accessing or using our platform, you agree to be bound by these Terms & Conditions. If you do not agree, please do not use the service.
                 </p>
 
                 <h3>1. Service Description</h3>
                 <p>
-                  Releasly is an AI-powered release notes generator that connects to your development and project management tools (GitHub, Jira, DevRev, etc.) to automatically generate professional release notes from your commits, issues, and sprints.
+                  Releaslyy is an AI-powered release notes generator that connects to your development and project management tools (GitHub, Jira, DevRev, etc.) to automatically generate professional release notes from your commits, issues, and sprints.
                 </p>
 
                 <h3>2. Account Registration</h3>
@@ -31,7 +31,7 @@ export default function TermsPage() {
                   <li>You must sign in using a valid Google account via OAuth 2.0.</li>
                   <li>You are responsible for maintaining the security of your account and any connected integration tokens.</li>
                   <li>You must not share your account or allow unauthorized access to the platform through your credentials.</li>
-                  <li>You must be at least 13 years of age to use Releasly.</li>
+                  <li>You must be at least 13 years of age to use Releaslyy.</li>
                 </ul>
 
                 <h3>3. Acceptable Use</h3>
@@ -46,7 +46,7 @@ export default function TermsPage() {
 
                 <h3>4. Integration Tokens & Data</h3>
                 <ul>
-                  <li>When you connect a third-party service, you grant Releasly permission to access data from that service on your behalf using the credentials you provide.</li>
+                  <li>When you connect a third-party service, you grant Releaslyy permission to access data from that service on your behalf using the credentials you provide.</li>
                   <li>All tokens are encrypted at rest using AES-256-GCM encryption.</li>
                   <li>You can revoke access at any time by disconnecting the integration from the Integrations page.</li>
                   <li>You are responsible for ensuring your tokens have appropriate scopes and permissions.</li>
@@ -62,7 +62,7 @@ export default function TermsPage() {
 
                 <h3>6. Intellectual Property</h3>
                 <ul>
-                  <li>The Releasly platform, including its design, code, logos, and documentation, is the intellectual property of Releasly.</li>
+                  <li>The Releaslyy platform, including its design, code, logos, and documentation, is the intellectual property of Releaslyy.</li>
                   <li>Your data, integration content, and generated release notes remain your property.</li>
                   <li>You grant us a limited license to process your data solely for the purpose of providing the service.</li>
                 </ul>
@@ -76,7 +76,7 @@ export default function TermsPage() {
 
                 <h3>8. Limitation of Liability</h3>
                 <p>
-                  To the maximum extent permitted by law, Releasly shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform, including but not limited to:
+                  To the maximum extent permitted by law, Releaslyy shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform, including but not limited to:
                 </p>
                 <ul>
                   <li>Loss of data or inaccuracies in AI-generated content.</li>

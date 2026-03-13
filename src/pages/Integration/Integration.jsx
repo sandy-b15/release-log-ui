@@ -404,7 +404,7 @@ const Integration = () => {
             <TopBar sub="Integrations" title="Connect Your Tools" />
             <div style={{ padding: '28px 32px' }}>
                 <p className="fu" style={{ fontSize: 14, color: 'var(--muted)', maxWidth: 460, lineHeight: 1.6, marginBottom: 24 }}>
-                    Seamlessly connect your development and project management tools. Releasly pulls data from all sources to generate unified release notes.
+                    Seamlessly connect your development and project management tools. Releaslyy pulls data from all sources to generate unified release notes.
                 </p>
 
                 {/* Stats */}

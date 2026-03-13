@@ -22,13 +22,13 @@ const SECTIONS = {
     title: "Getting Started",
     content: (
       <>
-        <p>Welcome to Releasly — the AI-powered release notes generator that turns your commits, tickets, and sprints into polished, audience-ready release notes in seconds.</p>
+        <p>Welcome to Releaslyy — the AI-powered release notes generator that turns your commits, tickets, and sprints into polished, audience-ready release notes in seconds.</p>
 
         <h3>Quick Start</h3>
         <ol>
           <li><strong>Sign up</strong> — Create your account using Google OAuth. No passwords to remember.</li>
           <li><strong>Connect a source</strong> — Link your GitHub repository, Jira project, DevRev workspace, or Zoho Sprints account.</li>
-          <li><strong>Generate</strong> — Select commits or sprints, configure your audience and tone, then let Releasly AI do the rest.</li>
+          <li><strong>Generate</strong> — Select commits or sprints, configure your audience and tone, then let Releaslyy AI do the rest.</li>
           <li><strong>Edit & publish</strong> — Fine-tune the generated notes in our rich text editor, then export or publish wherever you need.</li>
         </ol>
 
@@ -42,7 +42,7 @@ const SECTIONS = {
     title: "Connecting a Source",
     content: (
       <>
-        <p>Releasly pulls data from your existing development tools. Head to the <strong>Integrations</strong> page from the sidebar to connect your first source.</p>
+        <p>Releaslyy pulls data from your existing development tools. Head to the <strong>Integrations</strong> page from the sidebar to connect your first source.</p>
 
         <h3>Supported Sources</h3>
         <table>
@@ -83,7 +83,7 @@ const SECTIONS = {
           <li><strong>Title</strong> — Give your release notes a custom title (e.g., "v2.4.0 — Performance & Polish").</li>
           <li><strong>Audience</strong> — Choose who the notes are for: <em>QA / Testing</em>, <em>Product Team</em>, or <em>Stakeholders</em>. The AI adjusts language and detail level accordingly.</li>
           <li><strong>Tone</strong> — Pick a tone: Professional, Casual, or Technical.</li>
-          <li><strong>LLM Provider</strong> — Use the default Releasly AI or select your own provider (Groq, OpenAI, Anthropic, Gemini) if you've added API keys.</li>
+          <li><strong>LLM Provider</strong> — Use the default Releaslyy AI or select your own provider (Groq, OpenAI, Anthropic, Gemini) if you've added API keys.</li>
           <li><strong>Custom Prompt</strong> — Under Advanced Options, add additional instructions for the AI (e.g., "Focus on user-facing changes" or "Group by feature area").</li>
         </ul>
 
@@ -99,7 +99,7 @@ const SECTIONS = {
     title: "LLM Keys (Bring Your Own Key)",
     content: (
       <>
-        <p>Releasly supports multiple AI providers for generating release notes. By default, Releasly AI handles everything — but you can bring your own API key for more control.</p>
+        <p>Releaslyy supports multiple AI providers for generating release notes. By default, Releaslyy AI handles everything — but you can bring your own API key for more control.</p>
 
         <h3>Supported Providers</h3>
         <table>
@@ -123,7 +123,7 @@ const SECTIONS = {
         </ol>
 
         <h3>Using Your Key</h3>
-        <p>During generation (Step 3 — Configure), the LLM selector will show all providers you have keys for. Select the one you want, and Releasly will use your key directly. Your keys are encrypted with AES-256-CBC and never exposed in the UI after saving.</p>
+        <p>During generation (Step 3 — Configure), the LLM selector will show all providers you have keys for. Select the one you want, and Releaslyy will use your key directly. Your keys are encrypted with AES-256-CBC and never exposed in the UI after saving.</p>
 
         <div className="docs-callout">
           <strong>Tip:</strong> The Dashboard shows an "API Keys" stat card so you can quickly see how many keys you have configured.
@@ -187,7 +187,7 @@ const SECTIONS = {
     title: "Integrations",
     content: (
       <>
-        <p>Releasly is designed to sit at the center of your release workflow, pulling from any source and publishing to any destination.</p>
+        <p>Releaslyy is designed to sit at the center of your release workflow, pulling from any source and publishing to any destination.</p>
 
         <h3>Current Integrations</h3>
         <ul>
@@ -238,13 +238,13 @@ const SECTIONS = {
     content: (
       <>
         <div className="docs-faq-item">
-          <h3>What AI model does Releasly use?</h3>
-          <p>Releasly uses state-of-the-art large language models by default. You can also bring your own API key for Groq, OpenAI, Anthropic, or Gemini and choose your preferred model from their catalogue.</p>
+          <h3>What AI model does Releaslyy use?</h3>
+          <p>Releaslyy uses state-of-the-art large language models by default. You can also bring your own API key for Groq, OpenAI, Anthropic, or Gemini and choose your preferred model from their catalogue.</p>
         </div>
 
         <div className="docs-faq-item">
           <h3>Is my code or data shared with anyone?</h3>
-          <p>No. Releasly only reads commit messages, PR titles, and ticket summaries — never your source code. Your data is processed securely and is never shared with third parties.</p>
+          <p>No. Releaslyy only reads commit messages, PR titles, and ticket summaries — never your source code. Your data is processed securely and is never shared with third parties.</p>
         </div>
 
         <div className="docs-faq-item">
@@ -258,7 +258,7 @@ const SECTIONS = {
         </div>
 
         <div className="docs-faq-item">
-          <h3>Can I use Releasly with multiple repositories?</h3>
+          <h3>Can I use Releaslyy with multiple repositories?</h3>
           <p>Yes. Once you connect your GitHub account, you can select any repository you have access to when generating release notes. Switch between repos freely.</p>
         </div>
       </>
@@ -283,7 +283,7 @@ export default function DocsPage() {
                 <span style={{ fontSize: 12, fontWeight: 600, color: "var(--land-sky)", textTransform: "uppercase", letterSpacing: ".12em" }}>Documentation</span>
                 <h1 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 700, letterSpacing: "-.03em", marginTop: 12, color: "var(--land-text)" }}>
                   Learn how to use{" "}
-                  <span style={{ fontFamily: "var(--land-serif)", fontStyle: "italic", fontWeight: 400 }}>Releasly</span>
+                  <span style={{ fontFamily: "var(--land-serif)", fontStyle: "italic", fontWeight: 400 }}>Releaslyy</span>
                 </h1>
                 <p style={{ fontSize: 16, color: "var(--land-muted)", maxWidth: 500, margin: "16px auto 0", lineHeight: 1.6 }}>
                   Everything you need to generate, edit, and publish release notes from your development workflow.

@@ -18,7 +18,7 @@ export default function PrivacyPage() {
               <div className="docs-content-body">
                 <p><strong>Effective Date:</strong> March 11, 2026</p>
                 <p>
-                  Releasly ("we", "our", "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our AI-powered release notes platform.
+                  Releaslyy ("we", "our", "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our AI-powered release notes platform.
                 </p>
 
                 <h3>1. Information We Collect</h3>
@@ -90,7 +90,7 @@ export default function PrivacyPage() {
 
                 <h3>8. Children's Privacy</h3>
                 <p>
-                  Releasly is not intended for use by individuals under the age of 13. We do not knowingly collect personal information from children.
+                  Releaslyy is not intended for use by individuals under the age of 13. We do not knowingly collect personal information from children.
                 </p>
 
                 <h3>9. Changes to This Policy</h3>

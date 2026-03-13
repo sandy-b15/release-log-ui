@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/release-log-logo-2.png";
+import logo from "../../assets/logos/releaslyy-logo-main.png";
 
 const FOOTER_LINKS = [
   { label: "Docs", href: "/docs" },
@@ -25,7 +25,7 @@ export default function Footer() {
       <div className="land-con">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 24 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <img src={logo} alt="Releasly" style={{ height: 50 }} />
+            <img src={logo} alt="Releaslyy" style={{ height: 50 }} />
             <span style={{ fontSize: 13, color: "var(--land-muted)", marginLeft: 8 }}>&copy; 2026</span>
           </div>
           <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>

@@ -50,7 +50,7 @@ AI-powered Release Notes Generator that connects to version control and project 
 - [x] Generate from Jira issues (sprint or version based)
 - [x] Generate from DevRev work items
 - [x] Auto-save generated notes to database
-- [x] Multi-provider LLM support (Releasly AI, Groq, OpenAI, Anthropic, Gemini)
+- [x] Multi-provider LLM support (Releaslyy AI, Groq, OpenAI, Anthropic, Gemini)
 - [x] Bring Your Own Key — use your own API keys for any supported provider
 
 ### Editor & Export

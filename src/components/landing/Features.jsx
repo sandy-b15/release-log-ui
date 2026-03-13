@@ -4,11 +4,11 @@ import { I } from "./Icons";
 export default function Features() {
   const features = [
     { icon: I.sparkle, title: "AI Release Notes", desc: "Analyzes commits, PRs, sprint items, and linked issues — then writes human-readable summaries organized by category.", color: "var(--land-accent)" },
-    { icon: I.plug, title: "Multi-Source Ingestion", desc: "Pull data from GitHub, Jira, DevRev, and Zoho Sprints. Releasly unifies everything into a single release timeline.", color: "var(--land-sky)" },
+    { icon: I.plug, title: "Multi-Source Ingestion", desc: "Pull data from GitHub, Jira, DevRev, and Zoho Sprints. Releaslyy unifies everything into a single release timeline.", color: "var(--land-sky)" },
     { icon: I.send, title: "Auto-Publish Back", desc: "Push generated notes to GitHub Releases, create DevRev work items, or update Jira — all automatically.", color: "var(--land-warm)" },
     { icon: I.mail, title: "Email Notifications", desc: "Send polished release emails to customers, stakeholders, or your entire mailing list with one click.", color: "var(--land-pink)" },
     { icon: I.page, title: "Changelog Pages", desc: "Beautiful, hosted changelog pages with your branding. Embed in your app or share a public URL.", color: "var(--land-purple)" },
-    { icon: I.workflow, title: "Workflow Automation", desc: "Set up triggers: when a sprint closes or a tag is pushed, Releasly generates and publishes without lifting a finger.", color: "var(--land-orange)" },
+    { icon: I.workflow, title: "Workflow Automation", desc: "Set up triggers: when a sprint closes or a tag is pushed, Releaslyy generates and publishes without lifting a finger.", color: "var(--land-orange)" },
   ];
 
   return (
@@ -24,7 +24,7 @@ export default function Features() {
               {" "}— all automated
             </h2>
             <p style={{ fontSize: 16, color: "var(--land-muted)", maxWidth: 520, margin: "16px auto 0", lineHeight: 1.6 }}>
-              From sprint trackers to customer inboxes — Releasly handles the full release communication pipeline.
+              From sprint trackers to customer inboxes — Releaslyy handles the full release communication pipeline.
             </p>
           </div>
         </FadeIn>

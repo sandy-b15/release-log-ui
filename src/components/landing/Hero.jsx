@@ -100,7 +100,7 @@ export default function Hero() {
           }}>
             Your tools talk,{" "}
             <span style={{ fontFamily: "var(--land-serif)", fontStyle: "italic", fontWeight: 400, background: "linear-gradient(135deg,var(--land-primary),var(--land-accent))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              Releasly writes
+              Releaslyy writes
             </span>
           </h1>
         </FadeIn>

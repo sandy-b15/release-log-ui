@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="favGrad2" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="50%" stop-color="#3d3d99"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#favGrad2)"/>
+  <!-- Clean white R -->
+  <g transform="translate(120, 85)">
+    <path d="
+      M 35 0
+      L 35 342
+      L 78 342
+      L 78 190
+      L 150 190
+      L 222 342
+      L 272 342
+      L 194 183
+      C 237 168 262 132 262 90
+      C 262 36 220 0 158 0
+      Z
+      M 78 42
+      L 153 42
+      C 196 42 217 62 217 90
+      C 217 118 196 145 153 145
+      L 78 145
+      Z
+    " fill="white"/>
+  </g>
+</svg>
