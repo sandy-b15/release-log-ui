@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authApi } from '../../lib/api';
 import SEO from '../../components/SEO';
 import logo from '../../assets/logos/releaslyy-logo-main.png';
+import '../Login/Login.css';
 import './Signup.css';
 
 const Signup = () => {
@@ -37,7 +38,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-wrapper">
+    <div className="login-wrapper">
       <SEO
         title="Sign Up"
         description="Create your Releaslyy account to start generating AI-powered release notes."
@@ -48,7 +49,7 @@ const Signup = () => {
         <ArrowLeft size={20} /> Back to Home
       </button>
 
-      <div className="signup-left">
+      <div className="login-left">
         <div className="brand-logo">
           <img src={logo} alt="Releaslyy.com Logo" style={{ height: '30px' }} />
         </div>
@@ -56,7 +57,7 @@ const Signup = () => {
         <h1 className="login-title">Create your account</h1>
         <p className="login-subtitle">Get started with AI-powered release notes.</p>
 
-        <div className="signup-card">
+        <div className="login-card-interactive">
           <button onClick={handleGoogleSignup} className="google-login-btn">
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -110,6 +111,33 @@ const Signup = () => {
           <p className="terms-text" style={{ marginTop: '16px' }}>
             By signing up, you agree to our <a href="/terms">Terms of Service</a>.
           </p>
+        </div>
+      </div>
+
+      <div className="login-right">
+        <div className="feature-showcase">
+          <h2>Automate your workflow</h2>
+          <ul className="feature-list">
+            <li>
+              <CheckCircle2 className="check-icon" size={20} />
+              <span>Fetch commits from GitHub instantly</span>
+            </li>
+            <li>
+              <CheckCircle2 className="check-icon" size={20} />
+              <span>Generate AI summaries for stakeholders</span>
+            </li>
+            <li>
+              <CheckCircle2 className="check-icon" size={20} />
+              <span>Publish directly to Confluence</span>
+            </li>
+          </ul>
+
+          <div className="floating-card c1">
+            <span>feat: auth flow implementation</span>
+          </div>
+          <div className="floating-card c2">
+            <span>Release v1.2.0 is live!</span>
+          </div>
         </div>
       </div>
     </div>

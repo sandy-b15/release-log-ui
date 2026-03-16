@@ -1,61 +1,9 @@
-.signup-wrapper {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  background: var(--bg);
-  overflow: hidden;
-  position: relative;
-}
-
-.signup-left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.signup-card {
-  width: 100%;
-  max-width: 380px;
-}
+/* Signup-specific styles (layout reuses Login.css classes) */
 
 .signup-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-field label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.form-field input {
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--rs);
-  font-size: 0.9375rem;
-  font-family: var(--font);
-  color: var(--text);
-  background: var(--bg);
-  transition: border-color 0.2s;
-}
-
-.form-field input:focus {
-  outline: none;
-  border-color: var(--indigo);
-  box-shadow: 0 0 0 3px var(--il);
 }
 
 .signup-submit-btn {
@@ -79,30 +27,4 @@
 .signup-submit-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.auth-links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-  font-size: 0.875rem;
-  color: var(--muted);
-}
-
-.auth-links a {
-  color: var(--indigo);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.auth-links a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-  .signup-left {
-    padding: 24px 20px;
-  }
 }
