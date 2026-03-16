@@ -64,7 +64,7 @@ function DevRevMockup() {
               <div style={{ fontSize: 12, color: 'var(--land-muted)', marginTop: 2, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
                 <span>March 10, 2026</span>
                 <span style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                  <span style={{ width: 5, height: 5, borderRadius: 5, background: 'var(--land-teal)', opacity: 0.5 }} /> 8 DevRev tickets
+                  <span style={{ width: 5, height: 5, borderRadius: 5, background: 'var(--land-teal)', opacity: 0.5 }} /> 8 DevRev work items
                 </span>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function IntegrationLanding() {
     <div className="landing-root">
       <SEO
         title="DevRev Integration — AI Release Notes Generator"
-        description="Generate release notes from DevRev tickets and sprints automatically. AI-powered changelog from DevRev work items. Connect DevRev, generate, publish to Slack."
+        description="Generate release notes from DevRev work items and sprints automatically. AI-powered changelog generator for DevRev. Connect, generate, publish to Slack."
         keywords="devrev release notes, devrev changelog, devrev integration, generate release notes from devrev, devrev ai release notes, devrev slack integration, devrev sprint release notes, automated release notes devrev"
         canonical="https://releaslyy.com/integrations/devrev"
       />
@@ -183,7 +183,7 @@ export default function IntegrationLanding() {
               fontSize: 'clamp(36px, 5.5vw, 68px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-.035em',
               maxWidth: 820, margin: '0 auto 24px', color: 'var(--land-text)',
             }}>
-              Generate Release Notes from DevRev Tickets{' '}
+              Generate Release Notes from DevRev Work Items{' '}
               <span style={{
                 fontFamily: 'var(--land-serif)', fontStyle: 'italic', fontWeight: 400,
                 background: 'linear-gradient(135deg, var(--land-teal), var(--land-accent))',
@@ -268,7 +268,7 @@ export default function IntegrationLanding() {
           </FadeIn>
           <div className="integ-features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
             {[
-              { icon: <Sparkles size={20} />, title: 'AI Release Notes', desc: 'Analyzes DevRev tickets, sprint items, and linked work items -- then writes human-readable summaries organized by category.', color: 'var(--land-accent)' },
+              { icon: <Sparkles size={20} />, title: 'AI Release Notes', desc: 'Analyzes DevRev work items, sprint items, and linked work items -- then writes human-readable summaries organized by category.', color: 'var(--land-accent)' },
               { icon: <Cable size={20} />, title: 'Multi-Source Ingestion', desc: 'Pull data from DevRev alongside GitHub and Jira. Releaslyy unifies everything into a single release timeline.', color: 'var(--land-sky)' },
               { icon: <Send size={20} />, title: 'Slack Publishing', desc: 'Publish generated release notes directly to Slack channels. Keep your team and stakeholders informed automatically.', color: 'var(--land-teal)' },
             ].map((f, i) => (
@@ -351,7 +351,7 @@ export default function IntegrationLanding() {
           <div className="integ-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
             {[
               { num: '01', title: 'Connect Your Tools', desc: 'Link your DevRev workspace (and optionally GitHub, Jira). Releaslyy syncs your tickets, sprints, and work items.', color: 'var(--land-sky)' },
-              { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI reads DevRev tickets, sprint items, and linked issues to understand what shipped, why it matters, and who it affects.', color: 'var(--land-accent)' },
+              { num: '02', title: 'AI Analyzes Everything', desc: 'Our AI reads DevRev work items, sprint items, and linked issues to understand what shipped, why it matters, and who it affects.', color: 'var(--land-accent)' },
               { num: '03', title: 'Generate & Publish', desc: 'Review the AI draft, customize the tone, then publish -- to Slack, GitHub Releases, DevRev, email, or your changelog page.', color: 'var(--land-warm)' },
             ].map((s, i) => (
               <FadeIn key={s.num} delay={i * 0.12}>
