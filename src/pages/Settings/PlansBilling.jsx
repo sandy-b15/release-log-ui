@@ -11,7 +11,7 @@ function detectCurrency() {
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
     if (tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta')) return 'INR';
-  } catch {}
+  } catch { }
   return 'USD';
 }
 
@@ -146,7 +146,7 @@ export default function PlansBilling() {
   return (
     <div className="tab-content">
       <div className="section-title">Choose a Plan</div>
-      <div className="section-desc">Select the plan that fits your workflow</div>
+      <div className="section-desc">Select the plan and currency that fits your workflow</div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 0, background: 'var(--s1)', borderRadius: 10, padding: 4 }}>
