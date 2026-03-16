@@ -99,6 +99,8 @@ export default function PlansBilling() {
         toast.success(`Upgraded to ${selectedPlan.display_name}!`);
       }
     } catch (err) {
+      // Revert pending subscription if payment was cancelled or failed
+      try { await api.post('/billing/cancel-pending'); } catch {}
       if (err.message !== 'Payment cancelled') {
         toast.error(err.response?.data?.error || 'Failed to subscribe');
       }
