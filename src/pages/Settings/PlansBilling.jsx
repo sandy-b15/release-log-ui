@@ -37,7 +37,10 @@ export default function PlansBilling() {
   const [billingSaving, setBillingSaving] = useState(false);
   const [subscribing, setSubscribing] = useState(null);
   const [cancelConfirm, setCancelConfirm] = useState(false);
-  const [currency] = useState(detectCurrency);
+  const [currency, setCurrency] = useState(detectCurrency);
+  const [isAnnual, setIsAnnual] = useState(false);
+
+  const toggleCurrency = () => setCurrency(c => c === 'INR' ? 'USD' : 'INR');
 
   useEffect(() => {
     async function load() {
@@ -79,7 +82,7 @@ export default function PlansBilling() {
       } else {
         const { data } = await api.post('/billing/create-order', {
           planSlug: selectedPlan.slug,
-          interval: 'monthly',
+          interval: isAnnual ? 'annual' : 'monthly',
           currency,
         });
         const paymentResult = await openCheckout({
@@ -144,13 +147,48 @@ export default function PlansBilling() {
     <div className="tab-content">
       <div className="section-title">Choose a Plan</div>
       <div className="section-desc">Select the plan that fits your workflow</div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 0, background: 'var(--s1)', borderRadius: 10, padding: 4 }}>
+          <button onClick={() => setIsAnnual(false)} style={{
+            padding: '6px 16px', borderRadius: 8, fontSize: 13, fontWeight: 500,
+            fontFamily: 'var(--font)', border: 'none', cursor: 'pointer',
+            background: !isAnnual ? 'var(--white)' : 'transparent', color: !isAnnual ? 'var(--text)' : 'var(--muted)',
+            boxShadow: !isAnnual ? 'var(--sh)' : 'none', transition: 'all 0.2s',
+          }}>Monthly</button>
+          <button onClick={() => setIsAnnual(true)} style={{
+            padding: '6px 16px', borderRadius: 8, fontSize: 13, fontWeight: 500,
+            fontFamily: 'var(--font)', border: 'none', cursor: 'pointer',
+            background: isAnnual ? 'var(--white)' : 'transparent', color: isAnnual ? 'var(--text)' : 'var(--muted)',
+            boxShadow: isAnnual ? 'var(--sh)' : 'none', transition: 'all 0.2s',
+          }}>
+            Annual
+            <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--et)', marginLeft: 6 }}>Save 20%</span>
+          </button>
+        </div>
+
+        <button onClick={toggleCurrency} style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px',
+          borderRadius: 8, fontSize: 13, fontWeight: 500, border: '1px solid var(--border)',
+          background: 'var(--white)', cursor: 'pointer', color: 'var(--muted)',
+          fontFamily: 'var(--font)',
+        }}>
+          {currency === 'INR' ? '₹ INR' : '$ USD'}
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 5L6 8L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+
       <div className="plans-grid">
         {plans.map(p => {
           const isActive = p.slug === currentPlanSlug;
           const color = planColors[p.slug] || '#888';
           const icon = planIcons[p.slug] || <Zap size={20} />;
           const features = buildFeatures(p.entitlements);
-          const priceRaw = currency === 'INR' ? p.price_inr_monthly : p.price_usd_monthly;
+          const priceRaw = currency === 'INR'
+            ? (isAnnual ? p.price_inr_annual : p.price_inr_monthly)
+            : (isAnnual ? p.price_usd_annual : p.price_usd_monthly);
           const price = (priceRaw != null && !isNaN(priceRaw)) ? priceRaw / 100 : 0;
           const symbol = currency === 'INR' ? '₹' : '$';
           const isComingSoon = p.status === 'coming_soon';
