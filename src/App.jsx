@@ -15,6 +15,10 @@ import DocsPage from './pages/Docs/DocsPage';
 import PrivacyPage from './pages/Privacy/PrivacyPage';
 import TermsPage from './pages/Terms/TermsPage';
 import SupportPage from './pages/Support/SupportPage';
+import Signup from './pages/Signup/Signup';
+import VerifyOtp from './pages/VerifyOtp/VerifyOtp';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
 import { Toaster } from 'react-hot-toast';
 import './App.css';
 
@@ -59,6 +63,10 @@ function App() {
         {/* Public routes — no sidebar */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/docs" element={<DocsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
