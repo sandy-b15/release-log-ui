@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Hash, Plus, Cable, Send, ArrowRight } from 'lucide-react';
+import { Sparkles, Hash, Plus, Cable, Send, ArrowRight, Users, Code2, Megaphone, HeartHandshake, Puzzle, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Nav from '../../components/landing/Nav';
 import Footer from '../../components/landing/Footer';
 import FadeIn from '../../components/landing/FadeIn';
@@ -179,6 +181,91 @@ function IntegrationCard({ integration, index, navigate }) {
         )}
       </div>
     </FadeIn>
+  );
+}
+
+function IntegrationRequestForm() {
+  const [form, setForm] = useState({ name: '', email: '', tool: '', description: '' });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.tool.trim()) {
+      return toast.error('Please fill in name, email, and tool name');
+    }
+    setSending(true);
+    try {
+      // Send via mailto fallback — opens email client
+      const subject = encodeURIComponent(`Integration Request: ${form.tool}`);
+      const body = encodeURIComponent(
+        `Name: ${form.name}\nEmail: ${form.email}\nTool: ${form.tool}\n\nDescription:\n${form.description}`
+      );
+      window.location.href = `mailto:hello@releaslyy.com?subject=${subject}&body=${body}`;
+      setSent(true);
+      toast.success('Opening your email client...');
+    } catch {
+      toast.error('Failed to open email client');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (sent) {
+    return (
+      <div style={{
+        padding: 40, borderRadius: 16, background: 'var(--land-card)', border: '1px solid var(--land-border)',
+        textAlign: 'center',
+      }}>
+        <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(16,185,129,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--land-teal)', margin: '0 auto 16px' }}>
+          <Send size={22} />
+        </div>
+        <h3 style={{ fontSize: 18, fontWeight: 600, color: 'var(--land-text)', marginBottom: 8 }}>Request Submitted</h3>
+        <p style={{ fontSize: 14, color: 'var(--land-muted)', lineHeight: 1.6 }}>
+          Thanks for your request! We'll review it and get back to you at <strong>{form.email}</strong>.
+        </p>
+      </div>
+    );
+  }
+
+  const inputStyle = {
+    width: '100%', padding: '12px 14px', borderRadius: 10,
+    border: '1px solid var(--land-border)', background: 'var(--land-card)',
+    fontSize: 14, fontFamily: 'var(--land-font)', color: 'var(--land-text)',
+    outline: 'none', transition: 'border-color .2s',
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{
+      padding: 32, borderRadius: 16, background: 'var(--land-card)', border: '1px solid var(--land-border)',
+      display: 'flex', flexDirection: 'column', gap: 16,
+    }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div>
+          <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--land-text)', marginBottom: 6 }}>Name</label>
+          <input style={inputStyle} placeholder="Your name" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} />
+        </div>
+        <div>
+          <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--land-text)', marginBottom: 6 }}>Email</label>
+          <input style={inputStyle} type="email" placeholder="you@company.com" value={form.email} onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))} />
+        </div>
+      </div>
+      <div>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--land-text)', marginBottom: 6 }}>Tool Name</label>
+        <input style={inputStyle} placeholder="e.g., Linear, ClickUp, Asana..." value={form.tool} onChange={(e) => setForm(f => ({ ...f, tool: e.target.value }))} />
+      </div>
+      <div>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--land-text)', marginBottom: 6 }}>Description <span style={{ fontWeight: 400, color: 'var(--land-muted)' }}>(optional)</span></label>
+        <textarea style={{ ...inputStyle, minHeight: 80, resize: 'vertical' }} placeholder="How would you use this integration?" value={form.description} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} />
+      </div>
+      <button type="submit" className="land-btn land-btn-p" style={{ justifyContent: 'center', width: '100%' }} disabled={sending}>
+        {sending ? <Loader2 size={16} className="spin" /> : <Send size={16} />}
+        Submit Request
+      </button>
+      <p style={{ fontSize: 12, color: 'var(--land-muted)', textAlign: 'center' }}>
+        Or email us directly at <a href="mailto:hello@releaslyy.com" style={{ color: 'var(--land-accent)', fontWeight: 500 }}>hello@releaslyy.com</a>
+      </p>
+    </form>
   );
 }
 
@@ -381,6 +468,106 @@ export default function IntegrationsPage() {
               </FadeIn>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Target Users ── */}
+      <section className="land-sec">
+        <div className="land-con">
+          <FadeIn>
+            <div style={{ textAlign: 'center', marginBottom: 56 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--land-accent)', textTransform: 'uppercase', letterSpacing: '.12em' }}>
+                Built For
+              </span>
+              <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-.03em', marginTop: 12, color: 'var(--land-text)' }}>
+                Who uses{' '}
+                <span style={{ fontFamily: 'var(--land-serif)', fontStyle: 'italic', fontWeight: 400 }}>Releaslyy?</span>
+              </h2>
+            </div>
+          </FadeIn>
+          <div className="integ-hub-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
+            {[
+              { icon: <Users size={22} />, title: 'Product Managers', desc: 'Generate stakeholder-ready release notes from sprint data without chasing engineers.', color: 'var(--land-accent)' },
+              { icon: <Code2 size={22} />, title: 'Engineering Teams', desc: 'Auto-generate technical changelogs from commits and PRs. Focus on shipping, not writing.', color: 'var(--land-sky)' },
+              { icon: <Megaphone size={22} />, title: 'Developer Relations', desc: 'Create public changelogs and developer community updates from your release data.', color: 'var(--land-purple)' },
+              { icon: <HeartHandshake size={22} />, title: 'Customer Success', desc: 'Share product updates with customers in non-technical language. Keep them informed effortlessly.', color: 'var(--land-teal)' },
+            ].map((user, i) => (
+              <FadeIn key={user.title} delay={i * 0.08}>
+                <div style={{
+                  padding: 28, borderRadius: 14, background: 'var(--land-card)', border: '1px solid var(--land-border)',
+                  transition: 'all .3s ease', height: '100%',
+                }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#d0d0d6'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,.06)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--land-border)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+                >
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: user.color + '12', display: 'flex', alignItems: 'center', justifyContent: 'center', color: user.color, marginBottom: 16 }}>{user.icon}</div>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, letterSpacing: '-.02em', marginBottom: 8, color: 'var(--land-text)' }}>{user.title}</h3>
+                  <p style={{ fontSize: 14, color: 'var(--land-muted)', lineHeight: 1.65 }}>{user.desc}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Future Integrations ── */}
+      <section className="land-sec" style={{ background: 'var(--land-surface)' }}>
+        <div className="land-con">
+          <FadeIn>
+            <div style={{ textAlign: 'center', marginBottom: 48 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--land-warm)', textTransform: 'uppercase', letterSpacing: '.12em' }}>
+                On The Roadmap
+              </span>
+              <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-.03em', marginTop: 12, color: 'var(--land-text)' }}>
+                Future{' '}
+                <span style={{ fontFamily: 'var(--land-serif)', fontStyle: 'italic', fontWeight: 400 }}>integrations</span>
+              </h2>
+              <p style={{ fontSize: 16, color: 'var(--land-muted)', maxWidth: 480, margin: '16px auto 0', lineHeight: 1.6 }}>
+                We're expanding support for more tools. Vote or request your integration below.
+              </p>
+            </div>
+          </FadeIn>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12, maxWidth: 600, margin: '0 auto' }}>
+            {['Linear', 'Monday', 'ClickUp', 'Asana', 'GitLab', 'Bitbucket', 'Notion', 'Custom Tools'].map((tool, i) => (
+              <FadeIn key={tool} delay={i * 0.05}>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '10px 20px', borderRadius: 100,
+                  background: 'var(--land-card)', border: '1px solid var(--land-border)',
+                  fontSize: 14, fontWeight: 500, color: 'var(--land-text)',
+                  transition: 'all .2s',
+                }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--land-accent)'; e.currentTarget.style.color = 'var(--land-accent)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--land-border)'; e.currentTarget.style.color = 'var(--land-text)'; }}
+                >
+                  <Puzzle size={14} style={{ opacity: 0.5 }} />
+                  {tool}
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Custom Integration Request ── */}
+      <section className="land-sec">
+        <div className="land-con" style={{ maxWidth: 600 }}>
+          <FadeIn>
+            <div style={{ textAlign: 'center', marginBottom: 40 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--land-teal)', textTransform: 'uppercase', letterSpacing: '.12em' }}>
+                Request an Integration
+              </span>
+              <h2 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, letterSpacing: '-.03em', marginTop: 12, color: 'var(--land-text)' }}>
+                Need a custom integration?
+              </h2>
+              <p style={{ fontSize: 15, color: 'var(--land-muted)', maxWidth: 460, margin: '12px auto 0', lineHeight: 1.6 }}>
+                Tell us which tool you'd like to connect and we'll prioritize it on our roadmap.
+              </p>
+            </div>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <IntegrationRequestForm />
+          </FadeIn>
         </div>
       </section>
 
