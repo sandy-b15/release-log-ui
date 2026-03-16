@@ -5,6 +5,7 @@ const FOOTER_LINKS = [
   { label: "Docs", href: "/docs" },
   { label: "Pricing", href: "/pricing" },
   { label: "Integrations", href: "/#integrations" },
+  { label: "Changelog", href: "#", comingSoon: true },
   { label: "Support", href: "/support" },
   { label: "Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },
@@ -29,14 +30,21 @@ export default function Footer() {
             <span style={{ fontSize: 13, color: "var(--land-muted)", marginLeft: 8 }}>&copy; 2026</span>
           </div>
           <div className="land-footer-links" style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
-            {FOOTER_LINKS.map((l) => (
-              <a key={l.label} href={l.href}
-                onClick={(e) => handleClick(e, l)}
-                style={{ fontSize: 13, color: "var(--land-muted)", transition: "color .2s" }}
-                onMouseEnter={(e) => e.target.style.color = "var(--land-text)"}
-                onMouseLeave={(e) => e.target.style.color = "var(--land-muted)"}
-              >{l.label}</a>
-            ))}
+            {FOOTER_LINKS.map((l) =>
+              l.comingSoon ? (
+                <span key={l.label} style={{ fontSize: 13, color: "var(--land-muted)", cursor: "default", display: "inline-flex", alignItems: "center" }}>
+                  {l.label}
+                  <span style={{ fontSize: 10, fontWeight: 500, padding: "2px 6px", borderRadius: 4, background: "var(--land-border)", color: "var(--land-muted)", marginLeft: 6 }}>Coming Soon</span>
+                </span>
+              ) : (
+                <a key={l.label} href={l.href}
+                  onClick={(e) => handleClick(e, l)}
+                  style={{ fontSize: 13, color: "var(--land-muted)", transition: "color .2s" }}
+                  onMouseEnter={(e) => e.target.style.color = "var(--land-text)"}
+                  onMouseLeave={(e) => e.target.style.color = "var(--land-muted)"}
+                >{l.label}</a>
+              )
+            )}
           </div>
         </div>
       </div>
