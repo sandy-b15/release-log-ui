@@ -1,0 +1,116 @@
+.verify-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg);
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.verify-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  text-align: center;
+}
+
+.verify-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--il);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: var(--indigo);
+}
+
+.verify-card h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.verify-email-text {
+  color: var(--muted);
+  margin-bottom: 32px;
+  font-size: 0.9375rem;
+}
+
+.verify-email-text strong {
+  color: var(--text);
+}
+
+.otp-input-group {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.otp-input-group input {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: var(--rs);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  transition: border-color 0.2s;
+}
+
+.otp-input-group input:focus {
+  outline: none;
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px var(--il);
+}
+
+.verify-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: var(--pt);
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.2s;
+}
+
+.verify-submit-btn:hover:not(:disabled) {
+  background: var(--ph);
+}
+
+.verify-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resend-row {
+  margin-top: 20px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.resend-row button {
+  background: none;
+  border: none;
+  color: var(--indigo);
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 0.875rem;
+}
+
+.resend-row button:disabled {
+  color: var(--m2);
+  cursor: not-allowed;
+}
