@@ -57,7 +57,6 @@ export default function Integrations() {
                   </div>
                 </div>
                 <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-.01em", color: "var(--land-text)" }}>Releaslyy AI</div>
-                <div style={{ fontSize: 12, color: "var(--land-muted)", textAlign: "center", maxWidth: 140 }}>Generates &amp; publishes</div>
               </div>
             </FadeIn>
 
@@ -83,7 +82,10 @@ export default function Integrations() {
         <FadeIn delay={0.5}>
           <p style={{ textAlign: "center", fontSize: 14, color: "var(--land-muted)", marginTop: 24 }}>
             More integrations coming soon — Slack, Linear, Notion, and more.{" "}
-            <a href="#" style={{ color: "var(--land-accent)", fontWeight: 500, borderBottom: "1px dashed rgba(99,102,241,.3)" }}>Request an integration</a>
+            <a href="/integrations#request" onClick={(e) => {
+              e.preventDefault();
+              navigate("/integrations#request");
+            }} style={{ color: "var(--land-accent)", fontWeight: 500, borderBottom: "1px dashed rgba(99,102,241,.3)" }}>Request an integration</a>
           </p>
         </FadeIn>
       </div>

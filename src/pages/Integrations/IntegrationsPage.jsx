@@ -692,7 +692,7 @@ export default function IntegrationsPage() {
       </section>
 
       {/* ── Custom Integration Request ── */}
-      <section className="land-sec">
+      <section className="land-sec" id="request">
         <div className="land-con" style={{ maxWidth: 600 }}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: 40 }}>
