@@ -284,94 +284,42 @@ export default function PlansBilling() {
       {/* Usage Section */}
       <div style={{ maxWidth: 640, marginBottom: 20 }}>
         <div className="s-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <div>
-              <div className="section-title">Usage</div>
-              <div className="section-desc">Your current usage this billing period</div>
-            </div>
-            {entSub?.status && (
-              <span className={`s-badge ${statusColors[entSub.status] || 's-badge-gray'}`} style={{ textTransform: 'capitalize' }}>
-                {entSub.status === 'past_due' ? 'Past Due' : entSub.status}
-              </span>
-            )}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
-                <span className="form-label" style={{ margin: 0 }}>Generations</span>
-                <span style={{ color: 'var(--muted)', fontSize: 12 }}>
-                  {usage?.generations_this_month ?? 0} / {entitlements?.max_generations_per_month === -1 ? '\u221e' : (entitlements?.max_generations_per_month ?? 0)}
-                </span>
-              </div>
-              <div style={{ height: 8, borderRadius: 4, background: 'var(--border)', overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%',
-                  borderRadius: 4,
-                  background: 'var(--indigo)',
-                  width: entitlements?.max_generations_per_month === -1
-                    ? '5%'
-                    : `${Math.min(100, ((usage?.generations_this_month ?? 0) / (entitlements?.max_generations_per_month || 1)) * 100)}%`,
-                  transition: 'width 0.3s ease',
-                }} />
-              </div>
-            </div>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
-                <span className="form-label" style={{ margin: 0 }}>Projects</span>
-                <span style={{ color: 'var(--muted)', fontSize: 12 }}>
-                  {usage?.projects_count ?? 0} / {entitlements?.max_projects === -1 ? '\u221e' : (entitlements?.max_projects ?? 0)}
-                </span>
-              </div>
-              <div style={{ height: 8, borderRadius: 4, background: 'var(--border)', overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%',
-                  borderRadius: 4,
-                  background: 'var(--indigo)',
-                  width: entitlements?.max_projects === -1
-                    ? '5%'
-                    : `${Math.min(100, ((usage?.projects_count ?? 0) / (entitlements?.max_projects || 1)) * 100)}%`,
-                  transition: 'width 0.3s ease',
-                }} />
-              </div>
-            </div>
+          <div className="section-title">Usage</div>
+          <div className="section-desc">Your current usage this billing period</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 12 }}>
+            {[
+              { label: 'Generations', used: usage?.generations_this_month ?? 0, limit: entitlements?.max_generations_per_month },
+              { label: 'Publishes', used: usage?.publishes_this_month ?? 0, limit: entitlements?.max_publishes_per_month },
+              { label: 'Projects', used: usage?.projects_count ?? 0, limit: entitlements?.max_projects },
+            ].map(({ label, used, limit }) => {
+              const isUnlimited = limit === -1;
+              const max = isUnlimited ? 1 : (limit || 1);
+              const pct = isUnlimited ? 0 : Math.min(100, (used / max) * 100);
+              return (
+                <div key={label}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
+                    <span className="form-label" style={{ margin: 0 }}>{label}</span>
+                    <span style={{ color: 'var(--muted)', fontSize: 12 }}>
+                      {used} / {isUnlimited ? 'Unlimited' : limit}
+                    </span>
+                  </div>
+                  {!isUnlimited && (
+                    <div style={{ height: 8, borderRadius: 4, background: 'var(--border)', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%', borderRadius: 4,
+                        background: pct >= 90 ? 'var(--rose)' : pct >= 70 ? 'var(--amber)' : 'var(--indigo)',
+                        width: `${pct}%`, transition: 'width 0.3s ease',
+                      }} />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
       <div style={{ maxWidth: 640 }}>
-        <div className="s-card" style={{ marginBottom: 20 }}>
-          <div className="section-title">Billing Details</div>
-          <div className="section-desc">Manage your billing information</div>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">Billing Name</label>
-              <input className="form-input" placeholder="Full name" value={billing.billingName} onChange={e => setBilling(b => ({ ...b, billingName: e.target.value }))} />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Billing Email</label>
-              <input className="form-input" placeholder="billing@company.com" value={billing.billingEmail} onChange={e => setBilling(b => ({ ...b, billingEmail: e.target.value }))} />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">Phone</label>
-              <input className="form-input" placeholder="+1 (555) 000-0000" value={billing.billingPhone} onChange={e => setBilling(b => ({ ...b, billingPhone: e.target.value }))} />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Address</label>
-              <input className="form-input" placeholder="Billing address" value={billing.billingAddress} onChange={e => setBilling(b => ({ ...b, billingAddress: e.target.value }))} />
-            </div>
-          </div>
-          {subscription?.renews_at && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'var(--muted)', marginBottom: 16 }}>
-              <span>Next billing: <strong style={{ color: 'var(--text)' }}>{new Date(subscription.renews_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></span>
-            </div>
-          )}
-          <button className="btn btn-primary" onClick={handleSaveBilling} disabled={billingSaving}>
-            {billingSaving ? <Loader2 size={14} className="spin" /> : <Check size={14} />} Save Billing
-          </button>
-        </div>
-
         {invoices.length > 0 && (
           <div className="s-card">
             <div className="section-title">Invoice History</div>
