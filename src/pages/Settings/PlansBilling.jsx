@@ -250,6 +250,37 @@ export default function PlansBilling() {
         })}
       </div>
 
+      {/* Active Subscription Info */}
+      {currentPlanSlug !== 'free' && entSub?.status === 'active' && entSub?.renews_at && (
+        <div style={{ maxWidth: 640, marginBottom: 20 }}>
+          <div className="s-card">
+            <div className="section-title">Active Subscription</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12, fontSize: 13 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--muted)' }}>Plan</span>
+                <span style={{ fontWeight: 500, color: 'var(--text)' }}>{plan?.display_name || currentPlanSlug}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--muted)' }}>Billing</span>
+                <span style={{ fontWeight: 500, color: 'var(--text)', textTransform: 'capitalize' }}>{entSub.billing_interval || 'monthly'} ({entSub.currency || 'USD'})</span>
+              </div>
+              {entSub.started_at && (
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--muted)' }}>Started</span>
+                  <span style={{ fontWeight: 500, color: 'var(--text)' }}>{new Date(entSub.started_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--muted)' }}>{entSub.cancelled_at ? 'Access until' : 'Renews on'}</span>
+                <span style={{ fontWeight: 500, color: entSub.cancelled_at ? 'var(--rose)' : 'var(--text)' }}>
+                  {new Date(entSub.cancelled_at || entSub.renews_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Usage Section */}
       <div style={{ maxWidth: 640, marginBottom: 20 }}>
         <div className="s-card">
