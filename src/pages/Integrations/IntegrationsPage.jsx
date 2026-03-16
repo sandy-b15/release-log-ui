@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Hash, Plus, Cable, Send, ArrowRight, Users, Code2, Megaphone, HeartHandshake, Puzzle, Loader2 } from 'lucide-react';
+import { Sparkles, Hash, Plus, Cable, Send, ArrowRight, Users, Code2, Megaphone, HeartHandshake, Puzzle, Loader2, Terminal, Wand2, Star, CheckCircle2, TrendingUp } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Nav from '../../components/landing/Nav';
 import Footer from '../../components/landing/Footer';
@@ -388,6 +388,148 @@ export default function IntegrationsPage() {
                 navigate={navigate}
               />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Before & After ── */}
+      <section className="land-sec">
+        <div className="land-con">
+          <FadeIn>
+            <div style={{ textAlign: 'center', marginBottom: 56 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--land-accent)', textTransform: 'uppercase', letterSpacing: '.12em' }}>
+                See The Difference
+              </span>
+              <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, letterSpacing: '-.03em', marginTop: 12, color: 'var(--land-text)' }}>
+                Raw data in,{' '}
+                <span style={{ fontFamily: 'var(--land-serif)', fontStyle: 'italic', fontWeight: 400 }}>polished notes</span>
+                {' '}out
+              </h2>
+              <p style={{ fontSize: 16, color: 'var(--land-muted)', maxWidth: 520, margin: '16px auto 0', lineHeight: 1.6 }}>
+                Watch how Releaslyy transforms raw development data into professional release notes in seconds.
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="integ-before-after">
+            {/* Before Card */}
+            <FadeIn delay={0.1}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--land-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--land-muted)' }}>
+                    <Terminal size={18} />
+                  </div>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--land-text)' }}>Before: Raw GitHub Data</h3>
+                </div>
+                <div style={{
+                  borderRadius: 14, border: '1px solid var(--land-border)', background: 'var(--land-surface)',
+                  padding: 24, fontFamily: 'var(--land-mono)', fontSize: 13, minHeight: 420,
+                  position: 'relative', overflow: 'hidden',
+                }}>
+                  {[
+                    { msg: 'feat: merge branch \'staging\'', hash: '7a2b9f1', pr: '#442', time: '2 hours ago' },
+                    { msg: 'fix: updated regex for email validation', hash: '3c1d5e2', pr: '#441', time: '5 hours ago' },
+                    { msg: 'docs: fixed typos in readme.md', hash: '9f8a7b6', pr: '#440', time: 'Yesterday' },
+                    { msg: 'refactor: optimized query performance for dashboard', hash: '5e4d3c2', pr: '#439', time: 'Yesterday' },
+                    { msg: 'chore: bump deps', hash: '1a2b3c4', pr: '#438', time: '2 days ago' },
+                    { msg: 'fix: handle null pointer in user service', hash: '8d7e6f5', pr: '#437', time: '3 days ago' },
+                  ].map((c, i) => (
+                    <div key={i} style={{ padding: '10px 12px', borderBottom: '1px solid var(--land-border)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ color: 'var(--land-accent)', opacity: 0.7 }}>{c.msg}</span>
+                        <span style={{ fontSize: 11, color: 'var(--land-muted)', opacity: 0.6 }}>{c.pr}</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: 12, fontSize: 11, color: 'var(--land-muted)', opacity: 0.5 }}>
+                        <span>{c.hash}</span>
+                        <span>{c.time}</span>
+                      </div>
+                    </div>
+                  ))}
+                  {/* Fade overlay */}
+                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(to top, var(--land-surface), transparent)' }} />
+                </div>
+                <p style={{ fontSize: 13, color: 'var(--land-muted)', fontStyle: 'italic' }}>
+                  Unorganized commits and technical jargon that confuse your users.
+                </p>
+              </div>
+            </FadeIn>
+
+            {/* AI Transition */}
+            <FadeIn delay={0.2}>
+              <div className="integ-ai-divider">
+                <div className="integ-ai-line" />
+                <div style={{
+                  width: 64, height: 64, borderRadius: 32, background: 'var(--land-card)',
+                  border: '1px solid var(--land-border)', boxShadow: '0 8px 30px rgba(99,102,241,.15)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
+                }}>
+                  <Wand2 size={22} style={{ color: 'var(--land-accent)' }} />
+                  <span style={{ fontSize: 8, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.04em', color: 'var(--land-text)' }}>AI</span>
+                </div>
+                <div className="integ-ai-line" />
+              </div>
+            </FadeIn>
+
+            {/* After Card */}
+            <FadeIn delay={0.3}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(99,102,241,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--land-accent)' }}>
+                    <Sparkles size={18} />
+                  </div>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--land-text)' }}>After: AI Generated Release</h3>
+                </div>
+                <div style={{
+                  borderRadius: 14, border: '1px solid rgba(99,102,241,.2)',
+                  background: 'var(--land-card)', padding: 28, minHeight: 420,
+                  boxShadow: '0 0 40px -10px rgba(99,102,241,.1)', position: 'relative', overflow: 'hidden',
+                }}>
+                  {/* Glow */}
+                  <div style={{ position: 'absolute', top: -60, right: -60, width: 160, height: 160, background: 'rgba(99,102,241,.04)', borderRadius: '50%', filter: 'blur(40px)' }} />
+                  <div style={{ position: 'relative' }}>
+                    {/* Header */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--land-border)', paddingBottom: 20, marginBottom: 24 }}>
+                      <div>
+                        <h4 style={{ fontSize: 20, fontWeight: 700, color: 'var(--land-text)', letterSpacing: '-.02em' }}>v2.4.0 — Performance Update</h4>
+                        <p style={{ fontSize: 13, color: 'var(--land-muted)', marginTop: 4 }}>Released March 24, 2026</p>
+                      </div>
+                      <span style={{ padding: '4px 12px', borderRadius: 100, background: 'var(--land-accent)', color: '#fff', fontSize: 11, fontWeight: 700 }}>Stable</span>
+                    </div>
+                    {/* Categories */}
+                    {[
+                      { label: 'New Features', icon: <Star size={15} />, color: 'var(--land-accent)', items: [
+                        { bold: 'Dashboard Performance:', text: ' Significant improvements to data loading speeds, resulting in 40% faster rendering.' },
+                      ]},
+                      { label: 'Bug Fixes', icon: <CheckCircle2 size={15} />, color: 'var(--land-teal)', items: [
+                        { bold: null, text: 'Resolved an issue where special characters in email addresses caused validation failures.' },
+                      ]},
+                      { label: 'Improvements', icon: <TrendingUp size={15} />, color: 'var(--land-warm)', items: [
+                        { bold: null, text: 'Updated documentation with clearer examples and improved search indexing.' },
+                        { bold: null, text: 'Optimized database queries reducing average response time by 35%.' },
+                      ]},
+                    ].map((cat) => (
+                      <div key={cat.label} style={{ marginBottom: 20 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 700, color: cat.color, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 10 }}>
+                          {cat.icon} {cat.label}
+                        </div>
+                        {cat.items.map((item, i) => (
+                          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 8, paddingLeft: 4 }}>
+                            <div style={{ width: 5, height: 5, borderRadius: 5, background: cat.color, marginTop: 7, flexShrink: 0 }} />
+                            <p style={{ fontSize: 14, color: 'var(--land-muted)', lineHeight: 1.65 }}>
+                              {item.bold && <strong style={{ color: 'var(--land-text)' }}>{item.bold}</strong>}
+                              {item.text}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <p style={{ fontSize: 13, color: 'var(--land-muted)', fontStyle: 'italic' }}>
+                  Human-readable, categorized, and beautiful notes ready to publish.
+                </p>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
