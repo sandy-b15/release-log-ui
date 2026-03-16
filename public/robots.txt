@@ -1,7 +1,8 @@
 User-agent: *
+Allow: /integrations
 Allow: /
-Disallow: /dashboard
 Disallow: /integration
+Disallow: /dashboard
 Disallow: /generate
 Disallow: /settings
 
