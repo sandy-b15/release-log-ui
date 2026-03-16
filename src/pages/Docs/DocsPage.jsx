@@ -2,6 +2,7 @@ import { useState } from "react";
 import Nav from "../../components/landing/Nav";
 import Footer from "../../components/landing/Footer";
 import FadeIn from "../../components/landing/FadeIn";
+import SEO from "../../components/SEO";
 import "../Landing/LandingPage.css";
 import "./DocsPage.css";
 
@@ -272,6 +273,12 @@ export default function DocsPage() {
 
   return (
     <div className="landing-root">
+      <SEO
+        title="Documentation"
+        description="Learn how to use Releaslyy to generate release notes from GitHub, Jira, and DevRev. Setup guides, API docs, and best practices."
+        keywords="Releaslyy docs, release notes documentation, GitHub integration guide, Jira integration guide"
+        canonical="https://releaslyy.com/docs"
+      />
       <div className="land-noise" />
       <Nav />
 

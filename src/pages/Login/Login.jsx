@@ -1,5 +1,6 @@
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import SEO from '../../components/SEO';
 import './Login.css';
 import logo from '../../assets/logos/releaslyy-logo-main.png';
 
@@ -14,6 +15,12 @@ const Login = () => {
 
     return (
         <div className="login-wrapper">
+            <SEO
+                title="Sign In"
+                description="Sign in to Releaslyy with Google to start generating AI-powered release notes for your projects."
+                keywords="Releaslyy login, sign in, Google OAuth"
+                canonical="https://releaslyy.com/login"
+            />
             <button className="back-btn" onClick={() => navigate('/')}>
                 <ArrowLeft size={20} /> Back to Home
             </button>

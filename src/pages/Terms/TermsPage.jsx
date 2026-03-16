@@ -1,12 +1,19 @@
 import Nav from "../../components/landing/Nav";
 import Footer from "../../components/landing/Footer";
 import FadeIn from "../../components/landing/FadeIn";
+import SEO from "../../components/SEO";
 import "../Landing/LandingPage.css";
 import "../Docs/DocsPage.css";
 
 export default function TermsPage() {
   return (
     <div className="landing-root">
+      <SEO
+        title="Terms of Service"
+        description="Releaslyy terms of service. Read our terms and conditions for using the AI-powered release notes platform."
+        keywords="Releaslyy terms, terms of service, terms and conditions"
+        canonical="https://releaslyy.com/terms"
+      />
       <div className="land-noise" />
       <Nav />
 

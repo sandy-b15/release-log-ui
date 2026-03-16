@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Nav from '../../components/landing/Nav';
 import Footer from '../../components/landing/Footer';
+import SEO from '../../components/SEO';
 import { useRazorpay } from '../../hooks/useRazorpay';
 import api, { authApi } from '../../lib/api';
 import { buildFeatures } from '../../lib/planFeatures';
@@ -226,6 +227,12 @@ export default function PricingPage() {
 
   return (
     <div className="landing-root">
+      <SEO
+        title="Pricing"
+        description="Choose the right Releaslyy plan for your team. Free, Pro, Team, and Enterprise tiers with AI-powered release notes generation."
+        keywords="Releaslyy pricing, release notes pricing, AI changelog pricing, developer tools pricing"
+        canonical="https://releaslyy.com/pricing"
+      />
       <div className="land-noise" />
       <Nav />
       <div style={{ maxWidth: 1120, margin: '0 auto', padding: '120px 24px 80px', fontFamily: "'Satoshi', sans-serif" }}>

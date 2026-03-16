@@ -2,6 +2,7 @@ import { useState } from "react";
 import Nav from "../../components/landing/Nav";
 import Footer from "../../components/landing/Footer";
 import FadeIn from "../../components/landing/FadeIn";
+import SEO from "../../components/SEO";
 import "../Landing/LandingPage.css";
 import "../Docs/DocsPage.css";
 import "./SupportPage.css";
@@ -21,6 +22,12 @@ export default function SupportPage() {
 
   return (
     <div className="landing-root">
+      <SEO
+        title="Support"
+        description="Get help with Releaslyy. Contact our support team, report bugs, or request features for the AI release notes generator."
+        keywords="Releaslyy support, help, contact, bug report, feature request"
+        canonical="https://releaslyy.com/support"
+      />
       <div className="land-noise" />
       <Nav />
 

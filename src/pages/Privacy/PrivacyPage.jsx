@@ -1,12 +1,19 @@
 import Nav from "../../components/landing/Nav";
 import Footer from "../../components/landing/Footer";
 import FadeIn from "../../components/landing/FadeIn";
+import SEO from "../../components/SEO";
 import "../Landing/LandingPage.css";
 import "../Docs/DocsPage.css";
 
 export default function PrivacyPage() {
   return (
     <div className="landing-root">
+      <SEO
+        title="Privacy Policy"
+        description="Releaslyy privacy policy. Learn how we handle your data, integrations, and account information."
+        keywords="Releaslyy privacy, data privacy, privacy policy"
+        canonical="https://releaslyy.com/privacy"
+      />
       <div className="land-noise" />
       <Nav />
 
