@@ -228,9 +228,9 @@ export default function PricingPage() {
   return (
     <div className="landing-root">
       <SEO
-        title="Pricing — Free & Pro Plans"
-        description="Start free with 10 release notes/month. Upgrade to Pro for unlimited AI-generated release notes, BYOK, publish to GitHub/Jira/Slack, and changelog pages. From $19/mo."
-        keywords="Releaslyy pricing, release notes tool pricing, AI changelog pricing, free release notes generator, release notes tool free tier, developer tools pricing, BYOK AI pricing"
+        title="Pricing — Free AI Release Notes Generator"
+        description="Generate release notes automatically — free forever. Upgrade to Pro for unlimited AI-generated changelogs, BYOK, publish to GitHub/Jira/Slack. From $19/mo."
+        keywords="ai changelog generator free, automated release notes tool, free release notes generator, github release notes generator for free, jira release notes generator for free, devrev release notes generator for free, release notes tool pricing, BYOK AI pricing, product update generator"
         canonical="https://releaslyy.com/pricing"
       />
       <div className="land-noise" />

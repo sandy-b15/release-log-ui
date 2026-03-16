@@ -39,9 +39,9 @@ const Signup = () => {
   return (
     <div className="login-wrapper">
       <SEO
-        title="Sign Up — Free Release Notes Generator"
-        description="Create a free Releaslyy account. Generate AI-powered release notes from GitHub commits, Jira issues, and DevRev sprints in seconds."
-        keywords="Releaslyy signup, free release notes generator, create account, AI changelog tool, release notes free"
+        title="Sign Up — Free AI Release Notes Generator"
+        description="Create a free account and generate release notes automatically from GitHub commits, Jira tickets, and DevRev sprints. No credit card required."
+        keywords="ai changelog generator free, free release notes generator, generate release notes automatically, github release notes generator for free, jira release notes generator for free, product update generator, app update generator, automated release notes tool"
         canonical="https://releaslyy.com/signup"
       />
       <button className="back-btn" onClick={() => navigate('/')}>

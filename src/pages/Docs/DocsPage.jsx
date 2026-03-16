@@ -274,9 +274,9 @@ export default function DocsPage() {
   return (
     <div className="landing-root">
       <SEO
-        title="Documentation — Setup & Integration Guides"
-        description="Learn how to connect GitHub, Jira, and DevRev to Releaslyy. Step-by-step guides for generating AI release notes, publishing changelogs, and using BYOK with OpenAI, Anthropic, Groq, and Gemini."
-        keywords="Releaslyy documentation, how to generate release notes, GitHub integration setup, Jira integration guide, DevRev setup, BYOK setup, AI release notes guide, changelog setup, release notes automation tutorial"
+        title="Documentation — How to Generate Release Notes"
+        description="Learn how to generate release notes from commits, Jira tickets, and DevRev sprints. Step-by-step guides for GitHub, Jira, DevRev integration, BYOK setup with OpenAI, Anthropic, Groq, Gemini."
+        keywords="how to generate release notes from commits, ai tool to create changelog from git commits, generate release notes from jira tickets, github release notes generator for free, Jira integration guide, DevRev setup, BYOK setup, release notes automation tutorial, automated release notes tool"
         canonical="https://releaslyy.com/docs"
       />
       <div className="land-noise" />
