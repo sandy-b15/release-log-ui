@@ -15,7 +15,6 @@ const tabs = [
     { id: 'plans', label: 'Plans & Billing', icon: <CreditCard size={15} /> },
     { id: 'usage', label: 'Usage Metrics', icon: <BarChart3 size={15} /> },
     { id: 'keys', label: 'LLM Keys', icon: <Key size={15} /> },
-    { id: 'integrations', label: 'Integrations', icon: <Link2 size={15} /> },
 ];
 
 const tabContent = {
@@ -24,7 +23,6 @@ const tabContent = {
     plans: PlansBilling,
     usage: UsageMetrics,
     keys: LLMKeys,
-    integrations: SettingsIntegrations,
 };
 
 const Settings = () => {
