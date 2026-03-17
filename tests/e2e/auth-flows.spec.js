@@ -43,9 +43,9 @@ test.describe('Email Signup + OTP Verification Flow', () => {
 });
 
 test.describe('Login + Forgot Password Flow', () => {
-  test('should show unverified error for unverified user', async ({ page }) => {
+  test('should reject login for unverified user', async ({ page }) => {
     const email = `unverified-${Date.now()}@test.com`;
-    // Signup via API but don't verify
+    // Signup via API but don't verify — password_hash is deferred
     await page.request.post(`${API_URL}/auth/signup`, {
       data: { name: 'Unverified', email, password: 'TestPass123!' },
     });
@@ -55,8 +55,9 @@ test.describe('Login + Forgot Password Flow', () => {
     await page.fill('input[placeholder="Your password"]', 'TestPass123!');
     await page.click('button:has-text("Sign in")');
 
-    // Should show verification banner
-    await expect(page.locator('text=verify your email')).toBeVisible({ timeout: 5000 });
+    // Should stay on login page (login fails — no password_hash until OTP verified)
+    await page.waitForTimeout(2000);
+    await expect(page.locator('text=Welcome!')).toBeVisible();
   });
 
   test('should navigate forgot password flow', async ({ page }) => {
@@ -72,7 +73,7 @@ test.describe('Login + Forgot Password Flow', () => {
 
   test('should show reset password page', async ({ page }) => {
     await page.goto('/reset-password?email=test@test.com');
-    await expect(page.locator('text=Reset password')).toBeVisible();
+    await expect(page.locator('h1:has-text("Reset password")')).toBeVisible();
     await expect(page.locator('input[placeholder="Min 8 characters"]')).toBeVisible();
     await expect(page.locator('input[placeholder="Confirm your password"]')).toBeVisible();
   });

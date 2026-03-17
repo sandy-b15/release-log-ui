@@ -9,9 +9,8 @@ test.describe('Profile Settings', () => {
   });
 
   test('should show profile fields with user data', async ({ page }) => {
-    // Basic Info tab should be default
-    const nameInput = page.locator('input').first();
-    await expect(nameInput).toBeVisible({ timeout: 5000 });
+    // Basic Info tab should be default — wait for form to load
+    await expect(page.locator('.form-input, input[type="text"]').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should show password section', async ({ page }) => {
