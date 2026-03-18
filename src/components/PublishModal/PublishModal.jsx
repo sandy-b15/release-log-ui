@@ -52,7 +52,6 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
     const [slackChannels, setSlackChannels] = useState([]);
     const [slackChannel, setSlackChannel] = useState('');
     const [slackChannelName, setSlackChannelName] = useState('');
-    const [slackFormat, setSlackFormat] = useState('full');
 
     // Public visibility
     const [isPublic, setIsPublic] = useState(false);
@@ -225,7 +224,6 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 config: {
                     channelId: slackChannel,
                     channelName: slackChannelName,
-                    format: slackFormat,
                 },
             });
         }
@@ -268,7 +266,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         ghRepo, ghTag, ghTitle, ghPrerelease, ghDraft,
         jiraProject, jiraVersionName, jiraMarkReleased, jiraAddComments,
         devrevTitle, devrevStatus, devrevAccess, devrevPart,
-        slackChannel, slackChannelName, slackFormat]);
+        slackChannel, slackChannelName]);
 
     const handleRetry = useCallback(async (channelType) => {
         setPublishing(true);
@@ -591,30 +589,9 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                                         ))}
                                     </select>
                                 </div>
-                                <div className="pub-field">
-                                    <label className="pub-label">Format</label>
-                                    <div style={{ display: 'flex', gap: 6 }}>
-                                        <button
-                                            type="button"
-                                            className={`btn btn-sm ${slackFormat === 'full' ? 'btn-primary' : 'btn-secondary'}`}
-                                            onClick={() => setSlackFormat('full')}
-                                        >
-                                            Full
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className={`btn btn-sm ${slackFormat === 'summary' ? 'btn-primary' : 'btn-secondary'}`}
-                                            onClick={() => setSlackFormat('summary')}
-                                        >
-                                            Summary
-                                        </button>
-                                    </div>
-                                    <span style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, display: 'block' }}>
-                                        {slackFormat === 'summary'
-                                            ? 'Posts 3-5 bullet summary with link to full notes'
-                                            : 'Posts complete release notes to channel'}
-                                    </span>
-                                </div>
+                                <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block' }}>
+                                    Posts AI summary + full notes as attachment
+                                </span>
                             </ChannelCard>
                         </>
                     )}
