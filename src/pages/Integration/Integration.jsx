@@ -29,10 +29,11 @@ const INTEGRATIONS = [
         accentVar: '--text',
         tokenLabel: 'Personal Access Token',
         placeholder: 'ghp_...',
-        hint: <>Scopes required: <code>repo</code>, <code>read:user</code></>,
+        hint: 'Connect via GitHub App with read-only access to your repositories',
         dashboardUrl: '/dashboard',
-        apiConnect: '/tokens/github',
+        apiConnect: 'oauth',
         apiCheck: '/tokens/github',
+        patConnect: '/tokens/github', // fallback PAT endpoint
     },
     {
         id: 'devrev',
@@ -213,13 +214,24 @@ const IntegrationCard = ({ config, connected, onOpenModal, onConnect, onDelete, 
                 ) : config.soon ? (
                     <div className="int-coming-soon-v2">Coming Soon</div>
                 ) : (
-                    <button
-                        className="btn btn-secondary int-btn-connect-v2"
-                        onClick={() => isOAuth ? onConnect() : (isPlaceholder ? null : onOpenModal())}
-                        disabled={isPlaceholder}
-                    >
-                        {isPlaceholder ? 'Coming Soon' : 'Connect'}
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%', alignItems: 'center' }}>
+                        <button
+                            className="btn btn-secondary int-btn-connect-v2"
+                            onClick={() => isOAuth ? onConnect() : (isPlaceholder ? null : onOpenModal())}
+                            disabled={isPlaceholder}
+                        >
+                            {isPlaceholder ? 'Coming Soon' : isOAuth ? `Connect with ${config.title}` : 'Connect'}
+                        </button>
+                        {config.patConnect && (
+                            <button
+                                className="int-pat-fallback"
+                                onClick={onOpenModal}
+                                style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 11, cursor: 'pointer', textDecoration: 'underline' }}
+                            >
+                                Use token instead
+                            </button>
+                        )}
+                    </div>
                 )}
             </div>
         </div>
@@ -327,6 +339,18 @@ const Integration = () => {
             setSearchParams({}, { replace: true });
         }
 
+        // Handle GitHub OAuth callback redirect
+        const githubStatus = searchParams.get('github');
+        if (githubStatus === 'success') {
+            setConnections(prev => ({ ...prev, github: true }));
+            toast.success('GitHub connected successfully!');
+            setSearchParams({}, { replace: true });
+        } else if (githubStatus === 'error') {
+            const message = searchParams.get('message') || 'GitHub connection failed';
+            setErrorState(prev => ({ ...prev, github: message }));
+            setSearchParams({}, { replace: true });
+        }
+
         // Handle Slack OAuth callback redirect
         const slackStatus = searchParams.get('slack');
         if (slackStatus === 'success') {
@@ -350,6 +374,19 @@ const Integration = () => {
             toast.error(msg);
             setErrorState(prev => ({ ...prev, jira: msg }));
             setLoadingState(prev => ({ ...prev, jira: false }));
+        }
+    };
+
+    const handleGitHubOAuth = async () => {
+        try {
+            setLoadingState(prev => ({ ...prev, github: true }));
+            const res = await api.get('/github/auth');
+            window.location.href = res.data.authUrl;
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to start GitHub OAuth';
+            toast.error(msg);
+            setErrorState(prev => ({ ...prev, github: msg }));
+            setLoadingState(prev => ({ ...prev, github: false }));
         }
     };
 
@@ -389,13 +426,15 @@ const Integration = () => {
     const handleEditSubmit = async (token) => {
         if (!editingIntegration) return;
         const config = INTEGRATIONS.find(i => i.id === editingIntegration);
-        if (!config || !config.apiConnect) return;
+        if (!config) return;
+        const endpoint = config.patConnect || config.apiConnect;
+        if (!endpoint || endpoint === 'oauth') return;
 
         setLoadingState(prev => ({ ...prev, [editingIntegration]: true }));
         setErrorState(prev => ({ ...prev, [editingIntegration]: '' }));
 
         try {
-            await api.post(config.apiConnect, { token });
+            await api.post(endpoint, { token });
             setConnections(prev => ({ ...prev, [editingIntegration]: true }));
             setEditingIntegration(null);
         } catch (err) {
@@ -474,7 +513,7 @@ const Integration = () => {
                                     config={config}
                                     connected={!!connections[config.id]}
                                     onOpenModal={() => handleOpenModal(config.id, connections[config.id] ? 'edit' : 'connect')}
-                                    onConnect={config.apiConnect === 'oauth' ? (config.id === 'slack' ? handleSlackOAuth : handleJiraOAuth) : undefined}
+                                    onConnect={config.apiConnect === 'oauth' ? (config.id === 'slack' ? handleSlackOAuth : config.id === 'github' ? handleGitHubOAuth : handleJiraOAuth) : undefined}
                                     onDelete={() => setDeletingIntegration(config.id)}
                                     index={i}
                                 />

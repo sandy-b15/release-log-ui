@@ -21,6 +21,7 @@ import GitHubLanding from './pages/IntegrationLanding/GitHubLanding';
 import SlackLanding from './pages/IntegrationLanding/SlackLanding';
 import IntegrationsPage from './pages/Integrations/IntegrationsPage';
 import PublicNote from './pages/PublicNote/PublicNote';
+import Changelog from './pages/Changelog/Changelog';
 import Signup from './pages/Signup/Signup';
 import VerifyOtp from './pages/VerifyOtp/VerifyOtp';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
@@ -91,6 +92,7 @@ function App() {
           <Route path="/integration" element={<ProtectedRoute><Integration /></ProtectedRoute>} />
           <Route path="/generate" element={<ProtectedRoute><GenerateEdit /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/changelog/:userId" element={<ProtectedRoute><Changelog /></ProtectedRoute>} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

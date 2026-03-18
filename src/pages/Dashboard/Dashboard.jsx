@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { RefreshCw, Square, CheckSquare, Trash2, Search, X, Check, Plus } from 'lucide-react';
+import { RefreshCw, Square, CheckSquare, Trash2, Search, X, Check, Plus, Loader2 } from 'lucide-react';
 import api, { authApi } from '../../lib/api';
 import TopBar from '../../components/Header/Header';
 import DataSelector from '../../components/DataSelector/DataSelector';
@@ -90,7 +90,7 @@ const Dashboard = () => {
     });
     const [boardSearch, setBoardSearch] = useState('');
     const [sprintSearch, setSprintSearch] = useState('');
-    const [sprintFilter, setSprintFilter] = useState('all');
+    const [sprintFilter, setSprintFilter] = useState('completed');
     const [devrevItems, setDevrevItems] = useState([]);
     const [devrevSelectedItems, setDevrevSelectedItems] = useState([]);
     const [devrevItemSearch, setDevrevItemSearch] = useState('');
@@ -121,6 +121,7 @@ const Dashboard = () => {
     const [llmConfig, setLlmConfig] = useState({ provider: 'releasly', model: null, apiKeyOverride: null });
     const [loading, setLoading] = useState(false);
     const [loadingData, setLoadingData] = useState(false);
+    const [dashboardLoading, setDashboardLoading] = useState(true);
     const [customPrompt, setCustomPrompt] = useState('');
     const [advancedOpen, setAdvancedOpen] = useState(false);
     const [audienceOptions, setAudienceOptions] = useState([]);
@@ -217,9 +218,11 @@ const Dashboard = () => {
                 if (drRes.data.hasToken) fetchBoards(selectedBoard);
                 if (jiraRes.data.hasToken) fetchJiraProjects();
 
+                setDashboardLoading(false);
             } catch (err) {
                 console.error("Dashboard Init Error", err);
                 toast.error('Failed to initialize dashboard');
+                setDashboardLoading(false);
             }
         };
         init();
@@ -559,6 +562,15 @@ const Dashboard = () => {
         return searchMatch && filterMatch;
     });
 
+    const clearSessionSelections = () => {
+        sessionStorage.removeItem('github_selectedRepo');
+        sessionStorage.removeItem('github_selectedBranch');
+        sessionStorage.removeItem('github_selectedCommits');
+        sessionStorage.removeItem('devrev_selectedBoard');
+        sessionStorage.removeItem('devrev_selectedSprints');
+        sessionStorage.removeItem('shared_audience');
+    };
+
     // --- Generation Logic ---
     const handleGenerate = async () => {
         const genCheck = canUse('max_generations_per_month');
@@ -585,16 +597,19 @@ const Dashboard = () => {
                 const genRes = await api.post('/generate', { commits: commitList, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'github');
                 refetchEntitlements();
+                clearSessionSelections();
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             } else if (sources.includes('devrev') && devrevSelectedItems.length > 0) {
                 const genRes = await api.post('/devrev/generate', { items: devrevSelectedItems, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'devrev');
                 refetchEntitlements();
+                clearSessionSelections();
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             } else if (sources.includes('jira') && jiraSelectedIssues.length > 0) {
                 const genRes = await api.post('/jira/generate', { issues: jiraSelectedIssues, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'jira');
                 refetchEntitlements();
+                clearSessionSelections();
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
             }
         } catch (err) {
@@ -680,6 +695,12 @@ const Dashboard = () => {
             {view === 'overview' ? (
                 <>
                     <TopBar title={null} />
+                    {dashboardLoading ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '120px 0', color: 'var(--muted)' }}>
+                            <Loader2 size={28} className="spin" />
+                            <span>Loading dashboard...</span>
+                        </div>
+                    ) : (
                     <div className="page-content">
                         {/* Greeting + CTA */}
                         <div className="fu dash-greeting-v2">
@@ -858,6 +879,7 @@ const Dashboard = () => {
                             onCancel={() => setDeletingNoteId(null)}
                         />
                     </div>
+                    )}
                 </>
             ) : (
                 /* ─── Generate View ─── */

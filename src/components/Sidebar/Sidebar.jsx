@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { authApi } from '../../lib/api';
 import logo from '../../assets/logos/releaslyy-logo-main.png';
 import './Sidebar.css';
 
@@ -18,6 +20,12 @@ const icons = {
             <path d="M9 11.25v4.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
     ),
+    changelog: (
+        <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
+            <path d="M3 3h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0115 15H3a1.5 1.5 0 01-1.5-1.5v-9A1.5 1.5 0 013 3z" stroke="currentColor" strokeWidth="1.4" />
+            <path d="M5.5 7h7M5.5 10h5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
+    ),
     gear: (
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
             <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -26,13 +34,25 @@ const icons = {
     ),
 };
 
-const navItems = [
+const staticNavItems = [
     { to: '/dashboard', icon: icons.grid, label: 'Dashboard' },
     { to: '/integration', icon: icons.plug, label: 'Integrations' },
 ];
 
 const Sidebar = () => {
     const navigate = useNavigate();
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        authApi.get('/auth/me')
+            .then(res => { if (res.data?.id) setUserId(res.data.id); })
+            .catch(() => {});
+    }, []);
+
+    const navItems = [
+        ...staticNavItems,
+        ...(userId ? [{ to: `/changelog/${userId}`, icon: icons.changelog, label: 'Changelog' }] : []),
+    ];
 
     return (
         <>
