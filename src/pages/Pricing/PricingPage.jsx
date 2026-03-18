@@ -263,7 +263,14 @@ export default function PricingPage() {
                 boxShadow: isAnnual ? '0 1px 3px rgba(0,0,0,0.08)' : 'none', transition: 'all 0.2s ease',
               }}>
                 Annual
-                <span style={{ fontSize: 11, fontWeight: 600, color: '#16a34a', marginLeft: 6 }}>Save 8%</span>
+                {(() => {
+                  const paid = plans.find(p => p.slug === 'pro');
+                  if (!paid) return null;
+                  const monthly = currency === 'INR' ? paid.price_inr_monthly : paid.price_usd_monthly;
+                  const annual = currency === 'INR' ? paid.price_inr_annual : paid.price_usd_annual;
+                  const pct = monthly > 0 ? Math.round((1 - annual / monthly) * 100) : 0;
+                  return pct > 0 ? <span style={{ fontSize: 11, fontWeight: 600, color: '#16a34a', marginLeft: 6 }}>Save {pct}%</span> : null;
+                })()}
               </button>
             </div>
 

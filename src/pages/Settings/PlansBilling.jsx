@@ -212,7 +212,14 @@ export default function PlansBilling() {
             boxShadow: isAnnual ? 'var(--sh)' : 'none', transition: 'all 0.2s',
           }}>
             Annual
-            <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--et)', marginLeft: 6 }}>Save 8%</span>
+            {(() => {
+              const paid = plans.find(p => p.slug === 'pro');
+              if (!paid) return null;
+              const monthly = currency === 'INR' ? paid.price_inr_monthly : paid.price_usd_monthly;
+              const annual = currency === 'INR' ? paid.price_inr_annual : paid.price_usd_annual;
+              const pct = monthly > 0 ? Math.round((1 - annual / monthly) * 100) : 0;
+              return pct > 0 ? <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--et)', marginLeft: 6 }}>Save {pct}%</span> : null;
+            })()}
           </button>
         </div>
 
