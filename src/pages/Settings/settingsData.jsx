@@ -1,12 +1,12 @@
 export const providerColors = {
-  Groq: '#f97316',
+  Grok: '#f97316',
   OpenAI: '#10b981',
   Anthropic: '#d97706',
   Gemini: '#3b82f6',
 };
 
 export const providerModels = {
-  Groq: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768'],
+  Grok: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768'],
   OpenAI: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo'],
   Anthropic: ['claude-sonnet-4-5', 'claude-haiku-4-5'],
   Gemini: ['gemini-1.5-pro', 'gemini-1.5-flash'],

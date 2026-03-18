@@ -11,6 +11,10 @@ import jiraLogo from '../../assets/jira_logo.webp';
 import devrevLogo from '../../assets/devrev-logo.webp';
 import zohoLogo from '../../assets/Zoho-logo.webp';
 import slackLogo from '../../assets/slack-logo.png';
+import linearLogo from '../../assets/linear-logo.svg';
+import asanaLogo from '../../assets/asana-logo.svg';
+import clickupLogo from '../../assets/clickup-logo.svg';
+import mondayLogo from '../../assets/monday-logo.svg';
 import '../Landing/LandingPage.css';
 import './IntegrationsPage.css';
 
@@ -52,6 +56,42 @@ const INTEGRATIONS = [
     href: '/integrations/slack',
   },
   {
+    id: 'linear',
+    name: 'Linear',
+    logo: linearLogo,
+    logoAlt: 'Linear',
+    description: 'Connect Linear teams, projects, and cycles. Generate release notes from your Linear issues automatically.',
+    status: 'available',
+    href: '/integrations/linear',
+  },
+  {
+    id: 'asana',
+    name: 'Asana',
+    logo: asanaLogo,
+    logoAlt: 'Asana',
+    description: 'Pull tasks from Asana workspaces and projects. Generate release notes from your project boards.',
+    status: 'available',
+    href: '/integrations/asana',
+  },
+  {
+    id: 'clickup',
+    name: 'ClickUp',
+    logo: clickupLogo,
+    logoAlt: 'ClickUp',
+    description: 'Sync ClickUp workspaces, spaces, and lists. AI generates release notes from your tasks.',
+    status: 'available',
+    href: '/integrations/clickup',
+  },
+  {
+    id: 'monday',
+    name: 'Monday.com',
+    logo: mondayLogo,
+    logoAlt: 'Monday.com',
+    description: 'Connect Monday.com boards and groups. Generate release notes from your board items.',
+    status: 'available',
+    href: '/integrations/monday',
+  },
+  {
     id: 'zoho',
     name: 'Zoho Sprints',
     logo: zohoLogo,
@@ -65,7 +105,7 @@ const INTEGRATIONS = [
     name: 'More Integrations',
     logo: null,
     logoAlt: null,
-    description: 'GitLab, Bitbucket, Linear, Notion — more integrations coming soon. Request yours on our support page.',
+    description: 'GitLab, Bitbucket, Notion — more integrations coming soon. Request yours on our support page.',
     status: 'placeholder',
     href: '/support',
   },
@@ -76,7 +116,7 @@ const HOW_IT_WORKS = [
     num: '01',
     icon: <Cable size={20} />,
     title: 'Connect',
-    desc: 'Link your GitHub, Jira, DevRev, or Slack workspace with one click. OAuth-based, secure, revocable.',
+    desc: 'Link your GitHub, Jira, DevRev, Linear, Asana, ClickUp, Monday.com, or Slack workspace with one click. OAuth-based, secure, revocable.',
     color: 'var(--land-sky)',
   },
   {
@@ -90,7 +130,7 @@ const HOW_IT_WORKS = [
     num: '03',
     icon: <Send size={20} />,
     title: 'Publish',
-    desc: 'Push notes back to GitHub Releases, Jira, DevRev, or Slack channels automatically.',
+    desc: 'Push notes back to GitHub Releases, Jira, DevRev, Slack channels, and more — automatically.',
     color: 'var(--land-teal)',
   },
 ];
@@ -253,7 +293,7 @@ function IntegrationRequestForm() {
       </div>
       <div>
         <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--land-text)', marginBottom: 6 }}>Tool Name</label>
-        <input style={inputStyle} placeholder="e.g., Linear, ClickUp, Asana..." value={form.tool} onChange={(e) => setForm(f => ({ ...f, tool: e.target.value }))} />
+        <input style={inputStyle} placeholder="e.g., GitLab, Bitbucket, Notion..." value={form.tool} onChange={(e) => setForm(f => ({ ...f, tool: e.target.value }))} />
       </div>
       <div>
         <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--land-text)', marginBottom: 6 }}>Description <span style={{ fontWeight: 400, color: 'var(--land-muted)' }}>(optional)</span></label>
@@ -276,9 +316,9 @@ export default function IntegrationsPage() {
   return (
     <div className="landing-root">
       <SEO
-        title="Integrations — GitHub, Jira, DevRev, Slack"
-        description="Connect GitHub, Jira, DevRev, and Slack to Releaslyy. Pull commits and issues, generate AI release notes, and publish back automatically. Free to start."
-        keywords="releaslyy integrations, github integration, jira integration, devrev integration, slack release notes, release notes integrations, changelog integrations, connect github jira devrev"
+        title="Integrations — GitHub, Jira, Linear, Asana, ClickUp, Monday.com & More"
+        description="Connect GitHub, Jira, DevRev, Linear, Asana, ClickUp, Monday.com, and Slack to Releaslyy. Pull commits and issues, generate AI release notes, and publish back automatically."
+        keywords="releaslyy integrations, github integration, jira integration, devrev integration, linear integration, asana integration, clickup integration, monday integration, slack release notes, release notes integrations"
         canonical="https://releaslyy.com/integrations"
       />
       <div className="land-noise" />
@@ -671,7 +711,7 @@ export default function IntegrationsPage() {
             </div>
           </FadeIn>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12, maxWidth: 600, margin: '0 auto' }}>
-            {['Linear', 'Monday', 'ClickUp', 'Asana', 'GitLab', 'Bitbucket', 'Notion', 'Custom Tools'].map((tool, i) => (
+            {['GitLab', 'Bitbucket', 'Notion', 'Zoho Projects', 'Shortcut', 'Custom Tools'].map((tool, i) => (
               <FadeIn key={tool} delay={i * 0.05}>
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8,

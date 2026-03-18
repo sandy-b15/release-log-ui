@@ -28,7 +28,7 @@ const SECTIONS = {
         <h3>Quick Start</h3>
         <ol>
           <li><strong>Sign up</strong> — Create your account using Google OAuth. No passwords to remember.</li>
-          <li><strong>Connect a source</strong> — Link your GitHub repository, Jira project, DevRev workspace, or Zoho Sprints account.</li>
+          <li><strong>Connect a source</strong> — Link your GitHub, Jira, Linear, Asana, ClickUp, Monday.com, or DevRev account.</li>
           <li><strong>Generate</strong> — Select commits or sprints, configure your audience and tone, then let Releaslyy AI do the rest.</li>
           <li><strong>Edit & publish</strong> — Fine-tune the generated notes in our rich text editor, then export or publish wherever you need.</li>
         </ol>
@@ -51,8 +51,12 @@ const SECTIONS = {
             <tr><th>Source</th><th>What it pulls</th><th>Setup</th></tr>
           </thead>
           <tbody>
-            <tr><td>GitHub</td><td>Repos, branches, merged PRs</td><td>Personal Access Token</td></tr>
+            <tr><td>GitHub</td><td>Repos, branches, merged PRs</td><td>OAuth or Personal Access Token</td></tr>
             <tr><td>Jira</td><td>Projects, boards, sprints, versions, issues</td><td>OAuth (supports multi-site)</td></tr>
+            <tr><td>Linear</td><td>Teams, projects, cycles, issues</td><td>OAuth</td></tr>
+            <tr><td>Asana</td><td>Workspaces, projects, sections, tasks</td><td>OAuth (auto-refresh)</td></tr>
+            <tr><td>ClickUp</td><td>Workspaces, spaces, folders, lists, tasks</td><td>OAuth</td></tr>
+            <tr><td>Monday.com</td><td>Boards, groups, items, subitems</td><td>OAuth</td></tr>
             <tr><td>DevRev</td><td>Sprint boards, sprints, work items</td><td>Personal Access Token</td></tr>
           </tbody>
         </table>
@@ -69,13 +73,17 @@ const SECTIONS = {
         <p>The generation wizard walks you through three simple steps to create release notes tailored to your audience.</p>
 
         <h3>Step 1 — Select Source</h3>
-        <p>Choose one or more connected sources to pull from: GitHub, Jira, or DevRev. You can select multiple sources if you have them connected.</p>
+        <p>Choose one or more connected sources to pull from: GitHub, Jira, Linear, Asana, ClickUp, Monday.com, or DevRev. You can select multiple sources if you have them connected.</p>
 
         <h3>Step 2 — Pick Changes</h3>
         <p>Select the specific data to include in your release notes:</p>
         <ul>
           <li><strong>GitHub</strong> — Select a repository and branch, then pick merged PRs. Filter by date range.</li>
           <li><strong>Jira</strong> — Select a project, then choose Board/Sprint mode or Release Version mode. Multi-select sprints or versions, then pick individual issues. Filter issues by type, status, priority, assignee, or labels.</li>
+          <li><strong>Linear</strong> — Select a team, then browse projects or cycles. Pick individual issues with full details (status, priority, assignee, labels).</li>
+          <li><strong>Asana</strong> — Select a workspace and project, optionally filter by section, then pick tasks with assignee, status, and custom fields.</li>
+          <li><strong>ClickUp</strong> — Browse workspaces → spaces → lists, then pick tasks with status, priority, assignees, and tags.</li>
+          <li><strong>Monday.com</strong> — Select a board, optionally filter by group, then pick items including subitems with all column values.</li>
           <li><strong>DevRev</strong> — Select a sprint board, multi-select sprints, then pick individual work items from those sprints.</li>
         </ul>
 
@@ -84,7 +92,7 @@ const SECTIONS = {
           <li><strong>Title</strong> — Give your release notes a custom title (e.g., "v2.4.0 — Performance & Polish").</li>
           <li><strong>Audience</strong> — Choose who the notes are for: <em>QA / Testing</em>, <em>Product Team</em>, or <em>Stakeholders</em>. The AI adjusts language and detail level accordingly.</li>
           <li><strong>Tone</strong> — Pick a tone: Professional, Casual, or Technical.</li>
-          <li><strong>LLM Provider</strong> — Use the default Releaslyy AI or select your own provider (Groq, OpenAI, Anthropic, Gemini) if you've added API keys.</li>
+          <li><strong>LLM Provider</strong> — Use the default Releaslyy AI or select your own provider (Grok, OpenAI, Anthropic, Gemini) if you've added API keys.</li>
           <li><strong>Custom Prompt</strong> — Under Advanced Options, add additional instructions for the AI (e.g., "Focus on user-facing changes" or "Group by feature area").</li>
         </ul>
 
@@ -108,7 +116,7 @@ const SECTIONS = {
             <tr><th>Provider</th><th>Models</th></tr>
           </thead>
           <tbody>
-            <tr><td>Groq</td><td>LLaMA, Mixtral, and more</td></tr>
+            <tr><td>Grok</td><td>LLaMA, Mixtral, and more</td></tr>
             <tr><td>OpenAI</td><td>GPT-4o, GPT-4, GPT-3.5 Turbo</td></tr>
             <tr><td>Anthropic</td><td>Claude Sonnet, Claude Haiku</td></tr>
             <tr><td>Gemini</td><td>Gemini Pro, Gemini Flash</td></tr>
@@ -167,8 +175,12 @@ const SECTIONS = {
         <ul>
           <li><strong>GitHub Releases</strong> — Publish as a GitHub release to your selected repository. Choose the tag name and whether to mark it as a draft or pre-release.</li>
           <li><strong>Jira</strong> — Publish to a Jira release version. Select the project and version to attach the notes to.</li>
+          <li><strong>Linear</strong> — Publish as a Project Update to any Linear project with full markdown formatting.</li>
+          <li><strong>Asana</strong> — Create a task in your Asana project with an AI summary and full HTML release notes as an attachment.</li>
+          <li><strong>ClickUp</strong> — Create a task in any ClickUp list with the release notes as markdown description.</li>
+          <li><strong>Monday.com</strong> — Create an item on a Monday board with the release notes as an HTML update.</li>
           <li><strong>DevRev</strong> — Publish as a part or article in your DevRev workspace.</li>
-          <li><strong>Slack</strong> — Post release notes to any Slack channel. Choose between <strong>Full</strong> mode (complete notes with rich formatting) or <strong>Summary</strong> mode (AI-generated 3-5 bullet summary with a link to the full public changelog).</li>
+          <li><strong>Slack</strong> — Post an AI-generated summary to any Slack channel with the full release notes as a file attachment.</li>
         </ul>
         <p>Each channel shows its publish status (success, failed, pending) with retry support for failed publishes.</p>
 
@@ -196,10 +208,14 @@ const SECTIONS = {
 
         <h3>Current Integrations</h3>
         <ul>
-          <li><strong>GitHub</strong> — Connect via Personal Access Token to pull merged PRs from your repositories. Also used as a publish channel for GitHub Releases.</li>
+          <li><strong>GitHub</strong> — Connect via OAuth or Personal Access Token to pull merged PRs from your repositories. Also used as a publish channel for GitHub Releases.</li>
           <li><strong>Jira</strong> — Connect via OAuth to pull issues from sprints or release versions. Supports multi-site selection, multi-select for sprints and versions, searchable dropdowns, and issue filtering by type, status, priority, assignee, and labels. Also used as a publish channel.</li>
+          <li><strong>Linear</strong> — Connect via OAuth to pull issues from teams, projects, and cycles. Browse by team hierarchy, filter by cycle or project, and view full issue details. Publish back as Project Updates.</li>
+          <li><strong>Asana</strong> — Connect via OAuth to pull tasks from workspaces and projects. Filter by section, view assignees and custom fields. Publish as tasks with HTML attachments. Token auto-refreshes.</li>
+          <li><strong>ClickUp</strong> — Connect via OAuth to pull tasks from workspaces, spaces, and lists. View status, priority, assignees, and tags. Publish as tasks in any list with markdown.</li>
+          <li><strong>Monday.com</strong> — Connect via OAuth to pull items from boards and groups, including subitems. Extract status, priority, and people from column values. Publish as board items with HTML updates.</li>
           <li><strong>DevRev</strong> — Connect with a Personal Access Token to browse sprint boards, select sprints, and pick individual work items. Also used as a publish channel.</li>
-          <li><strong>Slack</strong> — Connect via OAuth to publish release notes directly to Slack channels. Supports full release notes or AI-generated summaries with a link to the public changelog.</li>
+          <li><strong>Slack</strong> — Connect via OAuth to publish AI-generated summaries to Slack channels with the full release notes as a file attachment.</li>
         </ul>
 
         <h3>Public Release Notes</h3>
@@ -210,7 +226,7 @@ const SECTIONS = {
         <ul>
           <li><strong>GitLab</strong> — Pull merge requests and tags</li>
           <li><strong>Bitbucket</strong> — Pull commits and PRs</li>
-          <li><strong>Confluence</strong> — Sync with your team's knowledge base</li>
+          <li><strong>Notion</strong> — Sync with your team's knowledge base</li>
         </ul>
       </>
     ),
@@ -247,7 +263,7 @@ const SECTIONS = {
       <>
         <div className="docs-faq-item">
           <h3>What AI model does Releaslyy use?</h3>
-          <p>Releaslyy uses state-of-the-art large language models by default. You can also bring your own API key for Groq, OpenAI, Anthropic, or Gemini and choose your preferred model from their catalogue.</p>
+          <p>By default, Releaslyy uses the Grok LLaMA 3.3 70B model for fast, high-quality release note generation. You can also bring your own API key for OpenAI, Anthropic, or Gemini and choose your preferred model from their catalogue.</p>
         </div>
 
         <div className="docs-faq-item">
@@ -282,8 +298,8 @@ export default function DocsPage() {
     <div className="landing-root">
       <SEO
         title="Documentation — How to Generate Release Notes"
-        description="Learn how to generate release notes from commits, Jira tickets, and DevRev sprints. Step-by-step guides for GitHub, Jira, DevRev integration, BYOK setup with OpenAI, Anthropic, Groq, Gemini."
-        keywords="how to generate release notes from commits, ai tool to create changelog from git commits, generate release notes from jira tickets, github release notes generator for free, Jira integration guide, DevRev setup, BYOK setup, release notes automation tutorial, automated release notes tool"
+        description="Learn how to generate release notes from commits, Jira tickets, Linear issues, Asana tasks, ClickUp tasks, and Monday.com items. Step-by-step guides for all integrations, BYOK setup with OpenAI, Anthropic, Grok, Gemini."
+        keywords="how to generate release notes from commits, ai tool to create changelog from git commits, generate release notes from jira tickets, github release notes generator for free, linear release notes, asana release notes, clickup release notes, monday.com release notes, BYOK setup, release notes automation tutorial, automated release notes tool"
         canonical="https://releaslyy.com/docs"
       />
       <div className="land-noise" />

@@ -3,6 +3,10 @@ import { Link2, Clock, FileText, RefreshCw, Github } from 'lucide-react';
 import toast from 'react-hot-toast';
 import devrevLogo from '../../assets/devrev-logo.webp';
 import jiraLogo from '../../assets/jira_logo.webp';
+import linearLogo from '../../assets/linear-logo.svg';
+import asanaLogo from '../../assets/asana-logo.svg';
+import clickupLogo from '../../assets/clickup-logo.svg';
+import mondayLogo from '../../assets/monday-logo.svg';
 import api from '../../lib/api';
 
 const integrationDefs = [
@@ -29,6 +33,38 @@ const integrationDefs = [
     iconBg: '#f5f3ff',
     iconColor: '#7c3aed',
     renderIcon: () => <img src={devrevLogo} alt="DevRev" style={{ width: 24, height: 24, objectFit: 'contain' }} />,
+  },
+  {
+    key: 'linear',
+    name: 'Linear',
+    desc: 'Teams, projects, cycles and issues for release notes',
+    iconBg: '#eef2ff',
+    iconColor: '#6366f1',
+    renderIcon: () => <img src={linearLogo} alt="Linear" style={{ width: 24, height: 24, objectFit: 'contain' }} />,
+  },
+  {
+    key: 'asana',
+    name: 'Asana',
+    desc: 'Workspaces, projects, sections and tasks',
+    iconBg: '#fff1f2',
+    iconColor: '#f43f5e',
+    renderIcon: () => <img src={asanaLogo} alt="Asana" style={{ width: 24, height: 24, objectFit: 'contain' }} />,
+  },
+  {
+    key: 'clickup',
+    name: 'ClickUp',
+    desc: 'Workspaces, spaces, lists and tasks',
+    iconBg: '#f5f3ff',
+    iconColor: '#8b5cf6',
+    renderIcon: () => <img src={clickupLogo} alt="ClickUp" style={{ width: 24, height: 24, objectFit: 'contain' }} />,
+  },
+  {
+    key: 'monday',
+    name: 'Monday.com',
+    desc: 'Boards, groups and items for release notes',
+    iconBg: '#fffbeb',
+    iconColor: '#f59e0b',
+    renderIcon: () => <img src={mondayLogo} alt="Monday.com" style={{ width: 24, height: 24, objectFit: 'contain' }} />,
   },
 ];
 

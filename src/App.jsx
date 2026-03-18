@@ -19,6 +19,10 @@ import IntegrationLanding from './pages/IntegrationLanding/IntegrationLanding';
 import JiraLanding from './pages/IntegrationLanding/JiraLanding';
 import GitHubLanding from './pages/IntegrationLanding/GitHubLanding';
 import SlackLanding from './pages/IntegrationLanding/SlackLanding';
+import LinearLanding from './pages/IntegrationLanding/LinearLanding';
+import AsanaLanding from './pages/IntegrationLanding/AsanaLanding';
+import ClickUpLanding from './pages/IntegrationLanding/ClickUpLanding';
+import MondayLanding from './pages/IntegrationLanding/MondayLanding';
 import IntegrationsPage from './pages/Integrations/IntegrationsPage';
 import PublicNote from './pages/PublicNote/PublicNote';
 import Changelog from './pages/Changelog/Changelog';
@@ -84,6 +88,10 @@ function App() {
         <Route path="/integrations/jira" element={<JiraLanding />} />
         <Route path="/integrations/github" element={<GitHubLanding />} />
         <Route path="/integrations/slack" element={<SlackLanding />} />
+        <Route path="/integrations/linear" element={<LinearLanding />} />
+        <Route path="/integrations/asana" element={<AsanaLanding />} />
+        <Route path="/integrations/clickup" element={<ClickUpLanding />} />
+        <Route path="/integrations/monday" element={<MondayLanding />} />
         <Route path="/n/:slug" element={<PublicNote />} />
 
         {/* Authenticated routes — sidebar layout */}

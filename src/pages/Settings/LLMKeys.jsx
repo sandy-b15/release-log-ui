@@ -6,13 +6,13 @@ import { providerColors } from './settingsData.jsx';
 import SearchDropdown from '../../components/ui/SearchDropdown';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import groqLogo from '../../assets/groq-logo.svg';
+import grokLogo from '../../assets/grok-logo.webp';
 import openaiLogo from '../../assets/openai-logo.svg';
 import anthropicLogo from '../../assets/anthropic-logo.svg';
 import geminiLogo from '../../assets/gemini-logo.svg';
 import releaslyLogo from '../../assets/logos/releaslyy-favicon-192.png';
 
-const providerLogos = { releasly: releaslyLogo, groq: groqLogo, openai: openaiLogo, anthropic: anthropicLogo, gemini: geminiLogo };
+const providerLogos = { releasly: releaslyLogo, groq: grokLogo, openai: openaiLogo, anthropic: anthropicLogo, gemini: geminiLogo };
 
 export default function LLMKeys() {
   const { savedKeys, catalogue, saveKey, removeKey, validateKey, isLoading } = useLLMKeys();
@@ -34,7 +34,7 @@ export default function LLMKeys() {
   const userProviders = allProviders.filter(([, config]) => !config.builtin);
 
   const providerLabelMap = Object.fromEntries(allProviders.map(([key, config]) => [key, config.label]));
-  const colorMap = { groq: providerColors.Groq, openai: providerColors.OpenAI, anthropic: providerColors.Anthropic, gemini: providerColors.Gemini };
+  const colorMap = { groq: providerColors.Grok, openai: providerColors.OpenAI, anthropic: providerColors.Anthropic, gemini: providerColors.Gemini };
 
   const openAddForProvider = (providerKey) => {
     setSelectedProvider(providerKey);
@@ -133,7 +133,7 @@ export default function LLMKeys() {
             Bring Your Own Key is a Pro feature
           </div>
           <p style={{ fontSize: 14, color: 'var(--muted)', marginBottom: 20, maxWidth: 400, margin: '0 auto 20px' }}>
-            Upgrade to Pro to use your own API keys from OpenAI, Anthropic, Groq, and Gemini for release note generation.
+            Upgrade to Pro to use your own API keys from OpenAI, Anthropic, Grok, and Gemini for release note generation.
           </p>
           <button className="btn btn-primary" onClick={() => navigate('/pricing')}>
             Upgrade to Pro

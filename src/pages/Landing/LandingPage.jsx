@@ -16,7 +16,7 @@ const jsonLd = {
   "name": "Releaslyy",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web",
-  "description": "AI-powered release notes generator. Connect GitHub, Jira, or DevRev and generate polished release notes in seconds.",
+  "description": "AI-powered release notes generator. Connect GitHub, Jira, DevRev, Linear, Asana, ClickUp, Monday.com, or Slack and generate polished release notes in seconds.",
   "url": "https://releaslyy.com",
   "image": "https://releaslyy.com/favicon-192x192.png",
   "offers": {
@@ -29,6 +29,11 @@ const jsonLd = {
     "GitHub integration",
     "Jira integration",
     "DevRev integration",
+    "Linear integration",
+    "Asana integration",
+    "ClickUp integration",
+    "Monday.com integration",
+    "Slack integration",
     "Multiple LLM providers",
     "Export to Markdown, PDF, DOCX",
     "Publish to GitHub Releases"
@@ -40,8 +45,8 @@ export default function LandingPage() {
     <div className="landing-root">
       <SEO
         title="AI-Powered Release Notes Generator — Free"
-        description="Generate release notes automatically from GitHub commits, Jira tickets, and DevRev sprints. Free AI changelog generator for dev teams. Connect your tools, pick changes, done."
-        keywords="generate release notes automatically, automated release notes tool, ai changelog generator free, github release notes generator for free, jira release notes generator for free, devrev release notes generator for free, zoho release notes generator for free, product update generator, app update generator, how to generate release notes from commits, ai tool to create changelog from git commits, generate release notes from jira tickets, release notes generator, AI release notes, automatic changelog, changelog automation, software release notes tool, sprint release notes, release management tool, release notes template"
+        description="Generate release notes automatically from GitHub commits, Jira tickets, DevRev sprints, Linear cycles, Asana projects, ClickUp tasks, and Monday.com boards. Free AI changelog generator for dev teams. Connect your tools, pick changes, done."
+        keywords="generate release notes automatically, automated release notes tool, ai changelog generator free, github release notes generator for free, jira release notes generator for free, devrev release notes generator for free, linear release notes generator, asana release notes generator, clickup release notes generator, monday release notes generator, zoho release notes generator for free, product update generator, app update generator, how to generate release notes from commits, ai tool to create changelog from git commits, generate release notes from jira tickets, release notes generator, AI release notes, automatic changelog, changelog automation, software release notes tool, sprint release notes, release management tool, release notes template"
         canonical="https://releaslyy.com/"
       >
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

@@ -6,6 +6,7 @@ import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
 import toast from 'react-hot-toast';
@@ -58,6 +59,9 @@ const EditorToolbar = ({ editor }) => {
         if (url === null) return;
         if (url === '') {
             editor.chain().focus().extendMarkRange('link').unsetLink().run();
+            return;
+        }
+        if (!url.match(/^https?:\/\/|^mailto:/i)) {
             return;
         }
         editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
@@ -116,7 +120,7 @@ const GenerateEdit = () => {
     // Convert incoming markdown to HTML
     useEffect(() => {
         if (location.state?.notes) {
-            const html = marked.parse(location.state.notes);
+            const html = DOMPurify.sanitize(marked.parse(location.state.notes));
             setInitialHtml(html);
             if (location.state.noteId) setNoteId(location.state.noteId);
             if (location.state.noteTitle) setNoteTitle(location.state.noteTitle);
@@ -256,7 +260,7 @@ const GenerateEdit = () => {
 
         const container = document.createElement('div');
         container.style.cssText = 'font-family: Segoe UI, Arial, sans-serif; color: #1e293b; line-height: 1.7; padding: 40px; max-width: 900px;';
-        container.innerHTML = editor.getHTML();
+        container.innerHTML = DOMPurify.sanitize(editor.getHTML());
 
         container.querySelectorAll('table').forEach(t => {
             t.style.cssText = 'width:100%;border-collapse:collapse;margin:12px 0;font-size:0.9rem;';

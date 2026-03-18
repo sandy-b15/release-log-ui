@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import axios from 'axios';
 import './PublicNote.css';
+import logo from '../../assets/logos/releaslyy-combined.svg';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -48,7 +49,9 @@ export default function PublicNote() {
     return (
         <div className="public-note-container">
             <header className="public-note-header">
-                <a href="https://releaslyy.com" className="public-note-brand">Releaslyy</a>
+                <a href="https://releaslyy.com" className="public-note-brand">
+                    <img src={logo} alt="Releaslyy" style={{ height: 32 }} />
+                </a>
                 <span className="public-note-badge">{note.source} &middot; {note.audience}</span>
             </header>
             <article className="public-note-content">

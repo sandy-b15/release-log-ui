@@ -5,7 +5,6 @@ const FOOTER_LINKS = [
   { label: "Docs", href: "/docs" },
   { label: "Pricing", href: "/pricing" },
   { label: "Integrations", href: "/integrations" },
-  { label: "Changelog", href: "#", comingSoon: true },
   { label: "Support", href: "/support" },
   { label: "Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },

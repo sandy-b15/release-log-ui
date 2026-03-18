@@ -53,14 +53,14 @@ export default function PrivacyPage() {
                 <ul>
                   <li><strong>Authentication</strong> — To verify your identity and manage your account sessions.</li>
                   <li><strong>Integration Access</strong> — To fetch data from your connected tools (commits, issues, sprints) for release note generation.</li>
-                  <li><strong>AI Generation</strong> — To send relevant data to our AI provider (Groq) for generating release notes. Only the specific data you select (commits, issues) is sent.</li>
+                  <li><strong>AI Generation</strong> — To send relevant data to our AI provider (Grok) for generating release notes. Only the specific data you select (commits, issues) is sent.</li>
                   <li><strong>Storage</strong> — To save your generated release notes so you can access, edit, and export them later.</li>
                 </ul>
 
                 <h3>3. Data Sharing</h3>
                 <p>We do not sell, trade, or rent your personal information. Your data may be shared only in these limited circumstances:</p>
                 <ul>
-                  <li><strong>AI Processing</strong> — Selected commit messages, issue summaries, and sprint data are sent to Groq's API for release note generation. This data is used solely for processing your request and is not retained by the AI provider for training purposes.</li>
+                  <li><strong>AI Processing</strong> — Selected commit messages, issue summaries, and sprint data are sent to Grok's API for release note generation. This data is used solely for processing your request and is not retained by the AI provider for training purposes.</li>
                   <li><strong>Third-Party Integrations</strong> — When you connect a service (GitHub, Jira, DevRev), we communicate with their APIs using your stored credentials to fetch the data you request.</li>
                   <li><strong>Legal Requirements</strong> — If required by law, regulation, or legal process.</li>
                 </ul>

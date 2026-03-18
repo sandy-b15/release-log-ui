@@ -11,6 +11,10 @@ import gitlabLogo from '../../assets/gitlab-logo.png';
 import bitbucketLogo from '../../assets/bitbucket_icon.webp';
 import jiraLogo from '../../assets/jira_logo.webp';
 import slackLogo from '../../assets/slack-logo.png';
+import linearLogo from '../../assets/linear-logo.svg';
+import asanaLogo from '../../assets/asana-logo.svg';
+import clickupLogo from '../../assets/clickup-logo.svg';
+import mondayLogo from '../../assets/monday-logo.svg';
 import './Integration.css';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import api from '../../lib/api';
@@ -62,6 +66,62 @@ const INTEGRATIONS = [
         dashboardUrl: '/dashboard',
         apiConnect: 'oauth', // special: uses OAuth redirect flow
         apiCheck: '/tokens/jira',
+    },
+    {
+        id: 'linear',
+        title: 'Linear',
+        description: 'Teams, projects, cycles & issues',
+        category: 'project-management',
+        logo: linearLogo,
+        accentVar: '--indigo',
+        tokenLabel: null,
+        placeholder: null,
+        hint: 'Connect via Linear OAuth with read-only access',
+        dashboardUrl: '/dashboard',
+        apiConnect: 'oauth',
+        apiCheck: '/tokens/linear',
+    },
+    {
+        id: 'asana',
+        title: 'Asana',
+        description: 'Workspaces, projects, sections & tasks',
+        category: 'project-management',
+        logo: asanaLogo,
+        accentVar: '--rose',
+        tokenLabel: null,
+        placeholder: null,
+        hint: 'Connect via Asana OAuth',
+        dashboardUrl: '/dashboard',
+        apiConnect: 'oauth',
+        apiCheck: '/tokens/asana',
+    },
+    {
+        id: 'clickup',
+        title: 'ClickUp',
+        description: 'Workspaces, spaces, lists & tasks',
+        category: 'project-management',
+        logo: clickupLogo,
+        accentVar: '--violet',
+        tokenLabel: null,
+        placeholder: null,
+        hint: 'Connect via ClickUp OAuth',
+        dashboardUrl: '/dashboard',
+        apiConnect: 'oauth',
+        apiCheck: '/tokens/clickup',
+    },
+    {
+        id: 'monday',
+        title: 'Monday.com',
+        description: 'Boards, groups & items',
+        category: 'project-management',
+        logo: mondayLogo,
+        accentVar: '--amber',
+        tokenLabel: null,
+        placeholder: null,
+        hint: 'Connect via Monday.com OAuth',
+        dashboardUrl: '/dashboard',
+        apiConnect: 'oauth',
+        apiCheck: '/tokens/monday',
     },
     {
         id: 'gitlab',
@@ -300,17 +360,25 @@ const Integration = () => {
     useEffect(() => {
         const checkTokens = async () => {
             try {
-                const [ghRes, drRes, jiraRes, slackRes] = await Promise.all([
+                const [ghRes, drRes, jiraRes, slackRes, linearRes, asanaRes, clickupRes, mondayRes] = await Promise.all([
                     api.get('/tokens/github'),
                     api.get('/tokens/devrev'),
                     api.get('/tokens/jira'),
                     api.get('/tokens/slack'),
+                    api.get('/tokens/linear'),
+                    api.get('/tokens/asana'),
+                    api.get('/tokens/clickup'),
+                    api.get('/tokens/monday'),
                 ]);
                 setConnections({
                     github: ghRes.data.hasToken,
                     devrev: drRes.data.hasToken,
                     jira: jiraRes.data.hasToken,
                     slack: slackRes.data.hasToken,
+                    linear: linearRes.data.hasToken,
+                    asana: asanaRes.data.hasToken,
+                    clickup: clickupRes.data.hasToken,
+                    monday: mondayRes.data.hasToken,
                 });
             } catch (err) {
                 console.error('Token check failed', err);
@@ -362,6 +430,54 @@ const Integration = () => {
             setErrorState(prev => ({ ...prev, slack: message }));
             setSearchParams({}, { replace: true });
         }
+
+        // Handle Linear OAuth callback redirect
+        const linearStatus = searchParams.get('linear');
+        if (linearStatus === 'success') {
+            setConnections(prev => ({ ...prev, linear: true }));
+            toast.success('Linear connected successfully!');
+            setSearchParams({}, { replace: true });
+        } else if (linearStatus === 'error') {
+            const message = searchParams.get('message') || 'Linear connection failed';
+            setErrorState(prev => ({ ...prev, linear: message }));
+            setSearchParams({}, { replace: true });
+        }
+
+        // Handle Asana OAuth callback redirect
+        const asanaStatus = searchParams.get('asana');
+        if (asanaStatus === 'success') {
+            setConnections(prev => ({ ...prev, asana: true }));
+            toast.success('Asana connected successfully!');
+            setSearchParams({}, { replace: true });
+        } else if (asanaStatus === 'error') {
+            const message = searchParams.get('message') || 'Asana connection failed';
+            setErrorState(prev => ({ ...prev, asana: message }));
+            setSearchParams({}, { replace: true });
+        }
+
+        // Handle ClickUp OAuth callback redirect
+        const clickupStatus = searchParams.get('clickup');
+        if (clickupStatus === 'success') {
+            setConnections(prev => ({ ...prev, clickup: true }));
+            toast.success('ClickUp connected successfully!');
+            setSearchParams({}, { replace: true });
+        } else if (clickupStatus === 'error') {
+            const message = searchParams.get('message') || 'ClickUp connection failed';
+            setErrorState(prev => ({ ...prev, clickup: message }));
+            setSearchParams({}, { replace: true });
+        }
+
+        // Handle Monday OAuth callback redirect
+        const mondayStatus = searchParams.get('monday');
+        if (mondayStatus === 'success') {
+            setConnections(prev => ({ ...prev, monday: true }));
+            toast.success('Monday.com connected successfully!');
+            setSearchParams({}, { replace: true });
+        } else if (mondayStatus === 'error') {
+            const message = searchParams.get('message') || 'Monday.com connection failed';
+            setErrorState(prev => ({ ...prev, monday: message }));
+            setSearchParams({}, { replace: true });
+        }
     }, [searchParams, setSearchParams]);
 
     const handleJiraOAuth = async () => {
@@ -400,6 +516,58 @@ const Integration = () => {
             toast.error(msg);
             setErrorState(prev => ({ ...prev, slack: msg }));
             setLoadingState(prev => ({ ...prev, slack: false }));
+        }
+    };
+
+    const handleLinearOAuth = async () => {
+        try {
+            setLoadingState(prev => ({ ...prev, linear: true }));
+            const res = await api.get('/linear/auth');
+            window.location.href = res.data.authUrl;
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to start Linear OAuth';
+            toast.error(msg);
+            setErrorState(prev => ({ ...prev, linear: msg }));
+            setLoadingState(prev => ({ ...prev, linear: false }));
+        }
+    };
+
+    const handleAsanaOAuth = async () => {
+        try {
+            setLoadingState(prev => ({ ...prev, asana: true }));
+            const res = await api.get('/asana/auth');
+            window.location.href = res.data.authUrl;
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to start Asana OAuth';
+            toast.error(msg);
+            setErrorState(prev => ({ ...prev, asana: msg }));
+            setLoadingState(prev => ({ ...prev, asana: false }));
+        }
+    };
+
+    const handleClickUpOAuth = async () => {
+        try {
+            setLoadingState(prev => ({ ...prev, clickup: true }));
+            const res = await api.get('/clickup/auth');
+            window.location.href = res.data.authUrl;
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to start ClickUp OAuth';
+            toast.error(msg);
+            setErrorState(prev => ({ ...prev, clickup: msg }));
+            setLoadingState(prev => ({ ...prev, clickup: false }));
+        }
+    };
+
+    const handleMondayOAuth = async () => {
+        try {
+            setLoadingState(prev => ({ ...prev, monday: true }));
+            const res = await api.get('/monday/auth');
+            window.location.href = res.data.authUrl;
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to start Monday.com OAuth';
+            toast.error(msg);
+            setErrorState(prev => ({ ...prev, monday: msg }));
+            setLoadingState(prev => ({ ...prev, monday: false }));
         }
     };
 
@@ -513,7 +681,16 @@ const Integration = () => {
                                     config={config}
                                     connected={!!connections[config.id]}
                                     onOpenModal={() => handleOpenModal(config.id, connections[config.id] ? 'edit' : 'connect')}
-                                    onConnect={config.apiConnect === 'oauth' ? (config.id === 'slack' ? handleSlackOAuth : config.id === 'github' ? handleGitHubOAuth : handleJiraOAuth) : undefined}
+                                    onConnect={config.apiConnect === 'oauth' ? (
+                                        config.id === 'slack' ? handleSlackOAuth :
+                                        config.id === 'github' ? handleGitHubOAuth :
+                                        config.id === 'jira' ? handleJiraOAuth :
+                                        config.id === 'linear' ? handleLinearOAuth :
+                                        config.id === 'asana' ? handleAsanaOAuth :
+                                        config.id === 'clickup' ? handleClickUpOAuth :
+                                        config.id === 'monday' ? handleMondayOAuth :
+                                        undefined
+                                    ) : undefined}
                                     onDelete={() => setDeletingIntegration(config.id)}
                                     index={i}
                                 />

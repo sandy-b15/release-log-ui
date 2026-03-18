@@ -8,6 +8,10 @@
   <url><loc>https://releaslyy.com/integrations/jira</loc><lastmod>2026-03-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://releaslyy.com/integrations/devrev</loc><lastmod>2026-03-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://releaslyy.com/integrations/slack</loc><lastmod>2026-03-17</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://releaslyy.com/integrations/linear</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://releaslyy.com/integrations/asana</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://releaslyy.com/integrations/clickup</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://releaslyy.com/integrations/monday</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://releaslyy.com/support</loc><lastmod>2026-03-17</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://releaslyy.com/login</loc><lastmod>2026-03-17</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://releaslyy.com/signup</loc><lastmod>2026-03-17</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>

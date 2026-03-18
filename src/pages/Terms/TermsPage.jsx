@@ -96,7 +96,7 @@ export default function TermsPage() {
 
                 <h3>9. Bring Your Own Key (BYOK)</h3>
                 <ul>
-                  <li>Paid plans allow you to use your own API keys for supported LLM providers (OpenAI, Anthropic, Groq, Google Gemini).</li>
+                  <li>Paid plans allow you to use your own API keys for supported LLM providers (OpenAI, Anthropic, Grok, Google Gemini).</li>
                   <li>Your API keys are encrypted at rest using AES-256-GCM encryption and are never shared with other users.</li>
                   <li>You are responsible for any costs incurred with third-party AI providers through your own API keys.</li>
                   <li>Releaslyy is not responsible for charges, rate limits, or service interruptions from third-party AI providers when using BYOK.</li>
@@ -105,7 +105,7 @@ export default function TermsPage() {
 
                 <h3>10. AI-Generated Content</h3>
                 <ul>
-                  <li>Release notes are generated using third-party AI models (Groq, OpenAI, Anthropic, Google Gemini). While we strive for accuracy, AI-generated content may contain errors or inaccuracies.</li>
+                  <li>Release notes are generated using third-party AI models (Grok, OpenAI, Anthropic, Google Gemini). While we strive for accuracy, AI-generated content may contain errors or inaccuracies.</li>
                   <li>You are responsible for reviewing and editing generated content before publishing or sharing it.</li>
                   <li>Generated release notes are stored in your account and belong to you. You may export, modify, and distribute them freely.</li>
                   <li>We do not claim ownership over your generated content.</li>
@@ -165,7 +165,7 @@ export default function TermsPage() {
 
                 <h3>18. Contact</h3>
                 <p>
-                  For questions about these Terms & Conditions, please visit our <a href="/support">Support</a> page or email us at support@releaslyy.com.
+                  For questions about these Terms & Conditions, please visit our <a href="/support">Support</a> page or email us at hello@releaslyy.com.
                 </p>
               </div>
             </div>

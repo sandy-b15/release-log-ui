@@ -9,14 +9,18 @@ import StepIndicator from '../../components/ui/StepIndicator';
 import SearchDropdown from '../../components/ui/SearchDropdown';
 import devrevLogo from '../../assets/devrev-logo.webp';
 import jiraLogo from '../../assets/jira_logo.webp';
-import groqLogo from '../../assets/groq-logo.svg';
+import linearLogo from '../../assets/linear-logo.svg';
+import asanaLogo from '../../assets/asana-logo.svg';
+import clickupLogo from '../../assets/clickup-logo.svg';
+import mondayLogo from '../../assets/monday-logo.svg';
+import grokLogo from '../../assets/grok-logo.webp';
 import openaiLogo from '../../assets/openai-logo.svg';
 import anthropicLogo from '../../assets/anthropic-logo.svg';
 import geminiLogo from '../../assets/gemini-logo.svg';
 import releaslyLogo from '../../assets/logos/releaslyy-logo-main.png';
 
-const llmProviderLogos = { releasly: releaslyLogo, groq: groqLogo, openai: openaiLogo, anthropic: anthropicLogo, gemini: geminiLogo };
-const llmProviderLabels = { releasly: 'Releaslyy AI', groq: 'Groq', openai: 'OpenAI', anthropic: 'Anthropic', gemini: 'Gemini' };
+const llmProviderLogos = { releasly: releaslyLogo, groq: grokLogo, openai: openaiLogo, anthropic: anthropicLogo, gemini: geminiLogo };
+const llmProviderLabels = { releasly: 'Releaslyy AI', groq: 'Grok', openai: 'OpenAI', anthropic: 'Anthropic', gemini: 'Gemini' };
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import LLMSelector from '../../components/generate/LLMSelector';
 import { useLLMKeys } from '../../hooks/useLLMKeys';
@@ -73,7 +77,7 @@ const Dashboard = () => {
     const [selectedBranch, setSelectedBranch] = useState(() => sessionStorage.getItem('github_selectedBranch') || '');
     const [selectedCommits, setSelectedCommits] = useState(() => {
         const saved = sessionStorage.getItem('github_selectedCommits');
-        return saved ? JSON.parse(saved) : [];
+        try { return saved ? JSON.parse(saved) : []; } catch { return []; }
     });
     const [dateRange, setDateRange] = useState({ startDate: '', endDate: '' });
 
@@ -81,12 +85,12 @@ const Dashboard = () => {
     const [boards, setBoards] = useState([]);
     const [selectedBoard, setSelectedBoard] = useState(() => {
         const saved = sessionStorage.getItem('devrev_selectedBoard');
-        return saved ? JSON.parse(saved) : null;
+        try { return saved ? JSON.parse(saved) : null; } catch { return null; }
     });
     const [sprints, setSprints] = useState([]);
     const [selectedSprints, setSelectedSprints] = useState(() => {
         const saved = sessionStorage.getItem('devrev_selectedSprints');
-        return saved ? JSON.parse(saved) : [];
+        try { return saved ? JSON.parse(saved) : []; } catch { return []; }
     });
     const [boardSearch, setBoardSearch] = useState('');
     const [sprintSearch, setSprintSearch] = useState('');
@@ -113,6 +117,48 @@ const Dashboard = () => {
     const [jiraFilterPickerOpen, setJiraFilterPickerOpen] = useState(false);
     const [jiraFilterSubMenu, setJiraFilterSubMenu] = useState(null);
     const jiraFilterRef = useRef(null);
+
+    // -- Linear State --
+    const [linearTeams, setLinearTeams] = useState([]);
+    const [linearSelectedTeam, setLinearSelectedTeam] = useState(null);
+    const [linearProjects, setLinearProjects] = useState([]);
+    const [linearCycles, setLinearCycles] = useState([]);
+    const [linearSelectedProject, setLinearSelectedProject] = useState(null);
+    const [linearSelectedCycle, setLinearSelectedCycle] = useState(null);
+    const [linearIssues, setLinearIssues] = useState([]);
+    const [linearSelectedIssues, setLinearSelectedIssues] = useState([]);
+    const [linearIssueSearch, setLinearIssueSearch] = useState('');
+
+    // -- Asana State --
+    const [asanaWorkspaces, setAsanaWorkspaces] = useState([]);
+    const [asanaSelectedWorkspace, setAsanaSelectedWorkspace] = useState(null);
+    const [asanaProjects, setAsanaProjects] = useState([]);
+    const [asanaSelectedProject, setAsanaSelectedProject] = useState(null);
+    const [asanaSections, setAsanaSections] = useState([]);
+    const [asanaSelectedSection, setAsanaSelectedSection] = useState(null);
+    const [asanaTasks, setAsanaTasks] = useState([]);
+    const [asanaSelectedTasks, setAsanaSelectedTasks] = useState([]);
+    const [asanaTaskSearch, setAsanaTaskSearch] = useState('');
+
+    // -- ClickUp State --
+    const [clickupWorkspaces, setClickupWorkspaces] = useState([]);
+    const [clickupSelectedWorkspace, setClickupSelectedWorkspace] = useState(null);
+    const [clickupSpaces, setClickupSpaces] = useState([]);
+    const [clickupSelectedSpace, setClickupSelectedSpace] = useState(null);
+    const [clickupLists, setClickupLists] = useState([]);
+    const [clickupSelectedList, setClickupSelectedList] = useState(null);
+    const [clickupTasks, setClickupTasks] = useState([]);
+    const [clickupSelectedTasks, setClickupSelectedTasks] = useState([]);
+    const [clickupTaskSearch, setClickupTaskSearch] = useState('');
+
+    // -- Monday State --
+    const [mondayBoards, setMondayBoards] = useState([]);
+    const [mondaySelectedBoard, setMondaySelectedBoard] = useState(null);
+    const [mondayGroups, setMondayGroups] = useState([]);
+    const [mondaySelectedGroup, setMondaySelectedGroup] = useState(null);
+    const [mondayItems, setMondayItems] = useState([]);
+    const [mondaySelectedItems, setMondaySelectedItems] = useState([]);
+    const [mondayItemSearch, setMondayItemSearch] = useState('');
 
     // -- Shared Gen State --
     const [audience, setAudience] = useState(() => sessionStorage.getItem('shared_audience') || 'qa');
@@ -165,22 +211,21 @@ const Dashboard = () => {
                 const userRes = await authApi.get('/auth/me');
                 if (userRes.data && userRes.data.id) setUser(userRes.data);
 
-                const [ghRes, drRes, jiraRes] = await Promise.all([
+                const [ghRes, drRes, jiraRes, linearRes, asanaRes, clickupRes, mondayRes] = await Promise.all([
                     api.get('/tokens/github').catch(() => ({ data: { hasToken: false } })),
                     api.get('/tokens/devrev').catch(() => ({ data: { hasToken: false } })),
-                    api.get('/tokens/jira').catch(() => ({ data: { hasToken: false } }))
-                    // Note: these catches return fallback data intentionally — token check failures are non-blocking
+                    api.get('/tokens/jira').catch(() => ({ data: { hasToken: false } })),
+                    api.get('/tokens/linear').catch(() => ({ data: { hasToken: false } })),
+                    api.get('/tokens/asana').catch(() => ({ data: { hasToken: false } })),
+                    api.get('/tokens/clickup').catch(() => ({ data: { hasToken: false } })),
+                    api.get('/tokens/monday').catch(() => ({ data: { hasToken: false } })),
                 ]);
 
                 try {
                     const tokensRes = await api.get('/tokens');
                     const services = tokensRes.data.services || [];
-                    const formatted = services.map(s => {
-                        if (s === 'github') return 'GitHub';
-                        if (s === 'devrev') return 'DevRev';
-                        if (s === 'jira') return 'Jira';
-                        return s.charAt(0).toUpperCase() + s.slice(1);
-                    });
+                    const SERVICE_LABELS = { github: 'GitHub', devrev: 'DevRev', jira: 'Jira', linear: 'Linear', asana: 'Asana', clickup: 'ClickUp', monday: 'Monday.com' };
+                    const formatted = services.map(s => SERVICE_LABELS[s] || s.charAt(0).toUpperCase() + s.slice(1));
                     setConnectedIntegrations(formatted);
                 } catch (e) {
                     console.error("Failed to fetch all tokens", e);
@@ -213,10 +258,18 @@ const Dashboard = () => {
                 if (ghRes.data.hasToken) defaultSources.push('github');
                 if (drRes.data.hasToken) defaultSources.push('devrev');
                 if (jiraRes.data.hasToken) defaultSources.push('jira');
+                if (linearRes.data.hasToken) defaultSources.push('linear');
+                if (asanaRes.data.hasToken) defaultSources.push('asana');
+                if (clickupRes.data.hasToken) defaultSources.push('clickup');
+                if (mondayRes.data.hasToken) defaultSources.push('monday');
                 if (defaultSources.length > 0) setSources([defaultSources[0]]);
                 if (ghRes.data.hasToken) fetchRepos(selectedRepo, selectedBranch);
                 if (drRes.data.hasToken) fetchBoards(selectedBoard);
                 if (jiraRes.data.hasToken) fetchJiraProjects();
+                if (linearRes.data.hasToken) fetchLinearTeams();
+                if (asanaRes.data.hasToken) fetchAsanaWorkspaces();
+                if (clickupRes.data.hasToken) fetchClickUpWorkspaces();
+                if (mondayRes.data.hasToken) fetchMondayBoards();
 
                 setDashboardLoading(false);
             } catch (err) {
@@ -562,6 +615,274 @@ const Dashboard = () => {
         return searchMatch && filterMatch;
     });
 
+    // --- Linear Logic ---
+    const fetchLinearTeams = async () => {
+        try {
+            const res = await api.get('/linear/teams');
+            const teams = res.data.teams || [];
+            setLinearTeams(teams);
+            if (teams.length > 0 && !linearSelectedTeam) {
+                handleSelectLinearTeam(teams[0]);
+            }
+        } catch (err) { console.error("Linear fetchTeams", err); toast.error('Failed to load Linear teams'); }
+    };
+
+    const handleSelectLinearTeam = async (team) => {
+        setLinearSelectedTeam(team);
+        setLinearProjects([]); setLinearCycles([]);
+        setLinearSelectedProject(null); setLinearSelectedCycle(null);
+        setLinearIssues([]); setLinearSelectedIssues([]);
+        setLoadingData(true);
+        try {
+            const [projRes, cycleRes] = await Promise.all([
+                api.get('/linear/projects', { params: { teamId: team.id } }),
+                api.get('/linear/cycles', { params: { teamId: team.id } }),
+            ]);
+            const projects = projRes.data.projects || [];
+            const cycles = cycleRes.data.cycles || [];
+            setLinearProjects(projects);
+            setLinearCycles(cycles);
+            // Auto-fetch issues: prefer first cycle, fallback to first project, fallback to all team issues
+            const cycleId = cycles.length > 0 ? cycles[0].id : null;
+            const projectId = !cycleId && projects.length > 0 ? projects[0].id : null;
+            if (cycleId) setLinearSelectedCycle(cycleId);
+            if (projectId) setLinearSelectedProject(projectId);
+            fetchLinearIssues(team.id, projectId, cycleId);
+        } catch (err) { console.error("Linear fetch projects/cycles", err); toast.error('Failed to load Linear projects'); }
+        finally { setLoadingData(false); }
+    };
+
+    const fetchLinearIssues = async (teamId, projectId, cycleId) => {
+        setLinearIssues([]); setLinearSelectedIssues([]);
+        setLoadingData(true);
+        try {
+            const params = { teamId };
+            if (cycleId) params.cycleId = cycleId;
+            if (projectId) params.projectId = projectId;
+            const res = await api.get('/linear/issues', { params });
+            setLinearIssues(res.data.issues || []);
+        } catch (err) { console.error("Linear fetchIssues", err); toast.error('Failed to load Linear issues'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleSelectLinearProjectOrCycle = (projectId, cycleId) => {
+        setLinearSelectedProject(projectId);
+        setLinearSelectedCycle(cycleId);
+        if (linearSelectedTeam) fetchLinearIssues(linearSelectedTeam.id, projectId, cycleId);
+    };
+
+    const handleToggleLinearIssue = (issue) => {
+        setLinearSelectedIssues(prev => prev.find(i => i.id === issue.id) ? prev.filter(i => i.id !== issue.id) : [...prev, issue]);
+    };
+
+    const handleToggleAllLinearIssues = () => {
+        const filtered = filteredLinearIssues;
+        const allSelected = filtered.every(i => linearSelectedIssues.find(s => s.id === i.id));
+        if (allSelected) setLinearSelectedIssues(prev => prev.filter(s => !filtered.find(i => i.id === s.id)));
+        else setLinearSelectedIssues(prev => [...prev, ...filtered.filter(i => !prev.find(s => s.id === i.id))]);
+    };
+
+    const filteredLinearIssues = linearIssues.filter(i =>
+        (i.title || '').toLowerCase().includes(linearIssueSearch.toLowerCase()) ||
+        (i.identifier || '').toLowerCase().includes(linearIssueSearch.toLowerCase())
+    );
+
+    // --- Asana Logic ---
+    const fetchAsanaWorkspaces = async () => {
+        try {
+            const res = await api.get('/asana/workspaces');
+            const workspaces = res.data.workspaces || [];
+            setAsanaWorkspaces(workspaces);
+            if (workspaces.length > 0 && !asanaSelectedWorkspace) {
+                handleSelectAsanaWorkspace(workspaces[0]);
+            }
+        } catch (err) { console.error("Asana fetchWorkspaces", err); toast.error('Failed to load Asana workspaces'); }
+    };
+
+    const handleSelectAsanaWorkspace = async (ws) => {
+        setAsanaSelectedWorkspace(ws);
+        setAsanaProjects([]); setAsanaSelectedProject(null);
+        setAsanaSections([]); setAsanaSelectedSection(null);
+        setAsanaTasks([]); setAsanaSelectedTasks([]);
+        setLoadingData(true);
+        try {
+            const res = await api.get('/asana/projects', { params: { workspaceId: ws.gid } });
+            const projects = res.data.projects || [];
+            setAsanaProjects(projects);
+            if (projects.length > 0) {
+                handleSelectAsanaProject(projects[0]);
+            }
+        } catch (err) { console.error("Asana fetchProjects", err); toast.error('Failed to load Asana projects'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleSelectAsanaProject = async (project) => {
+        setAsanaSelectedProject(project);
+        setAsanaSections([]); setAsanaSelectedSection(null);
+        setAsanaTasks([]); setAsanaSelectedTasks([]);
+        setLoadingData(true);
+        try {
+            const [secRes, taskRes] = await Promise.all([
+                api.get('/asana/sections', { params: { projectId: project.gid } }),
+                api.get('/asana/tasks', { params: { projectId: project.gid } }),
+            ]);
+            setAsanaSections(secRes.data.sections || []);
+            setAsanaTasks(taskRes.data.tasks || []);
+        } catch (err) { console.error("Asana fetchSections/tasks", err); toast.error('Failed to load Asana tasks'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleSelectAsanaSection = async (section) => {
+        setAsanaSelectedSection(section);
+        setAsanaTasks([]); setAsanaSelectedTasks([]);
+        setLoadingData(true);
+        try {
+            const res = await api.get('/asana/tasks', { params: { projectId: asanaSelectedProject.gid, sectionId: section.gid } });
+            setAsanaTasks(res.data.tasks || []);
+        } catch (err) { console.error("Asana fetchTasks", err); toast.error('Failed to load Asana tasks'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleToggleAsanaTask = (task) => {
+        setAsanaSelectedTasks(prev => prev.find(t => t.id === task.id) ? prev.filter(t => t.id !== task.id) : [...prev, task]);
+    };
+
+    const handleToggleAllAsanaTasks = () => {
+        const filtered = filteredAsanaTasks;
+        const allSelected = filtered.every(t => asanaSelectedTasks.find(s => s.id === t.id));
+        if (allSelected) setAsanaSelectedTasks(prev => prev.filter(s => !filtered.find(t => t.id === s.id)));
+        else setAsanaSelectedTasks(prev => [...prev, ...filtered.filter(t => !prev.find(s => s.id === t.id))]);
+    };
+
+    const filteredAsanaTasks = asanaTasks.filter(t =>
+        (t.title || '').toLowerCase().includes(asanaTaskSearch.toLowerCase())
+    );
+
+    // --- ClickUp Logic ---
+    const fetchClickUpWorkspaces = async () => {
+        try {
+            const res = await api.get('/clickup/workspaces');
+            const workspaces = res.data.workspaces || [];
+            setClickupWorkspaces(workspaces);
+            if (workspaces.length > 0 && !clickupSelectedWorkspace) {
+                handleSelectClickUpWorkspace(workspaces[0]);
+            }
+        } catch (err) { console.error("ClickUp fetchWorkspaces", err); toast.error('Failed to load ClickUp workspaces'); }
+    };
+
+    const handleSelectClickUpWorkspace = async (ws) => {
+        setClickupSelectedWorkspace(ws);
+        setClickupSpaces([]); setClickupSelectedSpace(null);
+        setClickupLists([]); setClickupSelectedList(null);
+        setClickupTasks([]); setClickupSelectedTasks([]);
+        setLoadingData(true);
+        try {
+            const res = await api.get('/clickup/spaces', { params: { teamId: ws.id } });
+            const spaces = res.data.spaces || [];
+            setClickupSpaces(spaces);
+            if (spaces.length > 0) {
+                handleSelectClickUpSpace(spaces[0]);
+            }
+        } catch (err) { console.error("ClickUp fetchSpaces", err); toast.error('Failed to load ClickUp spaces'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleSelectClickUpSpace = async (space) => {
+        setClickupSelectedSpace(space);
+        setClickupLists([]); setClickupSelectedList(null);
+        setClickupTasks([]); setClickupSelectedTasks([]);
+        setLoadingData(true);
+        try {
+            const res = await api.get('/clickup/lists', { params: { spaceId: space.id } });
+            const lists = res.data.lists || [];
+            setClickupLists(lists);
+            if (lists.length > 0) {
+                handleSelectClickUpList(lists[0]);
+            }
+        } catch (err) { console.error("ClickUp fetchLists", err); toast.error('Failed to load ClickUp lists'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleSelectClickUpList = async (list) => {
+        setClickupSelectedList(list);
+        setClickupTasks([]); setClickupSelectedTasks([]);
+        setLoadingData(true);
+        try {
+            const res = await api.get('/clickup/tasks', { params: { listId: list.id } });
+            setClickupTasks(res.data.tasks || []);
+        } catch (err) { console.error("ClickUp fetchTasks", err); toast.error('Failed to load ClickUp tasks'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleToggleClickUpTask = (task) => {
+        setClickupSelectedTasks(prev => prev.find(t => t.id === task.id) ? prev.filter(t => t.id !== task.id) : [...prev, task]);
+    };
+
+    const handleToggleAllClickUpTasks = () => {
+        const filtered = filteredClickUpTasks;
+        const allSelected = filtered.every(t => clickupSelectedTasks.find(s => s.id === t.id));
+        if (allSelected) setClickupSelectedTasks(prev => prev.filter(s => !filtered.find(t => t.id === s.id)));
+        else setClickupSelectedTasks(prev => [...prev, ...filtered.filter(t => !prev.find(s => s.id === t.id))]);
+    };
+
+    const filteredClickUpTasks = clickupTasks.filter(t =>
+        (t.title || '').toLowerCase().includes(clickupTaskSearch.toLowerCase())
+    );
+
+    // --- Monday Logic ---
+    const fetchMondayBoards = async () => {
+        try {
+            const res = await api.get('/monday/boards');
+            const boards = res.data.boards || [];
+            setMondayBoards(boards);
+            if (boards.length > 0 && !mondaySelectedBoard) {
+                handleSelectMondayBoard(boards[0]);
+            }
+        } catch (err) { console.error("Monday fetchBoards", err); toast.error('Failed to load Monday.com boards'); }
+    };
+
+    const handleSelectMondayBoard = async (board) => {
+        setMondaySelectedBoard(board);
+        setMondayGroups([]); setMondaySelectedGroup(null);
+        setMondayItems([]); setMondaySelectedItems([]);
+        setLoadingData(true);
+        try {
+            const [grpRes, itemRes] = await Promise.all([
+                api.get('/monday/groups', { params: { boardId: board.id } }),
+                api.get('/monday/items', { params: { boardId: board.id } }),
+            ]);
+            setMondayGroups(grpRes.data.groups || []);
+            setMondayItems(itemRes.data.items || []);
+        } catch (err) { console.error("Monday fetchGroups/items", err); toast.error('Failed to load Monday.com data'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleSelectMondayGroup = async (group) => {
+        setMondaySelectedGroup(group);
+        setMondayItems([]); setMondaySelectedItems([]);
+        setLoadingData(true);
+        try {
+            const res = await api.get('/monday/items', { params: { boardId: mondaySelectedBoard.id, groupId: group.id } });
+            setMondayItems(res.data.items || []);
+        } catch (err) { console.error("Monday fetchItems", err); toast.error('Failed to load Monday.com items'); }
+        finally { setLoadingData(false); }
+    };
+
+    const handleToggleMondayItem = (item) => {
+        setMondaySelectedItems(prev => prev.find(i => i.id === item.id) ? prev.filter(i => i.id !== item.id) : [...prev, item]);
+    };
+
+    const handleToggleAllMondayItems = () => {
+        const filtered = filteredMondayItems;
+        const allSelected = filtered.every(i => mondaySelectedItems.find(s => s.id === i.id));
+        if (allSelected) setMondaySelectedItems(prev => prev.filter(s => !filtered.find(i => i.id === s.id)));
+        else setMondaySelectedItems(prev => [...prev, ...filtered.filter(i => !prev.find(s => s.id === i.id))]);
+    };
+
+    const filteredMondayItems = mondayItems.filter(i =>
+        (i.title || '').toLowerCase().includes(mondayItemSearch.toLowerCase())
+    );
+
     const clearSessionSelections = () => {
         sessionStorage.removeItem('github_selectedRepo');
         sessionStorage.removeItem('github_selectedBranch');
@@ -587,7 +908,8 @@ const Dashboard = () => {
         try {
             // Generate from the first source with data selected
             // (multi-source unified endpoint can be added later)
-            const defaultTitle = releaseTitle || `${sources.map(s => s === 'github' ? 'GitHub' : s === 'jira' ? 'Jira' : 'DevRev').join(' + ')} Release Notes - ${new Date().toLocaleDateString()}`;
+            const SOURCE_LABELS = { github: 'GitHub', jira: 'Jira', devrev: 'DevRev', linear: 'Linear', asana: 'Asana', clickup: 'ClickUp', monday: 'Monday.com' };
+            const defaultTitle = releaseTitle || `${sources.map(s => SOURCE_LABELS[s] || s).join(' + ')} Release Notes - ${new Date().toLocaleDateString()}`;
 
             if (sources.includes('github') && selectedCommits.length > 0) {
                 const selectedObjects = commits.filter(c => selectedCommits.includes(c.id));
@@ -608,6 +930,30 @@ const Dashboard = () => {
             } else if (sources.includes('jira') && jiraSelectedIssues.length > 0) {
                 const genRes = await api.post('/jira/generate', { issues: jiraSelectedIssues, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'jira');
+                refetchEntitlements();
+                clearSessionSelections();
+                navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
+            } else if (sources.includes('linear') && linearSelectedIssues.length > 0) {
+                const genRes = await api.post('/linear/generate', { issues: linearSelectedIssues, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
+                sessionStorage.setItem('last_integration', 'linear');
+                refetchEntitlements();
+                clearSessionSelections();
+                navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
+            } else if (sources.includes('asana') && asanaSelectedTasks.length > 0) {
+                const genRes = await api.post('/asana/generate', { tasks: asanaSelectedTasks, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
+                sessionStorage.setItem('last_integration', 'asana');
+                refetchEntitlements();
+                clearSessionSelections();
+                navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
+            } else if (sources.includes('clickup') && clickupSelectedTasks.length > 0) {
+                const genRes = await api.post('/clickup/generate', { tasks: clickupSelectedTasks, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
+                sessionStorage.setItem('last_integration', 'clickup');
+                refetchEntitlements();
+                clearSessionSelections();
+                navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
+            } else if (sources.includes('monday') && mondaySelectedItems.length > 0) {
+                const genRes = await api.post('/monday/generate', { items: mondaySelectedItems, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
+                sessionStorage.setItem('last_integration', 'monday');
                 refetchEntitlements();
                 clearSessionSelections();
                 navigate('/generate', { state: { notes: genRes.data.notes, noteId: genRes.data.noteId, noteTitle: genRes.data.title } });
@@ -660,7 +1006,7 @@ const Dashboard = () => {
         { n: 'API Keys', v: savedKeys.length, icon: ic.key, bg: 'var(--vl)', c: 'var(--violet)', change: savedKeys.length > 0 ? savedKeys.map(k => k.provider).join(', ') : 'None added' },
     ];
 
-    const CHANNEL_LABELS = { github: 'GitHub', jira: 'Jira', devrev: 'DevRev' };
+    const CHANNEL_LABELS = { github: 'GitHub', jira: 'Jira', devrev: 'DevRev', linear: 'Linear', asana: 'Asana', clickup: 'ClickUp', monday: 'Monday.com', slack: 'Slack' };
 
     const timeAgo = (dateStr) => {
         const diff = Date.now() - new Date(dateStr).getTime();
@@ -676,7 +1022,11 @@ const Dashboard = () => {
 
     const hasDataSelected = (sources.includes('github') && selectedCommits.length > 0)
         || (sources.includes('jira') && jiraSelectedIssues.length > 0)
-        || (sources.includes('devrev') && devrevSelectedItems.length > 0);
+        || (sources.includes('devrev') && devrevSelectedItems.length > 0)
+        || (sources.includes('linear') && linearSelectedIssues.length > 0)
+        || (sources.includes('asana') && asanaSelectedTasks.length > 0)
+        || (sources.includes('clickup') && clickupSelectedTasks.length > 0)
+        || (sources.includes('monday') && mondaySelectedItems.length > 0);
 
     const wizardSteps = [
         { n: 1, label: 'Audience' },
@@ -788,7 +1138,7 @@ const Dashboard = () => {
                                         <div className="dash-empty-icon-v2">{ic.doc}</div>
                                         <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>No release notes yet</p>
                                         <p style={{ fontSize: '0.9375rem', color: 'var(--muted)', margin: '0 0 16px', maxWidth: 300, lineHeight: 1.5 }}>
-                                            Generate your first release note from GitHub, DevRev, or Jira data.
+                                            Generate your first release note from GitHub, Jira, Linear, Asana, ClickUp, Monday.com, or DevRev data.
                                         </p>
                                         <button className="btn btn-primary btn-sm" onClick={() => { setView('generate'); setStep(1); }}>
                                             {ic.spark} Get Started
@@ -956,6 +1306,10 @@ const Dashboard = () => {
                                                 { id: 'github', l: 'GitHub', icon: ic.gh, c: '--text' },
                                                 { id: 'devrev', l: 'DevRev', logo: devrevLogo, c: '--emerald' },
                                                 { id: 'jira', l: 'Jira', logo: jiraLogo, c: '--sky' },
+                                                { id: 'linear', l: 'Linear', logo: linearLogo, c: '--indigo' },
+                                                { id: 'asana', l: 'Asana', logo: asanaLogo, c: '--rose' },
+                                                { id: 'clickup', l: 'ClickUp', logo: clickupLogo, c: '--violet' },
+                                                { id: 'monday', l: 'Monday.com', logo: mondayLogo, c: '--amber' },
                                             ].filter(s => connectedIntegrations.includes(s.l)).map(s => {
                                                 const isSelected = sources.includes(s.id);
                                                 return (
@@ -1007,8 +1361,8 @@ const Dashboard = () => {
                                 {sources.length > 1 && (
                                     <div style={{ display: 'flex', gap: 4, marginBottom: 16, borderBottom: '1px solid var(--border-l)', paddingBottom: 0 }}>
                                         {sources.map(s => {
-                                            const labels = { github: 'GitHub', devrev: 'DevRev', jira: 'Jira' };
-                                            const counts = { github: selectedCommits.length, devrev: devrevSelectedItems.length, jira: jiraSelectedIssues.length };
+                                            const labels = { github: 'GitHub', devrev: 'DevRev', jira: 'Jira', linear: 'Linear', asana: 'Asana', clickup: 'ClickUp', monday: 'Monday.com' };
+                                            const counts = { github: selectedCommits.length, devrev: devrevSelectedItems.length, jira: jiraSelectedIssues.length, linear: linearSelectedIssues.length, asana: asanaSelectedTasks.length, clickup: clickupSelectedTasks.length, monday: mondaySelectedItems.length };
                                             return (
                                                 <button
                                                     key={s}
@@ -1397,6 +1751,329 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     </div>
+                                ) : (sources.length === 1 ? sources[0] : sourceTab) === 'linear' && sources.includes('linear') ? (
+                                    /* ── Linear Panel ── */
+                                    <div className="selector-card-v2 selector-jira-wrap">
+                                        <div style={{ padding: '16px 18px 0', display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
+                                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                                                <SearchDropdown
+                                                    options={linearTeams.map(t => ({ id: t.id, label: t.name }))}
+                                                    value={linearSelectedTeam?.id || null}
+                                                    onChange={id => { const t = linearTeams.find(t => t.id === id); if (t) handleSelectLinearTeam(t); }}
+                                                    placeholder="Select Team..."
+                                                    style={{ minWidth: 160 }}
+                                                />
+                                                {linearSelectedTeam && linearCycles.length > 0 && (
+                                                    <SearchDropdown
+                                                        options={[{ id: '__none__', label: 'All Cycles' }, ...linearCycles.map(c => ({ id: c.id, label: c.name || `Cycle ${c.number}` }))]}
+                                                        value={linearSelectedCycle || '__none__'}
+                                                        onChange={id => handleSelectLinearProjectOrCycle(linearSelectedProject, id === '__none__' ? null : id)}
+                                                        placeholder="Select Cycle..."
+                                                        style={{ minWidth: 150 }}
+                                                    />
+                                                )}
+                                                {linearSelectedTeam && linearProjects.length > 0 && (
+                                                    <SearchDropdown
+                                                        options={[{ id: '__none__', label: 'All Projects' }, ...linearProjects.map(p => ({ id: p.id, label: p.name }))]}
+                                                        value={linearSelectedProject || '__none__'}
+                                                        onChange={id => handleSelectLinearProjectOrCycle(id === '__none__' ? null : id, linearSelectedCycle)}
+                                                        placeholder="Select Project..."
+                                                        style={{ minWidth: 150 }}
+                                                    />
+                                                )}
+                                                {loadingData && <RefreshCw size={16} className="spin" style={{ color: 'var(--indigo)', alignSelf: 'center' }} />}
+                                            </div>
+                                        </div>
+                                        <div style={{ padding: '12px 18px 0', display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1, minHeight: 0 }}>
+                                            {linearIssues.length > 0 ? (
+                                                <>
+                                                    <div style={{ marginBottom: 8 }}>
+                                                        <input type="text" placeholder="Search issues..." className="selector-search-v2" style={{ margin: 0, maxWidth: 220, height: 36, fontSize: '0.875rem', borderRadius: 8 }} value={linearIssueSearch} onChange={e => setLinearIssueSearch(e.target.value)} />
+                                                    </div>
+                                                    <div className="selector-list-header-v2" onClick={handleToggleAllLinearIssues}>
+                                                        {filteredLinearIssues.length > 0 && filteredLinearIssues.every(i => linearSelectedIssues.find(s => s.id === i.id))
+                                                            ? <CheckSquare size={18} style={{ color: 'var(--emerald)' }} />
+                                                            : <Square size={18} style={{ color: 'var(--m2)' }} />}
+                                                        <span>Select All ({filteredLinearIssues.length})</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, overflowY: 'auto' }}>
+                                                        {filteredLinearIssues.map(issue => {
+                                                            const isSelected = !!linearSelectedIssues.find(s => s.id === issue.id);
+                                                            return (
+                                                                <div key={issue.id} className={`selector-item-v2 ${isSelected ? 'selected' : ''}`} onClick={() => handleToggleLinearIssue(issue)}>
+                                                                    <div className={`selector-checkbox-v2 ${isSelected ? 'checked' : ''}`}>
+                                                                        {isSelected && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                                                    </div>
+                                                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                                                            <span style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: 'var(--indigo)', fontWeight: 600 }}>{issue.identifier}</span>
+                                                                            <span style={{ fontSize: '0.9375rem', fontWeight: 500 }}>{issue.title}</span>
+                                                                        </div>
+                                                                        <div style={{ fontSize: '0.8rem', color: 'var(--m2)', marginTop: 2, display: 'flex', gap: 8 }}>
+                                                                            {issue.state && <span>{issue.state}</span>}
+                                                                            {issue.priority && <span>{issue.priority}</span>}
+                                                                            {issue.assignee && <span>{issue.assignee}</span>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: 'var(--muted)', fontSize: '0.9375rem' }}>
+                                                    {loadingData ? <RefreshCw className="spin" style={{ color: 'var(--indigo)' }} /> :
+                                                        !linearSelectedTeam ? 'Select a team to get started' : 'No issues found. Select a project or cycle.'}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="selector-footer-v2">
+                                            <button className="btn btn-secondary" onClick={() => setStep(2)}>{ic.back} Back</button>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                <span style={{ fontSize: '0.875rem', color: 'var(--muted)' }}>{linearSelectedIssues.length} selected</span>
+                                                <button className="btn btn-primary" onClick={() => setStep(4)} disabled={linearSelectedIssues.length === 0}>Continue {ic.arr}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (sources.length === 1 ? sources[0] : sourceTab) === 'asana' && sources.includes('asana') ? (
+                                    /* ── Asana Panel ── */
+                                    <div className="selector-card-v2 selector-jira-wrap">
+                                        <div style={{ padding: '16px 18px 0', display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
+                                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                                                <SearchDropdown
+                                                    options={asanaWorkspaces.map(w => ({ id: w.gid, label: w.name }))}
+                                                    value={asanaSelectedWorkspace?.gid || null}
+                                                    onChange={id => { const w = asanaWorkspaces.find(w => w.gid === id); if (w) handleSelectAsanaWorkspace(w); }}
+                                                    placeholder="Select Workspace..."
+                                                    style={{ minWidth: 160 }}
+                                                />
+                                                {asanaSelectedWorkspace && asanaProjects.length > 0 && (
+                                                    <SearchDropdown
+                                                        options={asanaProjects.map(p => ({ id: p.gid, label: p.name }))}
+                                                        value={asanaSelectedProject?.gid || null}
+                                                        onChange={id => { const p = asanaProjects.find(p => p.gid === id); if (p) handleSelectAsanaProject(p); }}
+                                                        placeholder="Select Project..."
+                                                        style={{ minWidth: 160 }}
+                                                    />
+                                                )}
+                                                {asanaSelectedProject && asanaSections.length > 0 && (
+                                                    <SearchDropdown
+                                                        options={[{ id: '__all__', label: 'All Sections' }, ...asanaSections.map(s => ({ id: s.gid, label: s.name }))]}
+                                                        value={asanaSelectedSection?.gid || '__all__'}
+                                                        onChange={id => { if (id === '__all__') { setAsanaSelectedSection(null); handleSelectAsanaProject(asanaSelectedProject); } else { const s = asanaSections.find(s => s.gid === id); if (s) handleSelectAsanaSection(s); } }}
+                                                        placeholder="Select Section..."
+                                                        style={{ minWidth: 150 }}
+                                                    />
+                                                )}
+                                                {loadingData && <RefreshCw size={16} className="spin" style={{ color: 'var(--rose)', alignSelf: 'center' }} />}
+                                            </div>
+                                        </div>
+                                        <div style={{ padding: '12px 18px 0', display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1, minHeight: 0 }}>
+                                            {asanaTasks.length > 0 ? (
+                                                <>
+                                                    <div style={{ marginBottom: 8 }}>
+                                                        <input type="text" placeholder="Search tasks..." className="selector-search-v2" style={{ margin: 0, maxWidth: 220, height: 36, fontSize: '0.875rem', borderRadius: 8 }} value={asanaTaskSearch} onChange={e => setAsanaTaskSearch(e.target.value)} />
+                                                    </div>
+                                                    <div className="selector-list-header-v2" onClick={handleToggleAllAsanaTasks}>
+                                                        {filteredAsanaTasks.length > 0 && filteredAsanaTasks.every(t => asanaSelectedTasks.find(s => s.id === t.id))
+                                                            ? <CheckSquare size={18} style={{ color: 'var(--emerald)' }} />
+                                                            : <Square size={18} style={{ color: 'var(--m2)' }} />}
+                                                        <span>Select All ({filteredAsanaTasks.length})</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, overflowY: 'auto' }}>
+                                                        {filteredAsanaTasks.map(task => {
+                                                            const isSelected = !!asanaSelectedTasks.find(s => s.id === task.id);
+                                                            return (
+                                                                <div key={task.id} className={`selector-item-v2 ${isSelected ? 'selected' : ''}`} onClick={() => handleToggleAsanaTask(task)}>
+                                                                    <div className={`selector-checkbox-v2 ${isSelected ? 'checked' : ''}`}>
+                                                                        {isSelected && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                                                    </div>
+                                                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                                                        <div style={{ fontSize: '0.9375rem', fontWeight: 500 }}>{task.title}</div>
+                                                                        <div style={{ fontSize: '0.8rem', color: 'var(--m2)', marginTop: 2, display: 'flex', gap: 8 }}>
+                                                                            {task.assignee && <span>{task.assignee}</span>}
+                                                                            <span>{task.status}</span>
+                                                                            {task.priority !== 'N/A' && <span>{task.priority}</span>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: 'var(--muted)', fontSize: '0.9375rem' }}>
+                                                    {loadingData ? <RefreshCw className="spin" style={{ color: 'var(--rose)' }} /> :
+                                                        !asanaSelectedWorkspace ? 'Select a workspace to get started' :
+                                                            !asanaSelectedProject ? 'Select a project' : 'No tasks found'}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="selector-footer-v2">
+                                            <button className="btn btn-secondary" onClick={() => setStep(2)}>{ic.back} Back</button>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                <span style={{ fontSize: '0.875rem', color: 'var(--muted)' }}>{asanaSelectedTasks.length} selected</span>
+                                                <button className="btn btn-primary" onClick={() => setStep(4)} disabled={asanaSelectedTasks.length === 0}>Continue {ic.arr}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (sources.length === 1 ? sources[0] : sourceTab) === 'clickup' && sources.includes('clickup') ? (
+                                    /* ── ClickUp Panel ── */
+                                    <div className="selector-card-v2 selector-jira-wrap">
+                                        <div style={{ padding: '16px 18px 0', display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
+                                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                                                <SearchDropdown
+                                                    options={clickupWorkspaces.map(w => ({ id: w.id, label: w.name }))}
+                                                    value={clickupSelectedWorkspace?.id || null}
+                                                    onChange={id => { const w = clickupWorkspaces.find(w => w.id === id); if (w) handleSelectClickUpWorkspace(w); }}
+                                                    placeholder="Select Workspace..."
+                                                    style={{ minWidth: 160 }}
+                                                />
+                                                {clickupSelectedWorkspace && clickupSpaces.length > 0 && (
+                                                    <SearchDropdown
+                                                        options={clickupSpaces.map(s => ({ id: s.id, label: s.name }))}
+                                                        value={clickupSelectedSpace?.id || null}
+                                                        onChange={id => { const s = clickupSpaces.find(s => s.id === id); if (s) handleSelectClickUpSpace(s); }}
+                                                        placeholder="Select Space..."
+                                                        style={{ minWidth: 150 }}
+                                                    />
+                                                )}
+                                                {clickupSelectedSpace && clickupLists.length > 0 && (
+                                                    <SearchDropdown
+                                                        options={clickupLists.map(l => ({ id: l.id, label: l.name }))}
+                                                        value={clickupSelectedList?.id || null}
+                                                        onChange={id => { const l = clickupLists.find(l => l.id === id); if (l) handleSelectClickUpList(l); }}
+                                                        placeholder="Select List..."
+                                                        style={{ minWidth: 150 }}
+                                                    />
+                                                )}
+                                                {loadingData && <RefreshCw size={16} className="spin" style={{ color: 'var(--violet)', alignSelf: 'center' }} />}
+                                            </div>
+                                        </div>
+                                        <div style={{ padding: '12px 18px 0', display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1, minHeight: 0 }}>
+                                            {clickupTasks.length > 0 ? (
+                                                <>
+                                                    <div style={{ marginBottom: 8 }}>
+                                                        <input type="text" placeholder="Search tasks..." className="selector-search-v2" style={{ margin: 0, maxWidth: 220, height: 36, fontSize: '0.875rem', borderRadius: 8 }} value={clickupTaskSearch} onChange={e => setClickupTaskSearch(e.target.value)} />
+                                                    </div>
+                                                    <div className="selector-list-header-v2" onClick={handleToggleAllClickUpTasks}>
+                                                        {filteredClickUpTasks.length > 0 && filteredClickUpTasks.every(t => clickupSelectedTasks.find(s => s.id === t.id))
+                                                            ? <CheckSquare size={18} style={{ color: 'var(--emerald)' }} />
+                                                            : <Square size={18} style={{ color: 'var(--m2)' }} />}
+                                                        <span>Select All ({filteredClickUpTasks.length})</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, overflowY: 'auto' }}>
+                                                        {filteredClickUpTasks.map(task => {
+                                                            const isSelected = !!clickupSelectedTasks.find(s => s.id === task.id);
+                                                            return (
+                                                                <div key={task.id} className={`selector-item-v2 ${isSelected ? 'selected' : ''}`} onClick={() => handleToggleClickUpTask(task)}>
+                                                                    <div className={`selector-checkbox-v2 ${isSelected ? 'checked' : ''}`}>
+                                                                        {isSelected && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                                                    </div>
+                                                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                                                        <div style={{ fontSize: '0.9375rem', fontWeight: 500 }}>{task.title}</div>
+                                                                        <div style={{ fontSize: '0.8rem', color: 'var(--m2)', marginTop: 2, display: 'flex', gap: 8 }}>
+                                                                            {task.key && <span style={{ fontFamily: 'var(--mono)', fontSize: '0.75rem' }}>{task.key}</span>}
+                                                                            {task.status && task.status !== 'N/A' && <span>{task.status}</span>}
+                                                                            {task.priority && task.priority !== 'N/A' && <span>{task.priority}</span>}
+                                                                            {task.assignee && <span>{task.assignee}</span>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: 'var(--muted)', fontSize: '0.9375rem' }}>
+                                                    {loadingData ? <RefreshCw className="spin" style={{ color: 'var(--violet)' }} /> :
+                                                        !clickupSelectedWorkspace ? 'Select a workspace to get started' :
+                                                            !clickupSelectedSpace ? 'Select a space' :
+                                                                !clickupSelectedList ? 'Select a list' : 'No tasks found'}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="selector-footer-v2">
+                                            <button className="btn btn-secondary" onClick={() => setStep(2)}>{ic.back} Back</button>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                <span style={{ fontSize: '0.875rem', color: 'var(--muted)' }}>{clickupSelectedTasks.length} selected</span>
+                                                <button className="btn btn-primary" onClick={() => setStep(4)} disabled={clickupSelectedTasks.length === 0}>Continue {ic.arr}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (sources.length === 1 ? sources[0] : sourceTab) === 'monday' && sources.includes('monday') ? (
+                                    /* ── Monday Panel ── */
+                                    <div className="selector-card-v2 selector-jira-wrap">
+                                        <div style={{ padding: '16px 18px 0', display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
+                                            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                                                <SearchDropdown
+                                                    options={mondayBoards.map(b => ({ id: b.id, label: b.name }))}
+                                                    value={mondaySelectedBoard?.id || null}
+                                                    onChange={id => { const b = mondayBoards.find(b => b.id === id); if (b) handleSelectMondayBoard(b); }}
+                                                    placeholder="Select Board..."
+                                                    style={{ minWidth: 180 }}
+                                                />
+                                                {mondaySelectedBoard && mondayGroups.length > 0 && (
+                                                    <SearchDropdown
+                                                        options={[{ id: '__all__', label: 'All Groups' }, ...mondayGroups.map(g => ({ id: g.id, label: g.title }))]}
+                                                        value={mondaySelectedGroup?.id || '__all__'}
+                                                        onChange={id => { if (id === '__all__') { setMondaySelectedGroup(null); handleSelectMondayBoard(mondaySelectedBoard); } else { const g = mondayGroups.find(g => g.id === id); if (g) handleSelectMondayGroup(g); } }}
+                                                        placeholder="Select Group..."
+                                                        style={{ minWidth: 150 }}
+                                                    />
+                                                )}
+                                                {loadingData && <RefreshCw size={16} className="spin" style={{ color: 'var(--amber)', alignSelf: 'center' }} />}
+                                            </div>
+                                        </div>
+                                        <div style={{ padding: '12px 18px 0', display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1, minHeight: 0 }}>
+                                            {mondayItems.length > 0 ? (
+                                                <>
+                                                    <div style={{ marginBottom: 8 }}>
+                                                        <input type="text" placeholder="Search items..." className="selector-search-v2" style={{ margin: 0, maxWidth: 220, height: 36, fontSize: '0.875rem', borderRadius: 8 }} value={mondayItemSearch} onChange={e => setMondayItemSearch(e.target.value)} />
+                                                    </div>
+                                                    <div className="selector-list-header-v2" onClick={handleToggleAllMondayItems}>
+                                                        {filteredMondayItems.length > 0 && filteredMondayItems.every(i => mondaySelectedItems.find(s => s.id === i.id))
+                                                            ? <CheckSquare size={18} style={{ color: 'var(--emerald)' }} />
+                                                            : <Square size={18} style={{ color: 'var(--m2)' }} />}
+                                                        <span>Select All ({filteredMondayItems.length})</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, overflowY: 'auto' }}>
+                                                        {filteredMondayItems.map(item => {
+                                                            const isSelected = !!mondaySelectedItems.find(s => s.id === item.id);
+                                                            return (
+                                                                <div key={item.id} className={`selector-item-v2 ${isSelected ? 'selected' : ''}`} onClick={() => handleToggleMondayItem(item)}>
+                                                                    <div className={`selector-checkbox-v2 ${isSelected ? 'checked' : ''}`}>
+                                                                        {isSelected && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                                                    </div>
+                                                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                                                        <div style={{ fontSize: '0.9375rem', fontWeight: 500 }}>{item.title}</div>
+                                                                        <div style={{ fontSize: '0.8rem', color: 'var(--m2)', marginTop: 2, display: 'flex', gap: 8 }}>
+                                                                            {item.key && <span style={{ fontFamily: 'var(--mono)', fontSize: '0.75rem' }}>{item.key}</span>}
+                                                                            {item.status && item.status !== 'N/A' && <span>{item.status}</span>}
+                                                                            {item.priority && item.priority !== 'N/A' && <span>{item.priority}</span>}
+                                                                            {item.assignee && <span>{item.assignee}</span>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: 'var(--muted)', fontSize: '0.9375rem' }}>
+                                                    {loadingData ? <RefreshCw className="spin" style={{ color: 'var(--amber)' }} /> :
+                                                        !mondaySelectedBoard ? 'Select a board to get started' : 'No items found'}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="selector-footer-v2">
+                                            <button className="btn btn-secondary" onClick={() => setStep(2)}>{ic.back} Back</button>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                <span style={{ fontSize: '0.875rem', color: 'var(--muted)' }}>{mondaySelectedItems.length} selected</span>
+                                                <button className="btn btn-primary" onClick={() => setStep(4)} disabled={mondaySelectedItems.length === 0}>Continue {ic.arr}</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 ) : null}
                             </div>
                         )}
@@ -1415,7 +2092,7 @@ const Dashboard = () => {
                                                 <input
                                                     value={releaseTitle}
                                                     onChange={e => setReleaseTitle(e.target.value)}
-                                                    placeholder={`${sources.map(s => s === 'github' ? 'GitHub' : s === 'jira' ? 'Jira' : 'DevRev').join(' + ')} Release Notes - ${new Date().toLocaleDateString()}`}
+                                                    placeholder={`${sources.map(s => ({ github: 'GitHub', jira: 'Jira', devrev: 'DevRev', linear: 'Linear', asana: 'Asana', clickup: 'ClickUp', monday: 'Monday.com' }[s] || s)).join(' + ')} Release Notes - ${new Date().toLocaleDateString()}`}
                                                     className="gen-config-input"
                                                 />
                                             </div>
@@ -1487,7 +2164,7 @@ const Dashboard = () => {
                                                 <div className="config-summary-row">
                                                     <span className="config-summary-label">Sources</span>
                                                     <span className="config-summary-value">
-                                                        {sources.map(s => s === 'github' ? 'GitHub' : s === 'jira' ? 'Jira' : 'DevRev').join(', ')}
+                                                        {sources.map(s => ({ github: 'GitHub', jira: 'Jira', devrev: 'DevRev', linear: 'Linear', asana: 'Asana', clickup: 'ClickUp', monday: 'Monday.com' }[s] || s)).join(', ')}
                                                     </span>
                                                 </div>
                                                 {sources.includes('github') && selectedCommits.length > 0 && (
@@ -1506,6 +2183,30 @@ const Dashboard = () => {
                                                     <div className="config-summary-row">
                                                         <span className="config-summary-label">Jira Issues</span>
                                                         <span className="config-summary-value">{jiraSelectedIssues.length} selected</span>
+                                                    </div>
+                                                )}
+                                                {sources.includes('linear') && linearSelectedIssues.length > 0 && (
+                                                    <div className="config-summary-row">
+                                                        <span className="config-summary-label">Linear Issues</span>
+                                                        <span className="config-summary-value">{linearSelectedIssues.length} selected</span>
+                                                    </div>
+                                                )}
+                                                {sources.includes('asana') && asanaSelectedTasks.length > 0 && (
+                                                    <div className="config-summary-row">
+                                                        <span className="config-summary-label">Asana Tasks</span>
+                                                        <span className="config-summary-value">{asanaSelectedTasks.length} selected</span>
+                                                    </div>
+                                                )}
+                                                {sources.includes('clickup') && clickupSelectedTasks.length > 0 && (
+                                                    <div className="config-summary-row">
+                                                        <span className="config-summary-label">ClickUp Tasks</span>
+                                                        <span className="config-summary-value">{clickupSelectedTasks.length} selected</span>
+                                                    </div>
+                                                )}
+                                                {sources.includes('monday') && mondaySelectedItems.length > 0 && (
+                                                    <div className="config-summary-row">
+                                                        <span className="config-summary-label">Monday Items</span>
+                                                        <span className="config-summary-value">{mondaySelectedItems.length} selected</span>
                                                     </div>
                                                 )}
                                                 <div className="config-summary-row">

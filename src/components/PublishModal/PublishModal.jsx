@@ -8,6 +8,10 @@ import githubLogo from '../../assets/github.png';
 import jiraLogo from '../../assets/jira_logo.webp';
 import devrevLogo from '../../assets/devrev-logo.webp';
 import slackLogo from '../../assets/slack-logo.png';
+import linearLogo from '../../assets/linear-logo.svg';
+import asanaLogo from '../../assets/asana-logo.svg';
+import clickupLogo from '../../assets/clickup-logo.svg';
+import mondayLogo from '../../assets/monday-logo.svg';
 import './PublishModal.css';
 
 const CHANNEL_META = {
@@ -15,6 +19,10 @@ const CHANNEL_META = {
     jira: { name: 'Jira Release', logo: jiraLogo, destination: 'jira_release' },
     devrev: { name: 'DevRev Article', logo: devrevLogo, destination: 'devrev_article' },
     slack: { name: 'Slack', logo: slackLogo, destination: 'slack' },
+    linear: { name: 'Linear Project', logo: linearLogo, destination: 'linear_project' },
+    asana: { name: 'Asana Task', logo: asanaLogo, destination: 'asana_update' },
+    clickup: { name: 'ClickUp Doc', logo: clickupLogo, destination: 'clickup_doc' },
+    monday: { name: 'Monday.com Update', logo: mondayLogo, destination: 'monday_update' },
 };
 
 const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJsonContent, isPublished }) => {
@@ -52,6 +60,35 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
     const [slackChannels, setSlackChannels] = useState([]);
     const [slackChannel, setSlackChannel] = useState('');
     const [slackChannelName, setSlackChannelName] = useState('');
+
+    // Linear config
+    const [linearEnabled, setLinearEnabled] = useState(false);
+    const [linearProjects, setLinearProjects] = useState([]);
+    const [linearProject, setLinearProject] = useState('');
+    const [linearProjectName, setLinearProjectName] = useState('');
+
+    // Asana config
+    const [asanaEnabled, setAsanaEnabled] = useState(false);
+    const [asanaProjects, setAsanaProjects] = useState([]);
+    const [asanaProject, setAsanaProject] = useState('');
+    const [asanaProjectName, setAsanaProjectName] = useState('');
+    const [asanaStatusType, setAsanaStatusType] = useState('on_track');
+
+    // ClickUp config
+    const [clickupEnabled, setClickupEnabled] = useState(false);
+    const [clickupWorkspaces, setClickupWorkspaces] = useState([]);
+    const [clickupSpaces, setClickupSpaces] = useState([]);
+    const [clickupLists, setClickupLists] = useState([]);
+    const [clickupWorkspace, setClickupWorkspace] = useState('');
+    const [clickupSpace, setClickupSpace] = useState('');
+    const [clickupList, setClickupList] = useState('');
+    const [clickupListName, setClickupListName] = useState('');
+
+    // Monday config
+    const [mondayEnabled, setMondayEnabled] = useState(false);
+    const [mondayBoards, setMondayBoards] = useState([]);
+    const [mondayBoard, setMondayBoard] = useState('');
+    const [mondayBoardName, setMondayBoardName] = useState('');
 
     // Public visibility
     const [isPublic, setIsPublic] = useState(false);
@@ -99,7 +136,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 setGhRepos(res.data.repos || []);
             }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load GitHub repos'); });
         }
-    }, [githubEnabled, connectedServices]);
+    }, [githubEnabled, connectedServices, ghRepos.length]);
 
     // Load GitHub tags when repo selected
     useEffect(() => {
@@ -117,7 +154,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 setJiraProjects(res.data.projects || []);
             }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load Jira projects'); });
         }
-    }, [jiraEnabled, connectedServices]);
+    }, [jiraEnabled, connectedServices, jiraProjects.length]);
 
     // Load DevRev parts when enabled
     useEffect(() => {
@@ -126,7 +163,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 setDevrevParts(res.data.parts || []);
             }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load DevRev parts'); });
         }
-    }, [devrevEnabled, connectedServices]);
+    }, [devrevEnabled, connectedServices, devrevParts.length]);
 
     // Load Slack channels when enabled
     useEffect(() => {
@@ -135,7 +172,61 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 setSlackChannels(res.data.channels || []);
             }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load Slack channels'); });
         }
-    }, [slackEnabled, connectedServices]);
+    }, [slackEnabled, connectedServices, slackChannels.length]);
+
+    // Load Linear projects when enabled
+    useEffect(() => {
+        if (linearEnabled && linearProjects.length === 0 && connectedServices.includes('linear')) {
+            api.get('/publish/linear/projects').then((res) => {
+                setLinearProjects(res.data.projects || []);
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load Linear projects'); });
+        }
+    }, [linearEnabled, connectedServices, linearProjects.length]);
+
+    // Load Asana projects when enabled
+    useEffect(() => {
+        if (asanaEnabled && asanaProjects.length === 0 && connectedServices.includes('asana')) {
+            api.get('/publish/asana/projects').then((res) => {
+                setAsanaProjects(res.data.projects || []);
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load Asana projects'); });
+        }
+    }, [asanaEnabled, connectedServices, asanaProjects.length]);
+
+    // Load ClickUp workspaces when enabled
+    useEffect(() => {
+        if (clickupEnabled && clickupWorkspaces.length === 0 && connectedServices.includes('clickup')) {
+            api.get('/publish/clickup/workspaces').then((res) => {
+                setClickupWorkspaces(res.data.workspaces || []);
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load ClickUp workspaces'); });
+        }
+    }, [clickupEnabled, connectedServices, clickupWorkspaces.length]);
+
+    // Load ClickUp spaces when workspace selected
+    useEffect(() => {
+        if (clickupWorkspace) {
+            api.get(`/publish/clickup/spaces?teamId=${clickupWorkspace}`).then((res) => {
+                setClickupSpaces(res.data.spaces || []);
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load ClickUp spaces'); });
+        }
+    }, [clickupWorkspace]);
+
+    // Load ClickUp lists when space selected
+    useEffect(() => {
+        if (clickupSpace) {
+            api.get(`/publish/clickup/lists?spaceId=${clickupSpace}`).then((res) => {
+                setClickupLists(res.data.lists || []);
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load ClickUp lists'); });
+        }
+    }, [clickupSpace]);
+
+    // Load Monday boards when enabled
+    useEffect(() => {
+        if (mondayEnabled && mondayBoards.length === 0 && connectedServices.includes('monday')) {
+            api.get('/publish/monday/boards').then((res) => {
+                setMondayBoards(res.data.boards || []);
+            }).catch((err) => { toast.error(err.response?.data?.error || 'Failed to load Monday.com boards'); });
+        }
+    }, [mondayEnabled, connectedServices, mondayBoards.length]);
 
     // Close on Escape
     useEffect(() => {
@@ -165,7 +256,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
 
     const publicUrl = publicSlug ? `${window.location.origin}/n/${publicSlug}` : null;
 
-    const enabledCount = [githubEnabled, jiraEnabled, devrevEnabled, slackEnabled].filter(Boolean).length;
+    const enabledCount = [githubEnabled, jiraEnabled, devrevEnabled, slackEnabled, linearEnabled, asanaEnabled, clickupEnabled, mondayEnabled].filter(Boolean).length;
 
     // Validation: check required fields per enabled channel
     const hasValidConfig = (() => {
@@ -173,6 +264,10 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         if (jiraEnabled && (!jiraProject || !jiraVersionName)) return false;
         if (devrevEnabled && !devrevTitle) return false;
         if (slackEnabled && !slackChannel) return false;
+        if (linearEnabled && !linearProject) return false;
+        if (asanaEnabled && !asanaProject) return false;
+        if (clickupEnabled && !clickupList) return false;
+        if (mondayEnabled && !mondayBoard) return false;
         return true;
     })();
 
@@ -227,6 +322,34 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 },
             });
         }
+        if (linearEnabled) {
+            channels.push({
+                type: 'linear',
+                enabled: true,
+                config: { projectId: linearProject, projectName: linearProjectName },
+            });
+        }
+        if (asanaEnabled) {
+            channels.push({
+                type: 'asana',
+                enabled: true,
+                config: { projectGid: asanaProject, projectName: asanaProjectName },
+            });
+        }
+        if (clickupEnabled) {
+            channels.push({
+                type: 'clickup',
+                enabled: true,
+                config: { listId: clickupList, listName: clickupListName },
+            });
+        }
+        if (mondayEnabled) {
+            channels.push({
+                type: 'monday',
+                enabled: true,
+                config: { boardId: mondayBoard, boardName: mondayBoardName },
+            });
+        }
 
         try {
             const res = await api.post('/publish', {
@@ -263,10 +386,15 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
             setPublishing(false);
         }
     }, [enabledCount, getHtmlContent, noteId, githubEnabled, jiraEnabled, devrevEnabled, slackEnabled,
+        linearEnabled, asanaEnabled, clickupEnabled, mondayEnabled,
         ghRepo, ghTag, ghTitle, ghPrerelease, ghDraft,
         jiraProject, jiraVersionName, jiraMarkReleased, jiraAddComments,
         devrevTitle, devrevStatus, devrevAccess, devrevPart,
-        slackChannel, slackChannelName]);
+        slackChannel, slackChannelName,
+        linearProject, linearProjectName,
+        asanaProject, asanaProjectName, asanaStatusType,
+        clickupList, clickupListName,
+        mondayBoard, mondayBoardName]);
 
     const handleRetry = useCallback(async (channelType) => {
         setPublishing(true);
@@ -280,6 +408,14 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
             config = { projectKey: jiraProject, versionName: jiraVersionName, markReleased: jiraMarkReleased, addComments: jiraAddComments, issueKeys: [] };
         } else if (channelType === 'slack') {
             config = { channelId: slackChannel, channelName: slackChannelName };
+        } else if (channelType === 'linear') {
+            config = { projectId: linearProject, projectName: linearProjectName };
+        } else if (channelType === 'asana') {
+            config = { projectGid: asanaProject, projectName: asanaProjectName, statusType: asanaStatusType };
+        } else if (channelType === 'clickup') {
+            config = { listId: clickupList, listName: clickupListName };
+        } else if (channelType === 'monday') {
+            config = { boardId: mondayBoard, boardName: mondayBoardName };
         } else {
             config = { title: devrevTitle, status: devrevStatus, accessLevel: devrevAccess, partId: devrevPart || undefined, partName: devrevPart ? devrevParts.find(p => p.id === devrevPart)?.name : undefined };
         }
@@ -592,6 +728,124 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                                 <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block' }}>
                                     Posts AI summary + full notes as attachment
                                 </span>
+                            </ChannelCard>
+
+                            {/* Linear */}
+                            <ChannelCard
+                                type="linear"
+                                enabled={linearEnabled}
+                                onToggle={setLinearEnabled}
+                                connected={isConnected('linear')}
+                                published={publishedChannels.includes('linear')}
+                                onNavigate={(path) => { onClose(); navigate(path); }}
+                            >
+                                <div className="config-field">
+                                    <label>Project</label>
+                                    <select value={linearProject} onChange={(e) => {
+                                        setLinearProject(e.target.value);
+                                        const selected = linearProjects.find(p => p.id === e.target.value);
+                                        setLinearProjectName(selected ? selected.name : '');
+                                    }}>
+                                        <option value="">Select project...</option>
+                                        {linearProjects.map((p) => (
+                                            <option key={p.id} value={p.id}>{p.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </ChannelCard>
+
+                            {/* Asana */}
+                            <ChannelCard
+                                type="asana"
+                                enabled={asanaEnabled}
+                                onToggle={setAsanaEnabled}
+                                connected={isConnected('asana')}
+                                published={publishedChannels.includes('asana')}
+                                onNavigate={(path) => { onClose(); navigate(path); }}
+                            >
+                                <div className="config-field">
+                                    <label>Project</label>
+                                    <select value={asanaProject} onChange={(e) => {
+                                        setAsanaProject(e.target.value);
+                                        const selected = asanaProjects.find(p => p.gid === e.target.value);
+                                        setAsanaProjectName(selected ? selected.name : '');
+                                    }}>
+                                        <option value="">Select project...</option>
+                                        {asanaProjects.map((p) => (
+                                            <option key={p.gid} value={p.gid}>{p.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </ChannelCard>
+
+                            {/* ClickUp */}
+                            <ChannelCard
+                                type="clickup"
+                                enabled={clickupEnabled}
+                                onToggle={setClickupEnabled}
+                                connected={isConnected('clickup')}
+                                published={publishedChannels.includes('clickup')}
+                                onNavigate={(path) => { onClose(); navigate(path); }}
+                            >
+                                <div className="config-field">
+                                    <label>Workspace</label>
+                                    <select value={clickupWorkspace} onChange={(e) => { setClickupWorkspace(e.target.value); setClickupSpace(''); setClickupList(''); setClickupListName(''); }}>
+                                        <option value="">Select workspace...</option>
+                                        {clickupWorkspaces.map((w) => (
+                                            <option key={w.id} value={w.id}>{w.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {clickupWorkspace && (
+                                    <div className="config-field">
+                                        <label>Space</label>
+                                        <select value={clickupSpace} onChange={(e) => { setClickupSpace(e.target.value); setClickupList(''); setClickupListName(''); }}>
+                                            <option value="">Select space...</option>
+                                            {clickupSpaces.map((s) => (
+                                                <option key={s.id} value={s.id}>{s.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+                                {clickupSpace && (
+                                    <div className="config-field">
+                                        <label>List</label>
+                                        <select value={clickupList} onChange={(e) => {
+                                            setClickupList(e.target.value);
+                                            const selected = clickupLists.find(l => l.id === e.target.value);
+                                            setClickupListName(selected ? selected.name : '');
+                                        }}>
+                                            <option value="">Select list...</option>
+                                            {clickupLists.map((l) => (
+                                                <option key={l.id} value={l.id}>{l.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+                            </ChannelCard>
+
+                            {/* Monday */}
+                            <ChannelCard
+                                type="monday"
+                                enabled={mondayEnabled}
+                                onToggle={setMondayEnabled}
+                                connected={isConnected('monday')}
+                                published={publishedChannels.includes('monday')}
+                                onNavigate={(path) => { onClose(); navigate(path); }}
+                            >
+                                <div className="config-field">
+                                    <label>Board</label>
+                                    <select value={mondayBoard} onChange={(e) => {
+                                        setMondayBoard(e.target.value);
+                                        const selected = mondayBoards.find(b => b.id === e.target.value);
+                                        setMondayBoardName(selected ? selected.name : '');
+                                    }}>
+                                        <option value="">Select board...</option>
+                                        {mondayBoards.map((b) => (
+                                            <option key={b.id} value={b.id}>{b.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </ChannelCard>
                         </>
                     )}

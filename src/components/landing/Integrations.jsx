@@ -133,7 +133,7 @@ export default function Integrations() {
 
         <FadeIn delay={0.5}>
           <p style={{ textAlign: "center", fontSize: 14, color: "var(--land-muted)", marginTop: 32 }}>
-            More integrations coming soon — Linear, Notion, and more.{" "}
+            Now supporting Linear, Asana, ClickUp, Monday.com, and more.{" "}
             <a href="/integrations#request" onClick={(e) => {
               e.preventDefault();
               navigate("/integrations#request");

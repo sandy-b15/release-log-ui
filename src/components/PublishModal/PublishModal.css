@@ -84,9 +84,13 @@
     background: var(--white);
 }
 
-.channel-card[data-channel="github"] { --ch-color: var(--text); --ch-light: var(--s1); }
-.channel-card[data-channel="jira"]   { --ch-color: var(--sky);  --ch-light: var(--sl); }
-.channel-card[data-channel="devrev"] { --ch-color: var(--emerald); --ch-light: var(--el); }
+.channel-card[data-channel="github"]  { --ch-color: var(--text);    --ch-light: var(--s1); }
+.channel-card[data-channel="jira"]    { --ch-color: var(--sky);     --ch-light: var(--sl); }
+.channel-card[data-channel="devrev"]  { --ch-color: var(--emerald); --ch-light: var(--el); }
+.channel-card[data-channel="linear"]  { --ch-color: var(--indigo);  --ch-light: var(--il); }
+.channel-card[data-channel="asana"]   { --ch-color: var(--rose);    --ch-light: var(--rl); }
+.channel-card[data-channel="clickup"] { --ch-color: var(--violet);  --ch-light: var(--vl); }
+.channel-card[data-channel="monday"]  { --ch-color: var(--amber);   --ch-light: var(--al); }
 
 .channel-card.active {
     border-color: var(--ch-color);
