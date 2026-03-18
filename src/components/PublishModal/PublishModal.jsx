@@ -52,6 +52,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
     const [slackChannels, setSlackChannels] = useState([]);
     const [slackChannel, setSlackChannel] = useState('');
     const [slackChannelName, setSlackChannelName] = useState('');
+    const [slackFormat, setSlackFormat] = useState('full');
 
     // Connected status
     const [connectedServices, setConnectedServices] = useState([]);
@@ -150,6 +151,21 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         if (enabledCount === 0) return;
         setPublishing(true);
 
+        // Prompt to make note public for Slack summary mode
+        if (slackEnabled && slackFormat === 'summary') {
+            try {
+                const noteRes = await api.get(`/notes/${noteId}`);
+                if (!noteRes.data.is_public) {
+                    const makePublic = window.confirm(
+                        'Summary mode includes a "View full notes" link. Make this note public so anyone with the link can read it?'
+                    );
+                    if (makePublic) {
+                        await api.put(`/notes/${noteId}/visibility`, { is_public: true });
+                    }
+                }
+            } catch { /* proceed anyway */ }
+        }
+
         const htmlContent = getHtmlContent();
         const jsonContent = getJsonContent ? getJsonContent() : null;
         const channels = [];
@@ -194,6 +210,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                 config: {
                     channelId: slackChannel,
                     channelName: slackChannelName,
+                    format: slackFormat,
                 },
             });
         }
@@ -236,7 +253,7 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
         ghRepo, ghTag, ghTitle, ghPrerelease, ghDraft,
         jiraProject, jiraVersionName, jiraMarkReleased, jiraAddComments,
         devrevTitle, devrevStatus, devrevAccess, devrevPart,
-        slackChannel, slackChannelName]);
+        slackChannel, slackChannelName, slackFormat]);
 
     const handleRetry = useCallback(async (channelType) => {
         setPublishing(true);
@@ -503,6 +520,30 @@ const PublishModal = ({ open, onClose, noteId, noteTitle, getHtmlContent, getJso
                                             </option>
                                         ))}
                                     </select>
+                                </div>
+                                <div className="pub-field">
+                                    <label className="pub-label">Format</label>
+                                    <div style={{ display: 'flex', gap: 6 }}>
+                                        <button
+                                            type="button"
+                                            className={`btn btn-sm ${slackFormat === 'full' ? 'btn-primary' : 'btn-secondary'}`}
+                                            onClick={() => setSlackFormat('full')}
+                                        >
+                                            Full
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`btn btn-sm ${slackFormat === 'summary' ? 'btn-primary' : 'btn-secondary'}`}
+                                            onClick={() => setSlackFormat('summary')}
+                                        >
+                                            Summary
+                                        </button>
+                                    </div>
+                                    <span style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, display: 'block' }}>
+                                        {slackFormat === 'summary'
+                                            ? 'Posts 3-5 bullet summary with link to full notes'
+                                            : 'Posts complete release notes to channel'}
+                                    </span>
                                 </div>
                             </ChannelCard>
                         </>
