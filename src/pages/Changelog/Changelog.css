@@ -1,0 +1,148 @@
+/* Heading */
+.changelog-heading {
+    margin-bottom: 20px;
+}
+
+.changelog-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+
+.changelog-desc {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 460px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Stats + Share row */
+.changelog-stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--s1, #f8fafc);
+    border-radius: var(--rs, 8px);
+    margin-bottom: 24px;
+}
+
+.changelog-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.changelog-stat-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.changelog-stat-label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* Notes list */
+.changelog-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.changelog-item {
+    display: flex;
+    gap: 24px;
+    padding: 18px 12px;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+    border-radius: 8px;
+}
+
+.changelog-item:hover {
+    background: var(--s1, #f8fafc);
+}
+
+.changelog-item-date {
+    font-size: 13px;
+    color: var(--muted, #94a3b8);
+    min-width: 100px;
+    padding-top: 2px;
+    flex-shrink: 0;
+}
+
+.changelog-item-content {
+    flex: 1;
+}
+
+.changelog-item-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--text, #1e293b);
+    line-height: 1.4;
+}
+
+.changelog-item-meta {
+    display: flex;
+    gap: 8px;
+}
+
+.changelog-item-badge {
+    font-size: 11px;
+    color: var(--muted, #94a3b8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--s1, #f1f5f9);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* Empty state */
+.changelog-empty {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--muted, #94a3b8);
+}
+
+.changelog-empty-icon {
+    margin-bottom: 12px;
+    color: var(--muted);
+    opacity: 0.5;
+}
+
+.changelog-empty h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 8px;
+}
+
+.changelog-empty p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Loading state for page transitions */
+.changelog-list-loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Pagination */
+.changelog-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px 0 8px;
+}
+
+.changelog-page-info {
+    font-size: 13px;
+    color: var(--muted);
+}
