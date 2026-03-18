@@ -78,13 +78,13 @@ const INTEGRATIONS = [
     {
         id: 'slack',
         title: 'Slack',
-        description: 'Release notifications to channels',
+        description: 'Publish release notes to Slack channels',
         category: 'communication',
         abbr: 'SL',
         accentVar: '--amber',
-        soon: true,
+        soon: false,
         dashboardUrl: null,
-        apiConnect: null,
+        apiConnect: 'oauth',
         apiCheck: null,
     },
 ];
@@ -287,15 +287,17 @@ const Integration = () => {
     useEffect(() => {
         const checkTokens = async () => {
             try {
-                const [ghRes, drRes, jiraRes] = await Promise.all([
+                const [ghRes, drRes, jiraRes, slackRes] = await Promise.all([
                     api.get('/tokens/github'),
                     api.get('/tokens/devrev'),
                     api.get('/tokens/jira'),
+                    api.get('/tokens/slack'),
                 ]);
                 setConnections({
                     github: ghRes.data.hasToken,
                     devrev: drRes.data.hasToken,
                     jira: jiraRes.data.hasToken,
+                    slack: slackRes.data.hasToken,
                 });
             } catch (err) {
                 console.error('Token check failed', err);
@@ -323,6 +325,18 @@ const Integration = () => {
             setErrorState(prev => ({ ...prev, jira: searchParams.get('message') || 'Jira connection failed' }));
             setSearchParams({}, { replace: true });
         }
+
+        // Handle Slack OAuth callback redirect
+        const slackStatus = searchParams.get('slack');
+        if (slackStatus === 'success') {
+            setConnections(prev => ({ ...prev, slack: true }));
+            toast.success('Slack connected successfully!');
+            setSearchParams({}, { replace: true });
+        } else if (slackStatus === 'error') {
+            const message = searchParams.get('message') || 'Slack connection failed';
+            setErrorState(prev => ({ ...prev, slack: message }));
+            setSearchParams({}, { replace: true });
+        }
     }, [searchParams, setSearchParams]);
 
     const handleJiraOAuth = async () => {
@@ -335,6 +349,19 @@ const Integration = () => {
             toast.error(msg);
             setErrorState(prev => ({ ...prev, jira: msg }));
             setLoadingState(prev => ({ ...prev, jira: false }));
+        }
+    };
+
+    const handleSlackOAuth = async () => {
+        try {
+            setLoadingState(prev => ({ ...prev, slack: true }));
+            const res = await api.get('/slack/auth');
+            window.location.href = res.data.authUrl;
+        } catch (err) {
+            const msg = err.response?.data?.error || 'Failed to start Slack OAuth';
+            toast.error(msg);
+            setErrorState(prev => ({ ...prev, slack: msg }));
+            setLoadingState(prev => ({ ...prev, slack: false }));
         }
     };
 
@@ -446,7 +473,7 @@ const Integration = () => {
                                     config={config}
                                     connected={!!connections[config.id]}
                                     onOpenModal={() => handleOpenModal(config.id, connections[config.id] ? 'edit' : 'connect')}
-                                    onConnect={config.apiConnect === 'oauth' ? handleJiraOAuth : undefined}
+                                    onConnect={config.apiConnect === 'oauth' ? (config.id === 'slack' ? handleSlackOAuth : handleJiraOAuth) : undefined}
                                     onDelete={() => setDeletingIntegration(config.id)}
                                     index={i}
                                 />

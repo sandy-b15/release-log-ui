@@ -47,7 +47,7 @@ const INTEGRATIONS = [
     logo: null,
     logoAlt: 'Slack',
     description: 'Auto-publish release notes to Slack channels. Rich formatting, thread support, and team mentions.',
-    status: 'soon',
+    status: 'available',
     href: '/integrations/slack',
   },
   {
