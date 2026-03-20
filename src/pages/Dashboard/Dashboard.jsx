@@ -886,7 +886,9 @@ const Dashboard = () => {
             if (sources.includes('github') && selectedCommits.length > 0) {
                 const selectedObjects = commits.filter(c => selectedCommits.includes(c.id));
                 const commitList = selectedObjects.map(pr => ({
-                    commit: { message: `PR #${pr.number}: ${pr.title}`, author: { name: pr.user.login } }
+                    commit: { message: `PR #${pr.number}: ${pr.title}`, author: { name: pr.user?.login || '' } },
+                    description: pr.body || '',
+                    labels: (pr.labels || []).map(l => l.name).filter(Boolean),
                 }));
                 const genRes = await api.post('/generate', { commits: commitList, audience, title: defaultTitle, tone, llm, customPrompt: customPrompt || undefined, sourcesCount: sources.length });
                 sessionStorage.setItem('last_integration', 'github');
